@@ -17,7 +17,7 @@
             @foreach(Helper::pendingprocess() as $process)
                 <a class="dropdown-item d-flex align-items-center" href="{{route('process.edit',$process->id)}}">
                     <div class="dropdown-list-image mr-3">
-                        @if($process->employee->photo)
+                        @if($process->employee?->photo)
                         <img class="rounded-circle" src="{{$process->employee->photo}}" alt="profile">
                         @else 
                         <img class="rounded-circle" src="{{asset('backend/img/avatar.png')}}" alt="default img">
@@ -25,7 +25,7 @@
                         {{-- <div class="status-indicator bg-success"></div> --}}
                     </div>
                     <div class="font-weight-bold">
-                        <div class="text-truncate">{{$process->employee->namewithinitial}}</div>
+                        <div class="text-truncate">{{$process->employee?->namewithinitial}}</div>
                         <div class="small text-gray-500">{{$process->service->service}} | Process ID: {{$process->id}}</div>
                     </div>
                 </a>

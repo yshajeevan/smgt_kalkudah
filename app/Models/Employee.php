@@ -15,9 +15,10 @@ class Employee extends Model
       'nic',
       'nicnew',
       'title',
-      'initial',
-      'surname',
-      'fullname',
+      'name_with_initial_e',
+      'name_denoted_by_initial_e',
+      'name_with_initial_t',
+      'name_denoted_by_initial_t',
       'designation_id',
       'empservice_id',
       'dsdivision_id',
@@ -67,7 +68,11 @@ class Employee extends Model
 
     public function scopeLastSync($query)
     {
-           return $query->select(DB::Raw('CONCAT(title,". ",initial,". ",surname) as namewithinitial'),'employees.*');
+          return $query->select(
+              DB::raw('CONCAT(title, ". ", name_with_initial_e) as namewithinitial'),
+              'employees.*'
+          );
+
     }
 
     public function process()  

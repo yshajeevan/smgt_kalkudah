@@ -148,7 +148,7 @@ $(document).ready(function () {
         },
         columns: [
             {data: 'id', name: 'id'},
-            {data: 'surname', name: 'surname'},
+            {data: 'namewithinitial', name: 'namewithinitial'},
             {data: 'institute', name: 'institute.institute'},
             {data: 'working_station', name: 'working_station'},
             {data: 'designation', name: 'designation.designation'},

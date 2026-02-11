@@ -112,7 +112,7 @@
                                     <img src="{{ isset($staff->user->employee_id) ? '/images/employees/'.$staff->user->employee_id.'.jpg' : asset('backend/img/avatar.png') }}" alt="Avatar" style="width:30px">
                                     </div>
                                 </td>
-                                <td>{{$staff->user->name}}</td>
+                                <td>{{$staff->user?->name ?? 'No user found'}}</td>
                                 <td>
                                     <div class="progress progress-xs">
                                         <div class="progress-bar progress-bar-danger" style="width: {{round($staff->countid/$process->where('user_id','!=',0)->where('pendingchk','=',0)->count('id') * 100,2)}}%"></div>

@@ -34,7 +34,7 @@
                     </div>
                     @if(!empty($employee->id))
                     <div class="card-body mt-4 ml-2">
-                      <h5 class="card-title text-left"><small><i class="fas fa-user"></i> {{$employee->title.".".$employee->initial.".".$employee->surname}}</small></h5>
+                      <h5 class="card-title text-left"><small><i class="fas fa-user"></i> {{$employee->title.".".$employee->name_with_initial_e}}</small></h5>
                       <p class="card-text text-left"><small><i class="fas fa-home"></i> {{$employee->peraddress}}</small></p>
                       <!--<p class="card-text text-left"><small><i class="fas fa-phone"></i> {{$employee->mobile}}</small></p>-->
                       <a class="card-text text-left" href="tel:+94{{isset($employee->mobile) ? $employee->mobile : 'N/A' }}"><i class="fa fa-phone"></i><small>{{$employee->mobile}}</small></a></br>
@@ -117,31 +117,40 @@
                 </div>
                 <div class="form-group">
                     <div class="form-col-2">
-                        <label for="initial" class="control-label">Initial</label>
+                        <label for="name_with_initial_e" class="control-label">Name with Initial (Eng)</label>
                     </div>
                     <div class="form-col-10">
-                        <input type="text" class="form-control form-control-sm" name="initial" id="initial" value="{{ old('initial', isset($employee) ? $employee->initial : '') }}" readonly>
+                        <input type="text" class="form-control form-control-sm" name="name_with_initial_e" id="name_with_initial_e" value="{{ old('name_with_initial_e', isset($employee) ? $employee->name_with_initial_e : '') }}" required readonly>
                     </div>
-                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->initial != $employee->initial) <span class="dummy-value">{{$employee->empdummy->initial}} <input type="hidden" name="dummy_initial" value="{{$employee->empdummy->initial}}"/></span>@endif @endif
-                </div>
+                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->name_with_initial_e != $employee->name_with_initial_e) <span class="dummy-value">{{$employee->empdummy->name_with_initial_e}} <input type="hidden" name="dummy_name_with_initial_e" value="{{$employee->empdummy->name_with_initial_e}}"/></span>@endif @endif
+                </div>  
                 <div class="form-group">
                     <div class="form-col-2">
-                        <label for="surname" class="control-label">Surname</label>
+                        <label for="name_denoted_by_initial_e" class="control-label">Name Denoted by Initial (Eng)</label>
                     </div>
                     <div class="form-col-10">
-                        <input type="text" class="form-control form-control-sm" name="surname" id="surname" value="{{ old('surname', isset($employee) ? $employee->surname : '') }}" required readonly>
+                        <input type="text" class="form-control form-control-sm" name="name_denoted_by_initial_e" id="name_denoted_by_initial_e" value="{{ old('name_denoted_by_initial_e', isset($employee) ? $employee->name_denoted_by_initial_e : '') }}" required readonly>
                     </div>
-                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->surname != $employee->surname) <span class="dummy-value">{{$employee->empdummy->surname}} <input type="hidden" name="dummy_surname" value="{{$employee->empdummy->surname}}"/></span>@endif @endif
-                </div>    
+                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->name_denoted_by_initial_e != $employee->name_denoted_by_initial_e) <span class="dummy-value">{{$employee->empdummy->name_denoted_by_initial_e}} <input type="hidden" name="dummy_name_denoted_by_initial_e" value="{{$employee->empdummy->name_denoted_by_initial_e}}"/></span>@endif @endif
+                </div>  
                 <div class="form-group">
                     <div class="form-col-2">
-                        <label for="" class="control-label">Name in Full</label>
+                        <label for="name_with_initial_t" class="control-label">Name with Initial (Tam)</label>
                     </div>
                     <div class="form-col-10">
-                        <input type="text" class="form-control form-control-sm" name="fullname" id="fullname" value="{{ old('fullname', isset($employee) ? $employee->fullname : '') }}" readonly>
+                        <input type="text" class="form-control form-control-sm" name="name_with_initial_t" id="name_with_initial_t" value="{{ old('name_with_initial_t', isset($employee) ? $employee->name_with_initial_t : '') }}" required readonly>
                     </div>
-                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->fullname != $employee->fullname) <span class="dummy-value">{{$employee->empdummy->fullname}} <input type="hidden" name="dummy_fullname" value="{{$employee->empdummy->fullname}}"/></span>@endif @endif
-                </div>
+                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->name_with_initial_t != $employee->name_with_initial_t) <span class="dummy-value">{{$employee->empdummy->name_with_initial_t}} <input type="hidden" name="dummy_name_with_initial_t" value="{{$employee->empdummy->name_with_initial_t}}"/></span>@endif @endif
+                </div>  
+                <div class="form-group">
+                    <div class="form-col-2">
+                        <label for="name_denoted_by_initial_t" class="control-label">Name Denoted by Initial (Tam)</label>
+                    </div>
+                    <div class="form-col-10">
+                        <input type="text" class="form-control form-control-sm" name="name_denoted_by_initial_t" id="name_denoted_by_initial_t" value="{{ old('name_denoted_by_initial_t', isset($employee) ? $employee->name_denoted_by_initial_t : '') }}" required readonly>
+                    </div>
+                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->name_denoted_by_initial_t != $employee->name_denoted_by_initial_t) <span class="dummy-value">{{$employee->empdummy->name_denoted_by_initial_t}} <input type="hidden" name="dummy_name_denoted_by_initial_t" value="{{$employee->empdummy->name_denoted_by_initial_t}}"/></span>@endif @endif
+                </div> 
                 <div class="form-group">
                     <div class="form-col-2">
                         <label for="" class="control-label">DOB</label>
@@ -775,7 +784,7 @@
                         <label for="" class="control-label">Designation Category</label>
                     </div>
                     <div class="form-col-10">
-                        <input type="text" class="form-control form-control-sm" id="desigcatg" name="desigcatg" value="{{ isset($employee) ? $employee->designation->catg : '' }}" required readonly>
+                        <input type="text" class="form-control form-control-sm" id="desigcatg" name="desigcatg" value="{{ $employee?->designation?->catg ?? '' }}" required readonly>
                     </div>
                 </div>
             </div>

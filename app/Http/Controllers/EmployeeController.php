@@ -146,7 +146,8 @@ class EmployeeController extends Controller
                     if ($request->filled('search')) {
                         $search = $request->get('search');
                         $instance->where(function($w) use ($search) {
-                            $w->where('surname', 'LIKE', "%{$search}%")
+                            $w->where('name_with_initial_e', 'LIKE', "%{$search}%")
+                            ->orWhere('name_denoted_by_initial_e', 'LIKE', "%{$search}%")
                             ->orWhere('nic', 'LIKE', "%{$search}%")
                             ->orWhere('empno', 'LIKE', "%{$search}%")
                             ->orWhere('id', 'LIKE', "%{$search}%");
@@ -159,13 +160,13 @@ class EmployeeController extends Controller
                     }
                 })
 
-                ->editColumn('surname', function(Employee $employee) {
-                    if (!empty($employee->empdummy) && $employee->empdummy->surname != $employee->surname) {
-                        $name = $employee->title . '.' . $employee->initial . '.' . $employee->surname
-                            . ' (' . $employee->empdummy->surname . ')';
+                ->editColumn('namewithinitial', function(Employee $employee) {
+                    if (!empty($employee->empdummy) && $employee->empdummy->name_with_initial_e != $employee->name_with_initial_e) {
+                        $name = $employee->title . '.' . $employee->name_with_initial_e
+                            . ' (' . $employee->empdummy->name_with_initial_e . ')'; 
                     } else {
-                        $name = $employee->title . '.' . $employee->initial . '.' . $employee->surname
-                            . ' (' . $employee->fullname . ')';
+                        $name = $employee->title . '.' . $employee->name_with_initial_e
+                            . ' (' . $employee->name_denoted_by_initial_e . ')';
                     }
 
                     if (!empty($employee->empdummy)) {
@@ -235,7 +236,7 @@ class EmployeeController extends Controller
                     return $btn;
                 })
 
-                ->rawColumns(['action','institute','surname'])
+                ->rawColumns(['action','institute','namewithinitial'])
                 ->make(true);
         }
 
@@ -284,29 +285,44 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,
-        [
-   
+        $this->validate($request, [
+            // your validations
         ]);
-        if($request->input('desigcatg') != 'SAC'){
-            $insid = Institute::select('id','institute')->where('institute','=',$request->input('desigcatg'))->value('id');
+
+        if ($request->input('desigcatg') != 'SAC') {
+            $insid = Institute::where('institute', $request->input('desigcatg'))
+                        ->value('id');
             $institute1id = $insid;
         } else {
-           $institute1id = $request->input('institute_id');
+            $institute1id = $request->input('institute_id');
         }
 
-        if (!Employee::where('nic', '=', $request->input('nic'))->exists()) { 
-            $status = Employee::create($request->all() + ['institute1_id' => $institute1id]);
-            if($status){
-                request()->session()->flash('success','Successfully added');
-            }else{
-                request()->session()->flash('error','Error occured while inserting');
+        // ✅ If current_working_station is empty
+        $currentWorkingStation = $request->input('current_working_station') 
+                                    ?: $request->input('institute_id');
+
+        if (!Employee::where('nic', $request->input('nic'))->exists()) {
+
+            $status = Employee::create(
+                $request->all() + [
+                    'institute1_id' => $institute1id,
+                    'current_working_station' => $currentWorkingStation
+                ]
+            );
+
+            if ($status) {
+                session()->flash('success', 'Successfully added');
+            } else {
+                session()->flash('error', 'Error occurred while inserting');
             }
+
             return redirect()->route('employee.index');
         } else {
-            request()->session()->flash('error','Employee already exist!');
+            session()->flash('error', 'Employee already exist!');
+            return redirect()->back();
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -322,6 +338,10 @@ class EmployeeController extends Controller
 
     public function show(Request $request, $id)
     {
+
+
+
+
         $employees = Employee::where('id',$id)->with('servicehistory')->get();
         return view('human_resource.show', compact('employees'));
     }
@@ -370,9 +390,10 @@ class EmployeeController extends Controller
         $updatable = [
             'dummy_nicnew' => 'nicnew',
             'dummy_title' => 'title',
-            'dummy_initial' => 'initial',
-            'dummy_surname' => 'surname',
-            'dummy_fullname' => 'fullname',
+            'dummy_surname' => 'name_with_initial_e', 
+            'dummy_fullname' => 'name_denoted_by_initial_e',
+            'dummy_surname' => 'name_with_initial_t', 
+            'dummy_fullname' => 'name_denoted_by_initial_t',
             'dummy_dob' => 'dob',
             'dummy_gender' => 'gender',
             'dummy_civilstatus' => 'civilstatus',
@@ -421,7 +442,7 @@ class EmployeeController extends Controller
             $this->validate($request, [
                 'empno' => 'required',
                 'nic' => 'required|unique:employees,nic,'.$id,
-                'surname' => 'string|required|max:30',
+                'name_with_initial_e' => 'string|required|max:30',
                 'cadresubject_id' => 'required',
                 'status' => 'required',
                 'email' => 'nullable|email',
@@ -498,7 +519,7 @@ class EmployeeController extends Controller
             $dynamicRules = [];
             if (array_key_exists('empno', $other)) $dynamicRules['empno'] = 'required';
             if (array_key_exists('nic', $other)) $dynamicRules['nic'] = 'required|unique:employees,nic,'.$id;
-            if (array_key_exists('surname', $other)) $dynamicRules['surname'] = 'string|required|max:30';
+            if (array_key_exists('name_with_initial_e', $other)) $dynamicRules['name_with_initial_e'] = 'string|required|max:30';
             if (array_key_exists('cadresubject_id', $other)) $dynamicRules['cadresubject_id'] = 'required';
             if (array_key_exists('status', $other)) $dynamicRules['status'] = 'required';
             if (array_key_exists('email', $other)) $dynamicRules['email'] = 'nullable|email';
@@ -524,6 +545,14 @@ class EmployeeController extends Controller
             } elseif ($request->has('institute_id')) {
                 $employee->institute1_id = $request->input('institute_id');
             }
+
+            // ✅ If current_working_station empty → use institute_id
+            if ($request->has('current_working_station')) {
+                $employee->current_working_station =
+                    $request->input('current_working_station')
+                    ?: $request->input('institute_id');
+            }
+
             $employee->save();
 
             // ---------- 4) Qualifications handling (same as your original logic) ----------
@@ -809,7 +838,7 @@ class EmployeeController extends Controller
                       $join->on('e.degsubject3_id', '=', 'degsub3.id');
                     })->leftJoin('app_categories', function($join) {
                       $join->on('e.appcategory_id', '=', 'app_categories.id');
-                    })->select('e.id','e.empno','e.nic','e.nicnew','e.nic','e.title','e.initial','e.surname','e.fullname','e.dob','e.ethinicity','e.religion','e.civilstatus',
+                    })->select('e.id','e.empno','e.nic','e.nicnew','e.nic','e.title','e.name_with_initial_e','e.name_denoted_by_initial_e','e.name_with_initial_t','e.name_denoted_by_initial_t','e.dob','e.ethinicity','e.religion','e.civilstatus',
                     'e.gender','gn_divisions.gn', 'ds_divisions.ds','zones.zone','e.peraddress','e.tmpaddress','e.fixedphone','e.mobile','e.distores','institutes.institute',
 		            'institutes.census','e.dtyasmprins','e.dtyasmfapp as duty assumption date','emp_services.service','e.dtyasmcser as duty_assump_pre_service','e.grade',
                     'app_categories.appcat','appsubject','designations.designation','cadresubjects.cadre as Cadre Subject','teasub1.cadre as Teaching Subject1',
@@ -891,7 +920,7 @@ class EmployeeController extends Controller
         }
         $notinsmgt = DB::table('salary_teachers')->select('name','nic','institutes.institute')->join('institutes', 'institutes.salaryinst_id', '=', 'salary_teachers.institute')->where('status',1)->whereNotIn('nic', $smgt)->get();
         
-        $notinsalary = DB::table('employees As e')->where('e.status','=','Active')->whereIn('e.designation_id',[7,8,9,13,16,17,18,19])->select(DB::raw('CONCAT(title,".", initial,".", surname) AS name'),'e.nic', 'i.institute As institute')
+        $notinsalary = DB::table('employees As e')->where('e.status','=','Active')->whereIn('e.designation_id',[7,8,9,13,16,17,18,19])->select(DB::raw('CONCAT(title,".", name_with_initial_e) AS name'),'e.nic', 'i.institute As institute')
         ->leftJoin('salary_teachers As s', function($join) {
             $join->on('e.nic', '=', 's.nic');
         })->whereNull('s.nic')->join('institutes As i', function($join) {
@@ -918,7 +947,7 @@ class EmployeeController extends Controller
         $institute = ['BATTICALOA WEST DUMMY SCHOOL','BATTICALOA WEST ZONAL EDUCATION OFFICE'];
         $notinsmgt = DB::table('nemis')->select('name','nic','institute')->whereNotIn('institute',$institute)->whereNotIn('nic', $smgt)->orderBy('institute')->get();
         
-        $notinnemis = DB::table('employees As e')->where('e.status','=','Active')->whereIn('e.designation_id',[7,8,9,13])->select(DB::raw('CONCAT(title,".", initial,".", surname) AS name'),'e.nic', 'e.institute_id As institute')
+        $notinnemis = DB::table('employees As e')->where('e.status','=','Active')->whereIn('e.designation_id',[7,8,9,13])->select(DB::raw('CONCAT(title,".", name_with_initial_e) AS name'),'e.nic', 'e.institute_id As institute')
        ->leftJoin('nemis As n', function($join) {
             $join->on('e.nic', '=', 'n.nic');
         })->whereNull('n.nic')->get();
@@ -970,15 +999,16 @@ class EmployeeController extends Controller
                         if (!empty($request->get('search'))) {
                             $instance->where(function($w) use($request){
                                 $search = $request->get('search');
-                                $w->orWhere('surname', 'LIKE', "%$search%")
+                                $w->orWhere('name_with_initial_e', 'LIKE', "%$search%")
+                                ->orWhere('name_denoted_by_initial_e', 'LIKE', "%$search%")
                                 ->orWhere('nic', 'LIKE', "%$search%")
                                 ->orWhere('empno', 'LIKE', "%$search%")
                                 ->orWhere('id', 'LIKE', "%$search%");
                             });
                         }
                     })
-                    ->editColumn('surname', function(EmployeeDummy $employee) {
-                            return $employee->title.'.'.$employee->initial.'.'.$employee->surname;
+                    ->editColumn('namewithinitial', function(EmployeeDummy $employee) {
+                            return $employee->title.'.'.$employee->name_with_initial_e;
                     })
                     ->addColumn('institute', function(EmployeeDummy $employee)
                     {
@@ -1234,7 +1264,7 @@ class EmployeeController extends Controller
         foreach ($employees as $data){
             $dataModified[] = array('value'      => $data->id,
                                     'label'      => $data->nic,
-                                    'fullname'   => $data->surname,
+                                    'fullname'   => $data->name_with_initial_e,
                                     'designation'=> $data->designation->designation,
                                     'institute'  => $data->institute->institute,
                                     'institute_id'  => $data->institute->id,
