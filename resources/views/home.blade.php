@@ -6,7 +6,7 @@
         <div class="col-xl-12">
             <div class="card-slider">
                 <div id="test1"><p>Service Management System</p></div>
-                <div id="test2"><p>Zonal Education Office, Kalkudah...</p></div>
+                <div id="test2"><p>Zonal Education Office, Kalkudah</p></div>
             </div>
         </div>
     </div>
