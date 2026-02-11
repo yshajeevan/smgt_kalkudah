@@ -1,0 +1,49 @@
+[25-Jan-2024 10:38:07 asia/colombo] PHP Fatal error:  Uncaught Error: Call to undefined function Symfony\Component\VarDumper\Dumper\json_encode() in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php:157
+Stack trace:
+#0 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php(950): Symfony\Component\VarDumper\Dumper\HtmlDumper->getDumpHeader()
+#1 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/CliDumper.php(580): Symfony\Component\VarDumper\Dumper\HtmlDumper->dumpLine(0, true)
+#2 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/CliDumper.php(268): Symfony\Component\VarDumper\Dumper\CliDumper->endValue(Object(Symfony\Component\VarDumper\Cloner\Cursor))
+#3 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php(799): Symfony\Component\VarDumper\Dumper\CliDumper->dumpString(Object(Symfony\Component\VarDumper\Cloner\Cursor), 'Use of undefine...', false, 0)
+#4 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Cloner/Data.php(418 in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php on line 157
+[25-Jan-2024 10:40:15 asia/colombo] PHP Fatal error:  Uncaught Error: Call to undefined function Symfony\Component\VarDumper\Dumper\json_encode() in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php:157
+Stack trace:
+#0 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php(950): Symfony\Component\VarDumper\Dumper\HtmlDumper->getDumpHeader()
+#1 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/CliDumper.php(580): Symfony\Component\VarDumper\Dumper\HtmlDumper->dumpLine(0, true)
+#2 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/CliDumper.php(268): Symfony\Component\VarDumper\Dumper\CliDumper->endValue(Object(Symfony\Component\VarDumper\Cloner\Cursor))
+#3 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php(799): Symfony\Component\VarDumper\Dumper\CliDumper->dumpString(Object(Symfony\Component\VarDumper\Cloner\Cursor), 'Use of undefine...', false, 0)
+#4 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Cloner/Data.php(418 in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php on line 157
+[25-Jan-2024 10:40:23 asia/colombo] PHP Fatal error:  Uncaught Error: Call to undefined function Symfony\Component\VarDumper\Dumper\json_encode() in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php:157
+Stack trace:
+#0 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php(950): Symfony\Component\VarDumper\Dumper\HtmlDumper->getDumpHeader()
+#1 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/CliDumper.php(580): Symfony\Component\VarDumper\Dumper\HtmlDumper->dumpLine(0, true)
+#2 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/CliDumper.php(268): Symfony\Component\VarDumper\Dumper\CliDumper->endValue(Object(Symfony\Component\VarDumper\Cloner\Cursor))
+#3 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php(799): Symfony\Component\VarDumper\Dumper\CliDumper->dumpString(Object(Symfony\Component\VarDumper\Cloner\Cursor), 'Use of undefine...', false, 0)
+#4 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Cloner/Data.php(418 in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php on line 157
+[25-Jan-2024 10:46:55 asia/colombo] PHP Fatal error:  Uncaught Error: Call to undefined function Symfony\Component\VarDumper\Dumper\json() in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php:157
+Stack trace:
+#0 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php(950): Symfony\Component\VarDumper\Dumper\HtmlDumper->getDumpHeader()
+#1 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/CliDumper.php(580): Symfony\Component\VarDumper\Dumper\HtmlDumper->dumpLine(0, true)
+#2 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/CliDumper.php(268): Symfony\Component\VarDumper\Dumper\CliDumper->endValue(Object(Symfony\Component\VarDumper\Cloner\Cursor))
+#3 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php(799): Symfony\Component\VarDumper\Dumper\CliDumper->dumpString(Object(Symfony\Component\VarDumper\Cloner\Cursor), 'Use of undefine...', false, 0)
+#4 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Cloner/Data.php(418): Symf in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php on line 157
+[25-Jan-2024 10:46:56 asia/colombo] PHP Fatal error:  Uncaught Error: Call to undefined function Symfony\Component\VarDumper\Dumper\json() in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php:157
+Stack trace:
+#0 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php(950): Symfony\Component\VarDumper\Dumper\HtmlDumper->getDumpHeader()
+#1 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/CliDumper.php(580): Symfony\Component\VarDumper\Dumper\HtmlDumper->dumpLine(0, true)
+#2 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/CliDumper.php(268): Symfony\Component\VarDumper\Dumper\CliDumper->endValue(Object(Symfony\Component\VarDumper\Cloner\Cursor))
+#3 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php(799): Symfony\Component\VarDumper\Dumper\CliDumper->dumpString(Object(Symfony\Component\VarDumper\Cloner\Cursor), 'Use of undefine...', false, 0)
+#4 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Cloner/Data.php(418): Symf in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php on line 157
+[25-Jan-2024 10:49:08 asia/colombo] PHP Parse error:  syntax error, unexpected '<' in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php on line 158
+[25-Jan-2024 10:49:08 asia/colombo] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[25-Jan-2024 00:29:44 America/New_York] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 7.4.0". You are running 7.3.33. in /home/battiwes/smgt.battiwestzeo.lk/vendor/composer/platform_check.php on line 24
+[25-Jan-2024 11:00:07 asia/colombo] PHP Parse error:  syntax error, unexpected '<' in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php on line 158
+[25-Jan-2024 11:00:07 asia/colombo] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[25-Jan-2024 05:38:45 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 7.4.0". You are running 7.3.33. in /home/battiwes/smgt.battiwestzeo.lk/vendor/composer/platform_check.php on line 24
+[25-Jan-2024 11:09:14 asia/colombo] PHP Fatal error:  Uncaught Error: Call to undefined function Symfony\Component\VarDumper\Dumper\json_encode() in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php:157
+Stack trace:
+#0 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php(950): Symfony\Component\VarDumper\Dumper\HtmlDumper->getDumpHeader()
+#1 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/CliDumper.php(580): Symfony\Component\VarDumper\Dumper\HtmlDumper->dumpLine(0, true)
+#2 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/CliDumper.php(268): Symfony\Component\VarDumper\Dumper\CliDumper->endValue(Object(Symfony\Component\VarDumper\Cloner\Cursor))
+#3 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php(799): Symfony\Component\VarDumper\Dumper\CliDumper->dumpString(Object(Symfony\Component\VarDumper\Cloner\Cursor), 'Use of undefine...', false, 0)
+#4 /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Cloner/Data.php(418 in /home/battiwes/smgt.battiwestzeo.lk/vendor/symfony/var-dumper/Dumper/HtmlDumper.php on line 157
+[25-Jan-2024 16:54:04 asia/colombo] PHP Fatal error:  Unparenthesized `a ? b : c ? d : e` is not supported. Use either `(a ? b : c) ? d : e` or `a ? b : (c ? d : e)` in /home/battiwes/smgt.battiwestzeo.lk/storage/framework/views/3ddf20511377a82412f572fdd4aea762a8fcf521.php on line 135

@@ -1,0 +1,3 @@
+*.sqlite
+*.sqlite-journal
+app/google-calendar/service-account-credentials.json

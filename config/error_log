@@ -1,0 +1,16 @@
+[17-Jun-2024 04:11:00 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/battiwes/smgt.battiwestzeo.lk/config/database.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/battiwes/smgt.battiwestzeo.lk/config/database.php on line 18
+[17-Aug-2024 08:49:25 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/battiwes/smgt.battiwestzeo.lk/config/database.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/battiwes/smgt.battiwestzeo.lk/config/database.php on line 18
+[17-Oct-2024 12:30:50 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/battiwes/smgt.battiwestzeo.lk/config/database.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/battiwes/smgt.battiwestzeo.lk/config/database.php on line 18
+[18-Oct-2024 17:17:55 America/New_York] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home/battiwes/smgt.battiwestzeo.lk/config/database.php:18
+Stack trace:
+#0 {main}
+  thrown in /home/battiwes/smgt.battiwestzeo.lk/config/database.php on line 18
