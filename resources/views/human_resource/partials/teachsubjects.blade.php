@@ -1,3 +1,4 @@
+<label class="card-title">Teaching Subjects</label>
 <table id="subjecttable">
     <thead>
         <tr>

@@ -14,14 +14,16 @@ use App\Models\EmpService;
 use App\Models\Zone;
 use App\Models\Degree;
 use App\Models\DegSubject;
-use App\Models\DegInstitute;
+use App\Models\EmpDegreeSubject;
 use App\Models\AppCategory;
 use App\Models\Institute;
-use App\Models\HighQualification;
+use App\Models\HighEduQualification;
 use App\Models\TransMode;
 use App\Exports\EmployeeExport;
 use App\Models\ServiceHistory;
 use App\Models\SalaryTeacher;
+use App\Models\ProfQualification;
+use App\Models\ProfQualificationInstitute;
 use App\Models\EmpQualification;
 use App\Models\EmpTeachSubject;
 use Illuminate\Support\Facades\DB;
@@ -265,15 +267,14 @@ class EmployeeController extends Controller
         $services = EmpService::get();   
         $designations = Designation::orderBy('designation')->get(); 
         $institutes = Institute::orderBy('institute')->get();  
-        $highqualifs = HighQualification::get(); 
+        $highqualifs = HighEduQualification::get(); 
         $degrees = Degree::get();
-        $eduinsts = DegInstitute::get();
         $degreesubs = DegSubject::get();
         $appcats = AppCategory::get();
         $cadresubs = Cadresubject::orderBy('cadre')->get(); 
 
         return view('human_resource.createOrUpdate', compact('employee','employeeDummy','ds','gn','zones','transmodes','services','designations','institutes',
-        'highqualifs','degrees','eduinsts','degreesubs','appcats','cadresubs'));
+        'highqualifs','degrees','degreesubs','appcats','cadresubs'));
    
     }
 
@@ -338,10 +339,6 @@ class EmployeeController extends Controller
 
     public function show(Request $request, $id)
     {
-
-
-
-
         $employees = Employee::where('id',$id)->with('servicehistory')->get();
         return view('human_resource.show', compact('employees'));
     }
@@ -351,6 +348,7 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function edit($id)
     {
         $ds = DsDivision::get();
@@ -360,9 +358,8 @@ class EmployeeController extends Controller
         $services = EmpService::get();   
         $designations = Designation::orderBy('designation')->get(); 
         $institutes = Institute::orderBy('institute')->get();  
-        $highqualifs = HighQualification::get(); 
+        $highqualifs = HighEduQualification::get(); 
         $degrees = Degree::get();
-        $eduinsts = DegInstitute::get();
         $degreesubs = DegSubject::get();
         $appcats = AppCategory::get();
         $cadresubs = Cadresubject::orderBy('cadre')->get(); 
@@ -375,13 +372,14 @@ class EmployeeController extends Controller
                     ])->orderBy('cadre')->get();
         $employee = Employee::find($id);
         $employeeDummy = EmployeeDummy::where('employee_id', $id)->first(); 
+        $empDegreeSubjects = EmpDegreeSubject::where('employee_id',$id)->get();
         $qualifications = EmpQualification::where('employee_id',$id)->get();
-        $qualifData = EmpQualification::query()->orderBy('course_name')->get();
-        $instituteData = EmpQualification::query()->orderBy('institution')->get();
+        $qualifData = ProfQualification::query()->orderBy('name')->get();
+        $instituteData = ProfQualificationInstitute::query()->orderBy('name')->get();
         $teachsubjects = EmpTeachSubject::where('employee_id',$id)->get();
   
     return view('human_resource.createOrUpdate', compact('employee','employeeDummy','ds','gn','zones','transmodes','services','designations','institutes',
-    'highqualifs','degrees','eduinsts','degreesubs','appcats','cadresubs','teachsubs','qualifications','qualifData','instituteData','teachsubjects'));
+    'highqualifs','degrees','degreesubs','empDegreeSubjects','appcats','cadresubs','teachsubs','qualifications','qualifData','instituteData','teachsubjects'));
     }
 
     public function update(Request $request, $id)
@@ -494,7 +492,7 @@ class EmployeeController extends Controller
             // ---------- 2) Now apply any other normal edit-form inputs present in the request ----------
             // Build exclude list so we do not accidentally apply temporary/form-only fields
             $exclude = array_merge(
-                ['_token','_method','desigcatg','qualifications','course_name','institution','duration','periods','teachsubject_id','teachsubjects','update'],
+                ['_token','_method','desigcatg','qualifications','course_name','degree_subjects','subject_name','institution','duration','periods','teachsubject_id','teachsubjects','update'],
                 array_keys($updatable)
             );
 
@@ -555,7 +553,38 @@ class EmployeeController extends Controller
 
             $employee->save();
 
+            // ================= DEGREE SUBJECTS =================
+            // Update existing
+            if ($request->input('degree_subjects')) {
+                foreach ($request->input('degree_subjects') as $subject) {
+
+                    if (!isset($subject['id'])) continue;
+
+                    $record = EmpDegreeSubject::find($subject['id']);
+
+                    if ($record) {
+                        $record->subject_name = $subject['subject_name'] ?? null;
+                        $record->save();
+                    }
+                }
+            }
+
+
+
+            // Insert new
+            if ($request->get('subject_name')) {
+                foreach ($request->subject_name as $val) {
+                    if (trim($val) == "") continue;
+                    EmpDegreeSubject::create([
+                        'subject_name' => $val,
+                        'employee_id' => $id,
+                    ]);
+                }
+            }
+
+
             // ---------- 4) Qualifications handling (same as your original logic) ----------
+            // Update existing
             if ($request->input('qualifications')) {
                 foreach ($request->input('qualifications') as $q) {
                     $record = EmpQualification::find($q['id']);
@@ -567,7 +596,7 @@ class EmployeeController extends Controller
                     }
                 }
             }
-
+            // Insert New
             if ($request->get('course_name')) {
                 foreach ($request->get('course_name') as $i => $val) {
                     if (trim($val) == "") continue;
@@ -581,6 +610,7 @@ class EmployeeController extends Controller
             }
 
             // ---------- 5) Teaching subjects handling (same as original) ----------
+            // Update existing
             if ($request->input('teachsubjects')) {
                 foreach ($request->input('teachsubjects') as $ts) {
                     $rec = EmpTeachSubject::find($ts['id']);
@@ -592,6 +622,7 @@ class EmployeeController extends Controller
                 }
             }
 
+            // Insert New
             if ($request->get('teachsubject_id')) {
                 foreach ($request->teachsubject_id as $i => $val) {
                     if (!$val) continue;
@@ -1242,6 +1273,24 @@ class EmployeeController extends Controller
             ]);
         }
     }
+
+    public function destroy_emp_degsubject($id)
+    {
+        $record = EmpDegreeSubject::find($id);
+
+        if (!$record) {
+            return response()->json([
+                'error' => 'Record not found'
+            ], 404);
+        }
+
+        $record->delete();
+
+        return response()->json([
+            'success' => 'Record deleted successfully!'
+        ]);
+    }
+
     
     public function destroy_teachsubject($id){
         $record = EmpTeachSubject::find($id);

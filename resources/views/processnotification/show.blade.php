@@ -25,7 +25,7 @@
                         {{-- <div class="status-indicator bg-success"></div> --}}
                     </div>
                     <div class="font-weight-bold">
-                        <div class="text-truncate">{{$process->employee?->namewithinitial}}</div>
+                        <div class="text-truncate">{{$process->employee?->namewithinitial ?? 'No user found'}}</div>
                         <div class="small text-gray-500">{{$process->service->service}} | Process ID: {{$process->id}}</div>
                     </div>
                 </a>

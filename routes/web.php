@@ -213,6 +213,9 @@ Route::group( ['middleware' => 'auth'], function(){
     //Delete teaching subject
     Route::delete('teachsubject/{id}', [EmployeeController::class, 'destroy_teachsubject']);
 
+    //Delete employee degree subject
+    Route::delete('empdegsubject/{id}', [EmployeeController::class, 'destroy_emp_degsubject']);
+
 });
 
 Route::get('/', function () {

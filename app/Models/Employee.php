@@ -27,9 +27,6 @@ class Employee extends Model
       'cadresubject2_id',
       'cadresubject3_id',
       'degree_id',
-      'degsubject1_id',
-      'degsubject2_id',
-      'degsubject3_id',
       'dob',
       'gender',
       'peraddress',
@@ -131,21 +128,6 @@ class Employee extends Model
         return $this->belongsTo('App\Models\Degree');  
       }
       
-    public function degsubject1()  
-      {  
-        return $this->belongsTo('App\Models\DegSubject','degsubject1_id');  
-      }
-      
-    public function degsubject2()  
-      {  
-        return $this->belongsTo('App\Models\DegSubject','degsubject2_id');  
-      }
-      
-    public function degsubject3()  
-      {  
-        return $this->belongsTo('App\Models\DegSubject','degsubject3_id');  
-      }
-      
     public function appcategory()  
       {  
         return $this->belongsTo('App\Models\AppCategory');  
@@ -154,21 +136,6 @@ class Employee extends Model
     public function cadresubject()  
       {  
         return $this->belongsTo('App\Models\Cadresubject');  
-      }
-      
-    public function cadresubject1()  
-      {  
-        return $this->belongsTo('App\Models\Cadresubject','cadresubject1_id');  
-      }
-      
-    public function cadresubject2()  
-      {  
-        return $this->belongsTo('App\Models\Cadresubject','cadresubject2_id');  
-      }
-      
-    public function cadresubject3()  
-      {  
-        return $this->belongsTo('App\Models\Cadresubject','cadresubject3_id');  
       }
       
     public function transmode()  

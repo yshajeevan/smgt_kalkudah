@@ -64,7 +64,9 @@
             <form id="employee_form" method="POST" action="{{ isset($employee) ? route('employee.update',$employee->id) : route('employee.store') }}" accept-charset="UTF-8" enctype="multipart/form-data">
         @endif
         @csrf
-        @method('PUT')
+        @if(isset($employee))
+            @method('PUT')
+        @endif
         <fieldset>
         <div class="form-card">
         <div class="form-numbering">
@@ -77,19 +79,19 @@
                     <input type="hidden" class="form-control form-control-sm" id="id" value="{{ old('id', isset($employee) ? $employee->id : '') }}" disabled>
                 @endif
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Paysheet Number</label>
                     </div>
-                    <div class="form-col-10">        
+                    <div class="form-col-9">        
                         <input type="text" class="form-control form-control-sm" name="empno" id="empno" value="{{ old('empno', isset($employee) ? $employee->empno : '') }}" required readonly>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">NIC</label>
                     </div>
-                    <div class="form-col-10">
-                        <input type="text" class="form-control form-control-sm float" name="nic" id="nic" value="{{ old('nic', isset($employee) ? $employee->nic : '') }}" required readonly>
+                    <div class="form-col-9">
+                        <input type="text" class="form-control form-control-sm float-double" name="nic" id="nic" value="{{ old('nic', isset($employee) ? $employee->nic : '') }}" required readonly>
                         <div class="image-set"><a data-gallery="photoviewer" id="{{isset($employee->virtualfile->id) ? $employee->virtualfile->id:''}}" data-title="SMGT-vFiles" data-group="a" href="{{isset($employee->virtualfile->nicf) ? asset('/vfiles/' ).'/'.$employee->virtualfile->nicf : asset('/vfiles/No_Image_Available.jpg') }}">
                         <img src="{{isset($employee->virtualfile->nicf) ? asset('/vfiles/' ).'/'.$employee->virtualfile->nicf : asset('/vfiles/No_Image_Available.jpg') }}" class="img-fluid img-thumbnail" alt="">
                         </a></div>@can('employee-edit')<button type="button" class="imgedit" id="nicf" data-toggle="modal" data-target="#imageupload"><i class="fas fa-edit"></i></button>@endcan
@@ -101,10 +103,10 @@
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->nic != $employee->nic) <span class="dummy-value">{{$employee->empdummy->nic}} </span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Title</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <select name="title" id="title" class="form-control form-control-sm" required disabled>
                             <option value="" @if(isset($employee) && $employee->title==""){{"selected"}} @endif >--Select Title--</option>
                             <option value="Miss" @if(isset($employee) && $employee->title=="Rev"){{"selected"}} @endif >Rev</option>
@@ -116,46 +118,46 @@
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->title != $employee->title) <span class="dummy-value">{{$employee->empdummy->title}} <input type="hidden" name="dummy_title" value="{{$employee->empdummy->title}}"/></span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="name_with_initial_e" class="control-label">Name with Initial (Eng)</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <input type="text" class="form-control form-control-sm" name="name_with_initial_e" id="name_with_initial_e" value="{{ old('name_with_initial_e', isset($employee) ? $employee->name_with_initial_e : '') }}" required readonly>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->name_with_initial_e != $employee->name_with_initial_e) <span class="dummy-value">{{$employee->empdummy->name_with_initial_e}} <input type="hidden" name="dummy_name_with_initial_e" value="{{$employee->empdummy->name_with_initial_e}}"/></span>@endif @endif
                 </div>  
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="name_denoted_by_initial_e" class="control-label">Name Denoted by Initial (Eng)</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <input type="text" class="form-control form-control-sm" name="name_denoted_by_initial_e" id="name_denoted_by_initial_e" value="{{ old('name_denoted_by_initial_e', isset($employee) ? $employee->name_denoted_by_initial_e : '') }}" required readonly>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->name_denoted_by_initial_e != $employee->name_denoted_by_initial_e) <span class="dummy-value">{{$employee->empdummy->name_denoted_by_initial_e}} <input type="hidden" name="dummy_name_denoted_by_initial_e" value="{{$employee->empdummy->name_denoted_by_initial_e}}"/></span>@endif @endif
                 </div>  
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="name_with_initial_t" class="control-label">Name with Initial (Tam)</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <input type="text" class="form-control form-control-sm" name="name_with_initial_t" id="name_with_initial_t" value="{{ old('name_with_initial_t', isset($employee) ? $employee->name_with_initial_t : '') }}" required readonly>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->name_with_initial_t != $employee->name_with_initial_t) <span class="dummy-value">{{$employee->empdummy->name_with_initial_t}} <input type="hidden" name="dummy_name_with_initial_t" value="{{$employee->empdummy->name_with_initial_t}}"/></span>@endif @endif
                 </div>  
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="name_denoted_by_initial_t" class="control-label">Name Denoted by Initial (Tam)</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <input type="text" class="form-control form-control-sm" name="name_denoted_by_initial_t" id="name_denoted_by_initial_t" value="{{ old('name_denoted_by_initial_t', isset($employee) ? $employee->name_denoted_by_initial_t : '') }}" required readonly>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->name_denoted_by_initial_t != $employee->name_denoted_by_initial_t) <span class="dummy-value">{{$employee->empdummy->name_denoted_by_initial_t}} <input type="hidden" name="dummy_name_denoted_by_initial_t" value="{{$employee->empdummy->name_denoted_by_initial_t}}"/></span>@endif @endif
                 </div> 
                 <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">DOB</label>
+                    <div class="form-col-3">
+                        <label for="" class="control-label">Date of birth</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <input type="date" class="form-control form-control-sm float" name="dob" id="dob" value="{{ old('dob', isset($employee) ? $employee->dob : '') }}" readonly>
                         <div class="image-set"><a data-gallery="photoviewer" id="{{isset($employee->virtualfile->id) ? $employee->virtualfile->id : ''}}" data-title="SMGT-Scanned Documents" data-group="a" href="{{isset($employee->virtualfile->birthcert) ? asset('/vfiles/' ).'/'.$employee->virtualfile->birthcert : asset('/vfiles/No_Image_Available.jpg') }}">
                         <img src="{{isset($employee->virtualfile->birthcert) ? asset('/vfiles/' ).'/'.$employee->virtualfile->birthcert : asset('/vfiles/No_Image_Available.jpg') }}" class="img-fluid img-thumbnail" alt="">
@@ -164,10 +166,10 @@
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->dob != $employee->dob) <span class="dummy-value">{{$employee->empdummy->dob}} <input type="hidden" name="dummy_dob" value="{{$employee->empdummy->dob}}"/></span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Gender</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <select name="gender" id="gender" class="form-control form-control-sm" required disabled>
                             <option value="" @if(isset($employee) && $employee->gender==""){{"selected"}} @endif >--Select Gender--</option>
                             <option value="Male" @if(isset($employee) && $employee->gender=="Male"){{"selected"}} @endif >Male</option>
@@ -177,25 +179,10 @@
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->gender != $employee->gender) <span class="dummy-value">{{$employee->empdummy->gender}} <input type="hidden" name="dummy_gender" value="{{$employee->empdummy->gender}}"/></span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Civil Status</label>
-                    </div>
-                    <div class="form-col-10">
-                        <select name="civilstatus" id="civilstatus" class="form-control form-control-sm" disabled>
-                            <option value="" @if(isset($employee) && $employee->civilstatus==""){{"selected"}} @endif >--Select Civil Status--</option>
-                            <option value="Married" @if(isset($employee) && $employee->civilstatus=="Married"){{"selected"}} @endif >Married</option>
-                            <option value="Single" @if(isset($employee) && $employee->civilstatus=="Single"){{"selected"}} @endif >Single</option>
-                            <option value="Widowed" @if(isset($employee) && $employee->civilstatus=="Widowed"){{"selected"}} @endif >Widowed</option>
-                            <option value="Not Specified" @if(isset($employee) && $employee->civilstatus=="Not Specified"){{"selected"}} @endif >Not Specified</option>
-                    	</select>
-                    </div>
-                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->civilstatus != $employee->civilstatus) <span class="dummy-value">{{$employee->empdummy->civilstatus}} <input type="hidden" name="dummy_civilstatus" value="{{$employee->empdummy->civilstatus}}"/></span>@endif @endif
-                </div>
-                <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Ethnicity</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <select name="ethinicity" id="ethinicity" class="form-control form-control-sm" disabled>
                             <option value="" @if(isset($employee) && $employee->ethinicity==""){{"selected"}} @endif >--Select Ethnicity--</option>
                             <option value="Tamil" @if(isset($employee) && $employee->ethinicity=="Tamil"){{"selected"}} @endif >Tamil</option>
@@ -207,11 +194,11 @@
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->ethinicity != $employee->ethinicity) <span class="dummy-value">{{$employee->empdummy->ethinicity}} <input type="hidden" name="dummy_ethinicity" value="{{$employee->empdummy->ethinicity}}"/></span>@endif @endif
                 </div>
-                <div class="form-group">
-                    <div class="form-col-2">
+                 <div class="form-group">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Religion</label>
                     </div>
-                    <div class="form-col-10">    
+                    <div class="form-col-9">    
                         <select name="religion" id="religion" class="form-control form-control-sm" disabled>
                             <option value="" @if(isset($employee) && $employee->religion==""){{"selected"}} @endif >--Select Religion--</option>
                             <option value="Hindu" @if(isset($employee) && $employee->religion=="Hindu"){{"selected"}} @endif >Hindu</option>
@@ -223,6 +210,21 @@
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->religion != $employee->religion) <span class="dummy-value">{{$employee->empdummy->religion}} <input type="hidden" name="dummy_religion" value="{{$employee->empdummy->religion}}"/></span>@endif @endif
                 </div>
+                <div class="form-group">
+                    <div class="form-col-3">
+                        <label for="" class="control-label">Civil Status</label>
+                    </div>
+                    <div class="form-col-9">
+                        <select name="civilstatus" id="civilstatus" class="form-control form-control-sm" disabled>
+                            <option value="" @if(isset($employee) && $employee->civilstatus==""){{"selected"}} @endif >--Select Civil Status--</option>
+                            <option value="Married" @if(isset($employee) && $employee->civilstatus=="Married"){{"selected"}} @endif >Married</option>
+                            <option value="Single" @if(isset($employee) && $employee->civilstatus=="Single"){{"selected"}} @endif >Single</option>
+                            <option value="Widowed" @if(isset($employee) && $employee->civilstatus=="Widowed"){{"selected"}} @endif >Widowed</option>
+                            <option value="Not Specified" @if(isset($employee) && $employee->civilstatus=="Not Specified"){{"selected"}} @endif >Not Specified</option>
+                    	</select>
+                    </div>
+                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->civilstatus != $employee->civilstatus) <span class="dummy-value">{{$employee->empdummy->civilstatus}} <input type="hidden" name="dummy_civilstatus" value="{{$employee->empdummy->civilstatus}}"/></span>@endif @endif
+                </div>
             </div>   
         </div>
         <!-- Fersonal info end & Geographical Information start-->
@@ -232,28 +234,28 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Permanant Address</label>
                     </div>
-                    <div class="form-col-10">  
+                    <div class="form-col-9">  
                         <input type="text" class="form-control form-control-sm" name="peraddress" id="peraddress" value="{{ old('peraddress', isset($employee) ? $employee->peraddress : '') }}" readonly>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->peraddress != $employee->peraddress) <span class="dummy-value">{{$employee->empdummy->peraddress}} <input type="hidden" name="dummy_peraddress" value="{{$employee->empdummy->peraddress}}"/></span>@endif @endif
                 </div> 
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Temprory Address</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <input type="text" class="form-control form-control-sm" name="tmpaddress" id="tmpaddress" value="{{ old('tmpaddress', isset($employee) ? $employee->tmpaddress : '') }}" readonly>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->tmpaddress != $employee->tmpaddress) <span class="dummy-value">{{$employee->empdummy->tmpaddress}} <input type="hidden" name="dummy_tmpaddress" value="{{$employee->empdummy->tmpaddress}}"/></span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Residential DS</label>
                     </div>   
-                    <div class="form-col-10"> 
+                    <div class="form-col-9"> 
                         <select name="dsdivision_id" id="dsdivision_id" class="form-control form-control-sm" disabled>
                             <option>--Select DS Division--</option>
                             @foreach ($ds as $ds)
@@ -264,10 +266,10 @@
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->dsdivision_id != $employee->dsdivision_id) <span class="dummy-value">{{$employee->empdummy->dsdivision->ds}} <input type="hidden" name="dummy_dsdivision_id" value="{{$employee->empdummy->dsdivision_id}}"/></span>@endif @endif
                 </div> 
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Residential GN</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <select name="gndivision_id" id="gndivision_id" class="form-control form-control-sm" disabled>
                             <option>-- Select GN Division --</option>
                             @foreach ($gn as $gn)
@@ -278,10 +280,10 @@
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->gndivision_id != $employee->gndivision_id) <span class="dummy-value">{{$employee->empdummy->gndivision->gn}} <input type="hidden" name="dummy_gndivision_id" value="{{$employee->empdummy->gndivision_id}}"/></span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Residential Zone</label>
                     </div>
-                    <div class="form-col-10">    
+                    <div class="form-col-9">    
                         <select name="zone_id" id="zone_id" class="form-control form-control-sm" disabled>
                             <option value="">--Select Education Zone--</option>
                             @foreach ($zones as $zone)
@@ -292,10 +294,10 @@
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->zone_id != $employee->zone_id) <span class="dummy-value">{{$employee->empdummy->zone->zone}} <input type="hidden" name="dummy_zone_id" value="{{$employee->empdummy->zone_id}}"/></span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Transportaion Mode</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <select name="transmode_id" id="transmode_id" class="form-control form-control-sm" disabled>
                             <option value="">--Select Transportation Mode--</option>
                             @foreach ($transmodes as $transmode)
@@ -306,10 +308,10 @@
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->transmode_id != $employee->transmode_id) <span class="dummy-value">{{$employee->empdummy->transmode->tranmode}} <input type="hidden" name="dummy_transmode_id" value="{{$employee->empdummy->transmode_id}}"/></span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Distance to Resident</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <input type="text" class="form-control form-control-sm" name="distores" id="distores" value="{{ old('distores', isset($employee) ? $employee->distores : '') }}" readonly>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->distores != $employee->distores) <span class="dummy-value">{{$employee->empdummy->distores}} <input type="hidden" name="dummy_distores" value="{{$employee->empdummy->distores}}"/></span>@endif @endif
@@ -326,8 +328,8 @@
                 @endphp
 
                 <div class="form-group">
-                    <div class="form-col-2"><label class="control-label">Mobile</label></div>
-                    <div class="form-col-10" style="position:relative;">
+                    <div class="form-col-3"><label class="control-label">Mobile</label></div>
+                    <div class="form-col-9" style="position:relative;">
                         <input type="text" class="form-control form-control-sm"
                             id="mobile" name="mobile"
                             value="{{ fullMask($mobile) }}" readonly
@@ -338,20 +340,8 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="form-col-2"><label class="control-label">Whatsapp</label></div>
-                    <div class="form-col-10" style="position:relative;">
-                        <input type="text" class="form-control form-control-sm"
-                            id="whatsapp" name="whatsapp"
-                            value="{{ fullMask($whatsapp) }}" readonly
-                            data-original="{{ e($whatsapp) }}">
-                        <i class="fas fa-eye toggle-visibility" data-target="whatsapp"
-                        style="cursor:pointer; position:absolute; right:10px; top:8px;"></i>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="form-col-2"><label class="control-label">Fixed Phone</label></div>
-                    <div class="form-col-10"
+                    <div class="form-col-3"><label class="control-label">Contact number in case of emergency</label></div>
+                    <div class="form-col-9"
                      style="position:relative;">
                         <input type="text" class="form-control form-control-sm"
                             id="fixedphone" name="fixedphone"
@@ -363,10 +353,22 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3"><label class="control-label">Whatsapp</label></div>
+                    <div class="form-col-9" style="position:relative;">
+                        <input type="text" class="form-control form-control-sm"
+                            id="whatsapp" name="whatsapp"
+                            value="{{ fullMask($whatsapp) }}" readonly
+                            data-original="{{ e($whatsapp) }}">
+                        <i class="fas fa-eye toggle-visibility" data-target="whatsapp"
+                        style="cursor:pointer; position:absolute; right:10px; top:8px;"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-col-3">
                         <label for="" class="control-label">eMail ID</label>
                     </div>  
-                    <div class="form-col-2">  
+                    <div class="form-col-3">  
                         <input type="text" class="form-control form-control-sm" name="email" id="email" value="{{ old('email', isset($employee) ? $employee->email : '') }}" readonly>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->email != $employee->email) <span class="dummy-value">{{$employee->empdummy->email}} <input type="hidden" name="dummy_email" value="{{$employee->empdummy->email}}"/></span>@endif @endif
@@ -380,10 +382,10 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Service</label>
+                    <div class="form-col-4">
+                        <label for="" class="control-label">Present Service</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-8">
                         <select name="empservice_id" id="empservice_id" class="form-control form-control-sm float" disabled>
                             <option value="">--Select Service--</option>
                     		@foreach ($services as $service)
@@ -397,10 +399,10 @@
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->empservice_id != $employee->empservice_id) <span class="dummy-value">{{$employee->empdummy->empservice->service}} <input type="hidden" name="dummy_empservice_id" value="{{$employee->empdummy->empservice_id}}"/></span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Grade</label>
+                    <div class="form-col-4">
+                        <label for="" class="control-label">Grade/Class</label>
                     </div>
-                    <div class="form-col-10">    
+                    <div class="form-col-8">    
                         <select name="grade" id="grade" class="form-control form-control-sm float" disabled>
                             <option value="" @if(isset($employee) && $employee->grade==""){{"selected"}} @endif >--Select Grade--</option>
                             <option value="3-II" @if(isset($employee) && $employee->grade=="3-II"){{"selected"}} @endif >3-II</option>
@@ -419,23 +421,12 @@
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->grade != $employee->grade) <span class="dummy-value">{{$employee->empdummy->grade}} <input type="hidden" name="dummy_grade" value="{{$employee->empdummy->grade}}"/></span>@endif @endif
                 </div>
+               
                 <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Duty Assm.of First Appointment</label>
+                    <div class="form-col-4">
+                        <label for="" class="control-label">Appointment date in present service</label>
                     </div>
-                    <div class="form-col-10">
-                        <input type="date" class="form-control form-control-sm float" name="dtyasmfapp" id="dtyasmfapp" value="{{ old('dtyasmfapp', isset($employee) ? $employee->dtyasmfapp : '') }}" readonly>
-                        <div class="image-set"><a data-gallery="photoviewer" id="{{isset($employee->virtualfile->id) ? $employee->virtualfile->id : ''}}" data-title="SMGT-Scanned Documents" data-group="a" href="{{isset($employee->virtualfile->firstdtyassm) ? asset('/vfiles/' ).'/'.$employee->virtualfile->firstdtyassm : asset('/vfiles/No_Image_Available.jpg') }}">
-                        <img src="{{isset($employee->virtualfile->firstdtyassm) ? asset('/vfiles/' ).'/'.$employee->virtualfile->firstdtyassm : asset('/vfiles/No_Image_Available.jpg') }}" class="img-fluid img-thumbnail" alt="">
-                        </a></div>@can('employee-edit')<button class="imgedit" type="button" id="firstdtyassm" data-toggle="modal" data-target="#imageupload"><i class="fas fa-edit"></i>@endcan</button>
-                    </div>
-                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->dtyasmfapp != $employee->dtyasmfapp) <span class="dummy-value">{{$employee->empdummy->dtyasmfapp}} <input type="hidden" name="dummy_dtyasmfapp" value="{{$employee->empdummy->dtyasmfapp}}"/></span>@endif @endif
-                </div>
-                <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">App.Date in Pre.Service</label>
-                    </div>
-                    <div class="form-col-10">                
+                    <div class="form-col-8">                
                         <input type="date" class="form-control form-control-sm float" name="dtyasmcser" id="dtyasmcser" value="{{ old('dtyasmcser', isset($employee) ? $employee->dtyasmcser : '') }}" readonly>
                         <div class="image-set"><a data-gallery="photoviewer" id="{{isset($employee->virtualfile->id) ? $employee->virtualfile->id : ''}}" data-title="SMGT-Scanned Documents" data-group="a" href="{{isset($employee->virtualfile->appltrcserv) ? asset('/vfiles/' ).'/'.$employee->virtualfile->appltrcserv : asset('/vfiles/No_Image_Available.jpg') }}">
                         <img src="{{isset($employee->virtualfile->appltrcserv) ? asset('/vfiles/' ).'/'.$employee->virtualfile->appltrcserv : asset('/vfiles/No_Image_Available.jpg') }}" class="img-fluid img-thumbnail" alt="">
@@ -443,11 +434,96 @@
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->dtyasmcser != $employee->dtyasmcser) <span class="dummy-value">{{$employee->empdummy->dtyasmcser}} <input type="hidden" name="dummy_dtyasmcser" value="{{$employee->empdummy->dtyasmcser}}"/></span>@endif @endif
                 </div>
-                <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Designation</label>
+
+                 <div class="form-group">
+                    <div class="form-col-4">
+                        <label for="" class="control-label">Duty assumption date in present service</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-8">
+                        <input type="date" class="form-control form-control-sm float" name="dtyasmfapp" id="dtyasmfapp" value="{{ old('dtyasmfapp', isset($employee) ? $employee->dtyasmfapp : '') }}" readonly>
+                        <div class="image-set"><a data-gallery="photoviewer" id="{{isset($employee->virtualfile->id) ? $employee->virtualfile->id : ''}}" data-title="SMGT-Scanned Documents" data-group="a" href="{{isset($employee->virtualfile->firstdtyassm) ? asset('/vfiles/' ).'/'.$employee->virtualfile->firstdtyassm : asset('/vfiles/No_Image_Available.jpg') }}">
+                        <img src="{{isset($employee->virtualfile->firstdtyassm) ? asset('/vfiles/' ).'/'.$employee->virtualfile->firstdtyassm : asset('/vfiles/No_Image_Available.jpg') }}" class="img-fluid img-thumbnail" alt="">
+                        </a></div>@can('employee-edit')<button class="imgedit" type="button" id="firstdtyassm" data-toggle="modal" data-target="#imageupload"><i class="fas fa-edit"></i>@endcan</button>
+                    </div>
+                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->dtyasmfapp != $employee->dtyasmfapp) <span class="dummy-value">{{$employee->empdummy->dtyasmfapp}} <input type="hidden" name="dummy_dtyasmfapp" value="{{$employee->empdummy->dtyasmfapp}}"/></span>@endif @endif
+                </div>
+
+                <div class="form-group">
+                    <div class="form-col-4">
+                        <label for="" class="control-label">Permanent working station (as per paysheet)</label>
+                    </div>
+                    <div class="form-col-8">    
+                        <select name="institute_id" id="institute_id" class="form-control form-control-sm" required disabled>
+                            <option value="">--Select Institution--</option>
+                    		@foreach ($institutes as $institute)
+                            <option value="{{ $institute->id}}" {{(isset($employee) && $employee->institute_id == $institute->id)  ? 'selected' : ''}}>{{ $institute->institute}}</option>
+                             @endforeach
+                    	</select>
+                    </div>
+                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->institute_id != $employee->institute_id) <span class="dummy-value">{{$employee->empdummy->institute->institute}} <input type="hidden" name="dummy_institute_id" value="{{$employee->empdummy->institute_id}}"/></span>@endif @endif
+                </div>
+
+                <div class="form-group">
+                    <div class="form-col-4">
+                        <label for="" class="control-label">Temprory working station (Attachment/Temprory)</label>
+                    </div>
+                    <div class="form-col-8">    
+                        <select name="current_working_station" id="current_working_station" class="form-control form-control-sm" required disabled>
+                            <option value="">--Select Institution--</option>
+                    		@foreach ($institutes as $institute)
+                            <option value="{{ $institute->id}}" {{(isset($employee) && $employee->current_working_station == $institute->id)  ? 'selected' : ''}}>{{ $institute->institute}}</option>
+                             @endforeach
+                    	</select>
+                    </div>
+                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->current_working_station != $employee->current_working_station) <span class="dummy-value">{{$employee->empdummy->workingStation->institute}} <input type="text" name="dummy_current_working_station" value="{{$employee->empdummy->current_working_station}}"/></span>@endif @endif
+                </div>
+
+                 <div class="form-group">
+                    <div class="form-col-4">
+                        <label for="" class="control-label">Reason of temprory attachment/Releases</label>
+                    </div>
+                    <div class="form-col-8">    
+                        <select name="reason_attachment" id="reason_attachment" class="form-control form-control-sm" disabled>
+                            <option value="" @if(isset($employee) && $employee->reason_attachment==""){{"selected"}} @endif >--Select reason--</option>
+                            <option value="maternity" @if(isset($employee) && $employee->reason_attachment=="maternity"){{"selected"}} @endif >Maternity</option>
+                            <option value="accident" @if(isset($employee) && $employee->reason_attachment=="accident"){{"selected"}} @endif >Accident</option>
+                            <option value="sick" @if(isset($employee) && $employee->reason_attachment=="sick"){{"selected"}} @endif >Sick</option>
+                            <option value="training" @if(isset($employee) && $employee->reason_attachment=="training"){{"selected"}} @endif >Training</option>
+                            <option value="abroad" @if(isset($employee) && $employee->reason_attachment=="abroad"){{"selected"}} @endif >Abroad</option>
+                            <option value="other_release" @if(isset($employee) && $employee->reason_attachment=="other_release"){{"selected"}} @endif >Other Release</option>
+                    	</select>
+                    </div>
+                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->reason_attachment != $employee->reason_attachment) <span class="dummy-value">{{$employee->empdummy->reason_attachment}} <input type="hidden" name="dummy_reason_attachment" value="{{$employee->empdummy->reason_attachment}}"/></span>@endif @endif
+                </div>
+
+                 <div class="form-group">
+                    <div class="form-col-4">
+                        <label for="" class="control-label">End of temprory attachment/release</label>
+                    </div>
+                    <div class="form-col-8">
+                        <input type="date" class="form-control form-control-sm float" name="date_of_re_joining" id="date_of_re_joining" value="{{ old('date_of_re_joining', isset($employee) ? $employee->date_of_re_joining : '') }}" readonly>
+                    </div>
+                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->date_of_re_joining != $employee->date_of_re_joining) <span class="dummy-value">{{$employee->empdummy->date_of_re_joining}} <input type="hidden" name="dummy_date_of_re_joining" value="{{$employee->empdummy->date_of_re_joining }}"/></span>@endif @endif
+                </div>
+
+                <div class="form-group">
+                    <div class="form-col-4">
+                        <label for="" class="control-label">Duty assumption date in present permanent station</label>
+                    </div>
+                    <div class="form-col-8">
+                        <input type="date" class="form-control form-control-sm float" name="dtyasmprins" id="dtyasmprins" value="{{ old('dtyasmprins', isset($employee) ? $employee->dtyasmprins : '') }}" readonly>
+                        <div class="image-set"><a data-gallery="photoviewer" id="{{isset($employee->virtualfile->id) ? $employee->virtualfile->id : ''}}" data-title="SMGT-Scanned Documents" data-group="a" href="{{isset($employee->virtualfile->dtysssmprinst) ? asset('/vfiles/' ).'/'.$employee->virtualfile->dtysssmprinst : asset('/vfiles/No_Image_Available.jpg') }}">
+                        <img src="{{isset($employee->virtualfile->dtysssmprinst) ? asset('/vfiles/' ).'/'.$employee->virtualfile->dtysssmprinst : asset('/vfiles/No_Image_Available.jpg') }}" class="img-fluid img-thumbnail" alt="">
+                        </a></div>@can('employee-edit')<button class="imgedit" type="button" id="dtysssmprinst" data-toggle="modal" data-target="#imageupload"><i class="fas fa-edit"></i>@endcan</button>
+                    </div>
+                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->dtyasmprins != $employee->dtyasmprins) <span class="dummy-value">{{$employee->empdummy->dtyasmprins}} <input type="hidden" name="dummy_dtyasmprins" value="{{$employee->empdummy->dtyasmprins}}"/></span>@endif @endif
+                </div>
+
+                <div class="form-group">
+                    <div class="form-col-4">
+                        <label for="" class="control-label">Designation in permanent working station</label>
+                    </div>
+                    <div class="form-col-8">
                         <select name="designation_id" id="designation_id" class="form-control form-control-sm float" required disabled>
                             <option value="">--Select Designation--</option>
                     		@foreach ($designations as $designation)
@@ -460,52 +536,12 @@
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->designation_id != $employee->designation_id) <span class="dummy-value">{{$employee->empdummy->designation->designation}} <input type="hidden" name="dummy_designation_id" value="{{$employee->empdummy->designation_id}}"/></span>@endif @endif
                 </div>
-                <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Permanent Institute (as per paysheet)</label>
-                    </div>
-                    <div class="form-col-10">    
-                        <select name="institute_id" id="institute_id" class="form-control form-control-sm" required disabled>
-                            <option value="">--Select Institution--</option>
-                    		@foreach ($institutes as $institute)
-                            <option value="{{ $institute->id}}" {{(isset($employee) && $employee->institute_id == $institute->id)  ? 'selected' : ''}}>{{ $institute->institute}}</option>
-                             @endforeach
-                    	</select>
-                    </div>
-                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->institute_id != $employee->institute_id) <span class="dummy-value">{{$employee->empdummy->institute->institute}} <input type="hidden" name="dummy_institute_id" value="{{$employee->empdummy->institute_id}}"/></span>@endif @endif
-                </div>
-                <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Current Working Station (Attachment/temprory)</label>
-                    </div>
-                    <div class="form-col-10">    
-                        <select name="current_working_station" id="current_working_station" class="form-control form-control-sm" required disabled>
-                            <option value="">--Select Institution--</option>
-                    		@foreach ($institutes as $institute)
-                            <option value="{{ $institute->id}}" {{(isset($employee) && $employee->current_working_station == $institute->id)  ? 'selected' : ''}}>{{ $institute->institute}}</option>
-                             @endforeach
-                    	</select>
-                    </div>
-                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->current_working_station != $employee->current_working_station) <span class="dummy-value">{{$employee->empdummy->workingStation->institute}} <input type="text" name="dummy_current_working_station" value="{{$employee->empdummy->current_working_station}}"/></span>@endif @endif
-                </div>
-                <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Dty.Assm in Pre.Institute</label>
-                    </div>
-                    <div class="form-col-10">
-                        <input type="date" class="form-control form-control-sm float" name="dtyasmprins" id="dtyasmprins" value="{{ old('dtyasmprins', isset($employee) ? $employee->dtyasmprins : '') }}" readonly>
-                        <div class="image-set"><a data-gallery="photoviewer" id="{{isset($employee->virtualfile->id) ? $employee->virtualfile->id : ''}}" data-title="SMGT-Scanned Documents" data-group="a" href="{{isset($employee->virtualfile->dtysssmprinst) ? asset('/vfiles/' ).'/'.$employee->virtualfile->dtysssmprinst : asset('/vfiles/No_Image_Available.jpg') }}">
-                        <img src="{{isset($employee->virtualfile->dtysssmprinst) ? asset('/vfiles/' ).'/'.$employee->virtualfile->dtysssmprinst : asset('/vfiles/No_Image_Available.jpg') }}" class="img-fluid img-thumbnail" alt="">
-                        </a></div>@can('employee-edit')<button class="imgedit" type="button" id="dtysssmprinst" data-toggle="modal" data-target="#imageupload"><i class="fas fa-edit"></i>@endcan</button>
-                    </div>
-                </div>
-                @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->dtyasmprins != $employee->dtyasmprins) <span class="dummy-value">{{$employee->empdummy->dtyasmprins}} <input type="hidden" name="dummy_dtyasmprins" value="{{$employee->empdummy->dtyasmprins}}"/></span>@endif @endif
-            </div>
+            </div>   
             <!--...............Service history.................-->
             <table>
                 <thead>
                     <tr>
-                        <th colspan="4" style="background-color:#FAF0E6; font-weight:bold; text-align: center;">Service History(Source:NEMIS)</th>
+                        <th colspan="4" style="background-color:#FAF0E6; font-weight:bold; text-align: center;"><label>Service History(Source:NEMIS)</label></th>
                     </tr>
                     <tr>
                         <th>Zone</th>
@@ -534,14 +570,14 @@
         <!-- Qualification Information start-->
         <div class="card qualifinfo" id="qualifinfo">
             <div class="card-header">
-                <b> <i class="fas fa-map"></i><span style="font-size: 13px"> Education/Professional Qualifications</span> </b>
+                <b> <i class="fas fa-map"></i><span style="font-size: 13px"> Education/Professional qualifications</span> </b>
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Higher Edu.Qualification</label>
+                    <div class="form-col-3">
+                        <label for="" class="control-label">Higher education qualification</label>
                     </div>
-                    <div class="form-col-10">    
+                    <div class="form-col-9">    
                         <select name="highqualification_id" id="highqualification_id" class="form-control form-control-sm float" disabled>
                             <option value="">--Select Highest Qualification--</option>
                             @foreach ($highqualifs as $highqualif)
@@ -564,11 +600,30 @@
                         @endif
                     @endif                
                 </div>
-                <div class="form-group">                
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Name of 1st Degree</label>
+                <div class="form-group">
+                    <div class="form-col-3">
+                        <label for="" class="control-label">A/L stream</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">    
+                        <select name="al_stream" id="al_stream" class="form-control form-control-sm" disabled>
+                            <option value="" @if(isset($employee) && $employee->al_stream==""){{"selected"}} @endif >--Select Degree Type--</option>
+                            <option value="bio science" @if(isset($employee) && $employee->al_stream=="bio science"){{"selected"}} @endif >Bio Science</option>
+                            <option value="physical science" @if(isset($employee) && $employee->al_stream=="physical science"){{"selected"}} @endif >Physical Science</option>
+                            <option value="commerce" @if(isset($employee) && $employee->al_stream=="commerce"){{"selected"}} @endif >Commerce</option>
+                            <option value="e_tech" @if(isset($employee) && $employee->al_stream=="e_tech"){{"selected"}} @endif >E-Technology</option>
+                            <option value="b_tech" @if(isset($employee) && $employee->al_stream=="b_tech"){{"selected"}} @endif >B-Technology</option>
+                            <option value="arts" @if(isset($employee) && $employee->al_stream=="arts"){{"selected"}} @endif >Arts</option>
+                            <option value="others" @if(isset($employee) && $employee->al_stream=="others"){{"selected"}} @endif >Other Stream</option>
+                            <option value="not sat for A/L" @if(isset($employee) && $employee->al_stream=="not sat for A/L"){{"selected"}} @endif >Not Sat for A/L</option>
+                    	</select>
+                    </div>
+                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->al_stream != $employee->al_stream) <span class="dummy-value">{{$employee->empdummy->al_stream}} <input type="hidden" name="dummy_al_stream" value="{{$employee->empdummy->al_stream}}"/></span>@endif @endif
+                </div>
+                <div class="form-group">                
+                    <div class="form-col-3">
+                        <label for="" class="control-label">Name of basic degree</label>
+                    </div>
+                    <div class="form-col-9">
                         <select name="degree_id" id="degree_id" class="form-control form-control-sm" disabled>
                             <option value="">--Select Degree--</option>
                     		@foreach ($degrees as $degree)
@@ -578,76 +633,56 @@
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->degree_id != $employee->degree_id) <span class="dummy-value">{{$employee->empdummy->degree->degree}} <input type="hidden" name="dummy_degree_id" value="{{$employee->empdummy->degree_id}}"/></span>@endif @endif
                 </div>
-                <div class="form-group"> 
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Degree Obtained from</label>
-                    </div>
-                    <div class="form-col-10">    
-                        <select name="deginstitute_id" id="deginstitute_id" class="form-control form-control-sm" disabled>
-                            <option value="">--Select Institution of Degree Obtained--</option>
-                            @foreach ($eduinsts as $eduinst)
-                            <option value="{{$eduinst->id}}" {{(isset($employee) && $employee->deginstitute_id == $eduinst->id)  ? 'selected' : ''}}>{{$eduinst->eduinsti}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->deginstitute_id != $employee->deginstitute_id) <span class="dummy-value">{{$employee->empdummy->deginstitute->eduinsti}} <input type="hidden" name="dummy_deginstitute_id" value="{{$employee->empdummy->deginstitute_id}}"/></span>@endif @endif
+                <br>
+                <!--............................................................Degree Subject....................................................-->
+                <label class="card-title">Degree Subjects</label>
+                <table id="degreesubjecttable">
+                    <thead>
+                        <tr>
+                            <th style="width:90%;">Subject Name</th>
+                            <th style="width:10%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($empDegreeSubjects as $item)
+                            <input type="hidden" name="degree_subjects[{{$loop->index}}][id]" value="{{$item->id}}">
+                            
+                            <tr id="rowdata_{{$item->id}}">
+                                <td>
+                                    <select class="form-control form-control-sm" name="degree_subjects[{{$loop->index}}][subject_name]"
+                                        value="{{$item->subject_name}}" disabled>
+                                        @foreach($degreesubs as $subject)
+                                            <option value="{{$subject->name}}"
+                                                {{$item->subject_name == $subject->name ? 'selected' : ''}}>
+                                                {{$subject->name}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
+
+
+                                <td>
+                                    <button data-id="removedata_{{$item->id}}"
+                                        class="btn removedegreedata btn-danger btn-sm"
+                                        style="display:none;">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+
+                        <tr class='element' id='div_degree_1'></tr>
+                    </tbody>
+                </table>
+
+                <!--.......................................Dynamic Degree Subject Area Start.............................................. -->
+                <div class="button-container float-left" id="adddegreebtn" style="display:none">
+                    <button type="button" class="btn btn-success btn-sm addDegreeSubject"><i class="fa fa-plus"></i> Add degree subject</button>
                 </div>
-                <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Degree Type</label>
-                    </div>
-                    <div class="form-col-10">    
-                        <select name="degtype" id="degtype" class="form-control form-control-sm" disabled>
-                            <option value="" @if(isset($employee) && $employee->degtype==""){{"selected"}} @endif >--Select Degree Type--</option>
-                            <option value="Internal" @if(isset($employee) && $employee->degtype=="Internal"){{"selected"}} @endif >Internal</option>
-                            <option value="External" @if(isset($employee) && $employee->degtype=="External"){{"selected"}} @endif >External</option>
-                            <option value="Distance" @if(isset($employee) && $employee->degtype=="Distance"){{"selected"}} @endif >Distance</option>
-                    	</select>
-                    </div>
-                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->degtype != $employee->degtype) <span class="dummy-value">{{$employee->empdummy->degtype}} <input type="hidden" name="dummy_degtype" value="{{$employee->empdummy->degtype}}"/></span>@endif @endif
-                </div>
-                <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Degree Subject 1</label>
-                    </div>
-                    <div class="form-col-10">    
-                        <select name="degsubject1_id" id="degsubject1_id" class="form-control form-control-sm" disabled>
-                            <option value="">--Select Degree Subject 1--</option>
-                            @foreach ($degreesubs as $degreesub)
-                            <option value="{{$degreesub->id}}" {{(isset($employee) && $employee->degsubject1_id == $degreesub->id)  ? 'selected' : ''}}>{{$degreesub->degreesub}}</option>
-                            @endforeach
-                    	</select>
-                    </div>
-                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->degsubject1_id != $employee->degsubject1_id) <span class="dummy-value">{{$employee->empdummy->degsubject1->degreesub}} <input type="hidden" name="dummy_degsubject1_id" value="{{$employee->empdummy->degsubject1_id}}"/></span>@endif @endif
-                </div>
-                <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Degree Subject 2</label>
-                    </div>
-                    <div class="form-col-10"> 
-                        <select name="degsubject2_id" id="degsubject2_id" class="form-control form-control-sm" disabled>
-                            <option value="">--Select Degree Subject 2--</option>
-                    		@foreach ($degreesubs as $degreesub)
-                            <option value="{{$degreesub->id}}" {{(isset($employee) && $employee->degsubject2_id == $degreesub->id)  ? 'selected' : ''}}>{{$degreesub->degreesub}}</option>
-                            @endforeach
-                    	</select>
-                    </div>
-                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->degsubject2_id != $employee->degsubject2_id) <span class="dummy-value">{{$employee->empdummy->degsubject2->degreesub}} <input type="hidden" name="dummy_degsubject2_id" value="{{$employee->empdummy->degsubject2_id}}"/></span>@endif @endif
-                </div>
-                <div class="form-group">
-                    <div class="form-col-2">
-                        <label for="" class="control-label">Degree Subject 3</label>
-                    </div>
-                    <div class="form-col-10">     
-                        <select name="degsubject3_id" id="degsubject3_id" class="form-control form-control-sm" disabled>
-                            <option value="">--Select Degree Subject 3--</option>
-                    		@foreach ($degreesubs as $degreesub)
-                            <option value="{{$degreesub->id}}" {{(isset($employee) && $employee->degsubject3_id == $degreesub->id)  ? 'selected' : ''}}>{{$degreesub->degreesub}}</option>
-                            @endforeach
-                    	</select>
-                    </div>
-                    @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->degsubject3_id != $employee->degsubject3_id) <span class="dummy-value">{{$employee->empdummy->degsubject3->degreesub}} <input type="hidden" name="dummy_degsubject3_id" value="{{$employee->empdummy->degsubject3_id}}"/></span>@endif @endif
-                </div>
+                <br>
+                <!--.......................................Dynamic Degree Subjects Area End.............................................. -->
+             
+                
                 <br>
                 <!--............................................................Other Qualifications....................................................-->
                 @if(!empty($employee->id))
@@ -655,7 +690,7 @@
                 @endif
                 <!--.......................................Dynamic Qualification Area Start.............................................. -->
                 <div class="button-container float-left" id="addqualifbtn" style="display:none">
-                    <button type="button" class="btn btn-success btn-sm addcourse"><i class="fa fa-plus"></i> Add row</button>
+                    <button type="button" class="btn btn-success btn-sm addcourse"><i class="fa fa-plus"></i> Add qualification</button>
                 </div>
                 <!--.......................................Dynamic Qualification Area Area End.............................................. -->
                 
@@ -668,10 +703,10 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Appointment Subject</label>
                     </div>
-                    <div class="form-col-10">     
+                    <div class="form-col-9">     
                         <input type="text" class="form-control form-control-sm float" name="appsubject" id="appsubject" value="{{ old('appsubject', isset($employee) ? $employee->appsubject : '') }}" readonly>
                         <div class="image-set"><a data-gallery="photoviewer" id="{{isset($employee->virtualfile->id) ? $employee->virtualfile->id : ''}}" data-title="SMGT-Scanned Documents" data-group="a" href="{{isset($employee->virtualfile->appsub) ? asset('/vfiles/' ).'/'.$employee->virtualfile->appsub : asset('/vfiles/No_Image_Available.jpg') }}">
                         <img src="{{isset($employee->virtualfile->appsub) ? asset('/vfiles/' ).'/'.$employee->virtualfile->appsub : asset('/vfiles/No_Image_Available.jpg') }}" class="img-fluid img-thumbnail" alt="">
@@ -680,10 +715,10 @@
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->appsubject != $employee->appsubject) <span class="dummy-value">{{$employee->empdummy->appsubject}} <input type="hidden" name="dummy_appsubject" value="{{$employee->empdummy->appsubject}}"/></span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Appointment Category</label>
                     </div>
-                    <div class="form-col-10">     
+                    <div class="form-col-9">     
                         <select name="appcategory_id" id="appcategory_id" class="form-control form-control-sm" disabled>
                             <option value="">--Select Appointment Category--</option>
                     		@foreach ($appcats as $appcat)
@@ -694,10 +729,10 @@
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->appcategory_id != $employee->appcategory_id) <span class="dummy-value">{{$employee->empdummy->appcategory->appcat}} <input type="hidden" name="dummy_appcategory_id" value="{{$employee->empdummy->appcategory_id}}"/></span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Cadre Subject</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <select name="cadresubject_id" id="cadresubject_id" class="form-control form-control-sm" disabled required>
                             <option value="">--Select cadre Subject--</option>
                             @foreach ($cadresubs as $cadresub)
@@ -708,10 +743,10 @@
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->cadresubject_id != $employee->cadresubject_id) <span class="dummy-value">{{$employee->empdummy->cadresubject->cadre}} <input type="hidden" name="dummy_cadresubject_id" value="{{$employee->empdummy->cadresubject_id}}"/></span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Trained Status</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <select name="trained" id="trained" class="form-control form-control-sm" disabled>
                             <option value="" @if(isset($employee) && $employee->trained==""){{"selected"}} @endif >--Select Trained Status--</option>
                             <option value="trained" @if(isset($employee) && $employee->trained=="trained"){{"selected"}} @endif >Trained</option>
@@ -739,10 +774,10 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Status(Active/In-Active)</label>
                     </div>
-                    <div class="form-col-10">     
+                    <div class="form-col-9">     
                         <select name="status" id="status" class="form-control form-control-sm" required disabled>
                             <option value="" @if(isset($employee) && $employee->status==""){{"selected"}} @endif >--Select Status--</option>
                             <option value="Active" @if(isset($employee) && $employee->status=="Active"){{"selected"}} @endif >Active</option>
@@ -754,36 +789,36 @@
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->status != $employee->status) <span class="dummy-value">{{$employee->empdummy->status}} <input type="hidden" name="dummy_status" value="{{$employee->empdummy->status}}"/></span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Remarks</label>
                     </div>
-                    <div class="form-col-10">     
+                    <div class="form-col-9">     
                         <input type="text" class="form-control form-control-sm" name="remark" id="remark" value="{{ old('remark', isset($employee) ? $employee->remark : '') }}" readonly>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->remark != $employee->remark) <span class="dummy-value">{{$employee->empdummy->remark}} <input type="hidden" name="dummy_remark" value="{{$employee->empdummy->remark}}"/></span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Created on</label>
                     </div>
-                    <div class="form-col-10">     
+                    <div class="form-col-9">     
                         <input type="text" class="form-control form-control-sm" name="created_at" id="created_at" value="{{ old('created_at', isset($employee) ? $employee->created_at : '') }}" readonly disabled>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Last Modification Date & Time</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <input type="text" class="form-control form-control-sm" name="updated_at" id="updated_at" value="{{ old('updated_at', isset($employee) ? $employee->updated_at : '') }}" readonly disabled>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->updated_at != $employee->updated_at) <span class="dummy-value">{{$employee->empdummy->updated_at}} </span>@endif @endif
                 </div>
                 <div class="form-group">
-                    <div class="form-col-2">
+                    <div class="form-col-3">
                         <label for="" class="control-label">Designation Category</label>
                     </div>
-                    <div class="form-col-10">
+                    <div class="form-col-9">
                         <input type="text" class="form-control form-control-sm" id="desigcatg" name="desigcatg" value="{{ $employee?->designation?->catg ?? '' }}" required readonly>
                     </div>
                 </div>
@@ -796,7 +831,7 @@
                     <div style="display:inline-block;vertical-align:middle;">
                         <label class="control-label" for="certifyChk"> </label>
                     </div>
-                    <div class="form-col-10" style="display:inline-block;vertical-align:middle;">
+                    <div class="form-col-9" style="display:inline-block;vertical-align:middle;">
                         <input type="checkbox" id="certifyChk" disabled />
                         <label for="certifyChk" style="margin-left:6px; font-weight:600;">I certify that above detailed are correct.</label>
                     </div>
@@ -936,17 +971,26 @@
 }
 
 @media (min-width: 576px) {
-  .form-col-2 {
-    flex: 0 0 20%;
-    max-width: 20%;
-    height: 20px;
-  }
-  
-  .form-col-10 {
-    flex: 0 0 80%;
-    max-width: 80%;
-    height: 20px;
-  }
+
+ .form-col-3 {
+  flex: 0 0 25%;
+  max-width: 25%;
+}
+
+.form-col-9 {
+  flex: 0 0 75%;
+  max-width: 75%;
+}
+
+  .form-col-4 {
+  flex: 0 0 40%;
+  max-width: 40%;
+}
+
+.form-col-8 {
+  flex: 0 0 60%;
+  max-width: 60%;
+}
   
 }
 
@@ -991,11 +1035,12 @@
     counter-reset: section;
 }
 
-.form-numbering .form-group {
+/* .form-numbering .form-group {
     counter-increment: section;
-}
+} */
 
-.form-numbering .form-group label::before {
+.form-numbering label::before {
+    counter-increment: section;
     content: counter(section) ". ";
     font-weight: bold;
 }
@@ -1008,7 +1053,11 @@
 }
 .float {
     float:left;
-    width:250px !important;
+    width:93% !important;
+}
+.float-double {
+    float:left;
+    width:85% !important;
 }
 .img-thumbnail{
     height: 30px !important;
@@ -1354,100 +1403,193 @@ $(document).ready(function () {
                     }
              });
            });
-    //..........................................................Adding a Cource.........................................................       
-    $(".addcourse").click(function(e){
+
+    //..................................... Adding Degree Subject .....................................
+    $(".addDegreeSubject").click(function(e){
         e.preventDefault();
-         // Finding total number of elements added
+
         var total_element = $(".element").length;
-        // last <div> with element class id
         var lastid = $(".element:last").attr("id");
         var split_id = lastid.split("_");
-        var nextindex = Number(split_id[1]) + 1;
+        var nextindex = Number(split_id[2] ?? split_id[1]) + 1;
 
- 
-            // Adding new div container after last occurance of element class
-            $(".element:last").after("<div class='element' id='div_"+ nextindex +"'></div>");
+        $(".element:last").after("<div class='element' id='div_degree_"+ nextindex +"'></div>");
 
-            // Adding element to <table>
-            var html="";
-            html += "<tr id='row_"+ nextindex +"'>";
-            html += "<td>";
-            html += "<input class='form-control form-control-sm' list='courses' name='course_name[]' id='course_name"+ nextindex +"' autocomplete='off' required>";
-            html += "<datalist id='courses'>"
-            html += "<option selected>--Choose or enter Course--</option>"
-            html += "</datalist>";
-            html += "</td>";
-            html += "<td>";
-            html += "<input list='institutions' class='form-control form-control-sm' name='institution[]' id='institution"+ nextindex +"' autocomplete='off' required>";
-            html += "<datalist id='institutions'>"
-            html += "<option selected>--Choose or enter Institution--</option>"
-            html += "</datalist>";
-            html += "</td>";
-            html += "<td>";
-            html += "<input type='text' class='form-control form-control-sm' id='duration"+ nextindex +"' name='duration[]' required>";
-            html += "</td>";
-            html += "<td>"
-            html += "<button type='button' id='remove_" + nextindex + "' class='btn remove btn-danger btn-sm'><i class='fa fa-trash'></i></button>";
-            html += "</td>";
-            html += "</tr>";
-            
-            $("#coursetable").find('tbody').append(html);
-        
-             //Append to parallel class
-            var len= 0;
-            var qualifData = {!! isset($qualifData) ? $qualifData : 'null' !!};
-            len = qualifData.length;
-            console.log(len);
-            if(len > 0){
-               // Read data and create <option >
-               for(var i=0; i<len; i++){
-                var course_name = qualifData[i].course_name;
-                var option1 = "<option value="+course_name+">";
+        var html = "";
+        html += "<tr id='row_degree_"+ nextindex +"'>";
 
-                $("#courses"+ nextindex +"").append(option1);  
-               }
+        // SUBJECT DROPDOWN
+        html += "<td>";
+        html += "<select class='form-control form-control-sm' name='subject_name[]' required>";
+        html += "<option value=''>-- Choose Subject --</option>";
+
+        var subjectData = @json($degreesubs);
+
+        if(subjectData && subjectData.length > 0){
+            for(var i = 0; i < subjectData.length; i++){
+                html += "<option value='"+ subjectData[i].name +"'>"
+                    + subjectData[i].name + "</option>";
             }
+        }
+
+        html += "</select>";
+        html += "</td>";
+
+        // DELETE BUTTON
+        html += "<td>";
+        html += "<button type='button' id='remove_degree_" + nextindex + "' class='btn remove_degree btn-danger btn-sm'>";
+        html += "<i class='fa fa-trash'></i></button>";
+        html += "</td>";
+
+        html += "</tr>";
+
+        $("#degreesubjecttable tbody").append(html);
+
     });
-    
-    // Remove element
-    $('.form-card').on('click','.remove',function(e){
+
+    $('.form-card').on('click','.remove_degree',function(e){
         e.preventDefault();
+
         var id = this.id;
         var split_id = id.split("_");
-        var deleteindex = split_id[1];
+        var deleteindex = split_id[2];
 
-        // Remove <div> with id
-        $("#row_" + deleteindex).remove();
-
+        $("#row_degree_" + deleteindex).remove();
     });
-    
-     $(".removedata").click(function(e){
+
+    $(document).on('click', '.removedegreedata', function(e){
         e.preventDefault();
-            var fullid = $(this).data("id")
-            var split_id = fullid.split("_");
-            var id = split_id[1];
-            
-        var confirmation = confirm("are you sure you want to remove the item?");
-        if (confirmation) {    
-            var token = $("meta[name='csrf-token']").attr("content");
-            $.ajax(
-            {
-                url: "/qualification/"+id,
-                type: 'post',
-                data: {
-                    "id": id,
-                    "_token": token,
-                },
-                success: function (data){
-                    $("#rowdata_" + id).remove();
-                    alert(data.success);
-                },
-                error: function () {
-                    alert("error");
-                }
-            });
-        }
+
+        var fullid = $(this).data("id");
+        var split_id = fullid.split("_");
+        var id = split_id[1];
+
+        if(!confirm("Are you sure you want to remove the subject?")) return;
+
+        var token = $("meta[name='csrf-token']").attr("content");
+
+        $.ajax({
+            url: "/empdegsubject/" + id,
+            type: 'DELETE',
+            data: {
+                "_token": token
+            },
+            success: function (data){
+                $("#rowdata_" + id).remove();
+                alert(data.success);
+            },
+            error: function (xhr){
+                console.log(xhr.responseText);
+                alert("Delete failed");
+            }
+        });
     });
+
+
+
+    //..........................................................Adding a Cource.........................................................       
+    $(".addcourse").click(function(e){
+    e.preventDefault();
+
+    var total_element = $(".element").length;
+    var lastid = $(".element:last").attr("id");
+    var split_id = lastid.split("_");
+    var nextindex = Number(split_id[1]) + 1;
+
+    $(".element:last").after("<div class='element' id='div_"+ nextindex +"'></div>");
+
+    var html="";
+    html += "<tr id='row_"+ nextindex +"'>";
+
+    // Course
+    html += "<td>";
+    html += "<select class='form-control form-control-sm' name='course_name[]' required>";
+    html += "<option value=''>-- Select Qualification --</option>";
+
+    var qualifData = @json($qualifData);
+
+    if(qualifData.length > 0){
+        for(var i = 0; i < qualifData.length; i++){
+            html += "<option value='"+ qualifData[i].name +"'>" 
+                 + qualifData[i].name + "</option>";
+        }
+    }
+
+    html += "</select>";
+    html += "</td>";
+
+    // Institution
+    html += "<td>";
+    html += "<select class='form-control form-control-sm' name='institution[]' required>";
+    html += "<option value=''>-- Select Institution --</option>";
+
+    var instituteData = @json($instituteData);
+
+    if(instituteData.length > 0){
+        for(var i = 0; i < instituteData.length; i++){
+            html += "<option value='"+ instituteData[i].name +"'>" 
+                 + instituteData[i].name + "</option>";
+        }
+    }
+
+    html += "</select>";
+    html += "</td>";
+
+    // Duration
+    html += "<td>";
+    html += "<input type='text' class='form-control form-control-sm' name='duration[]' required>";
+    html += "</td>";
+
+    // Delete Button
+    html += "<td>";
+    html += "<button type='button' id='remove_" + nextindex + "' class='btn remove btn-danger btn-sm'>";
+    html += "<i class='fa fa-trash'></i></button>";
+    html += "</td>";
+
+    html += "</tr>";
+
+    $("#coursetable tbody").append(html);
+});
+
+// Remove dynamic row
+$('.form-card').on('click','.remove',function(e){
+    e.preventDefault();
+    var id = this.id;
+    var split_id = id.split("_");
+    var deleteindex = split_id[1];
+    $("#row_" + deleteindex).remove();
+});
+
+// Remove existing record (AJAX)
+$(".removedata").click(function(e){
+    e.preventDefault();
+
+    var fullid = $(this).data("id");
+    var split_id = fullid.split("_");
+    var id = split_id[1];
+
+    if(confirm("Are you sure you want to remove this item?")){
+
+        var token = $("meta[name='csrf-token']").attr("content");
+
+        $.ajax({
+            url: "/qualification/" + id,
+            type: "DELETE",
+            data: {
+                id: id,
+                _token: token
+            },
+            success: function(data){
+                $("#rowdata_" + id).remove();
+                alert(data.success);
+            },
+            error: function(){
+                alert("Error deleting record");
+            }
+        });
+    }
+});
+
     //..........................................................Adding a Teaching Subject.........................................................
     $(".addsubject").click(function(e){
         e.preventDefault();
@@ -1565,14 +1707,33 @@ $(document).ready(function () {
         }
 
         // toggle other UI blocks as before
+        var adddegreebtn = document.getElementById("adddegreebtn");
+        if (adddegreebtn) adddegreebtn.style.display = (adddegreebtn.style.display === "none" || adddegreebtn.style.display === "") ? "block" : "none";
+
         var addqualifbtn = document.getElementById("addqualifbtn");
         if (addqualifbtn) addqualifbtn.style.display = (addqualifbtn.style.display === "none" || addqualifbtn.style.display === "") ? "block" : "none";
 
         var subjectbtn = document.getElementById("subjectbtn");
         if (subjectbtn) subjectbtn.style.display = (subjectbtn.style.display === "none" || subjectbtn.style.display === "") ? "block" : "none";
 
-        $('.removedata').css('display', 'block');
-        $('.removedata1').css('display', 'block');
+        if ($('.removedata').is(':visible')) {
+            $('.removedata').hide();
+        } else {
+            $('.removedata').show();
+        }
+        
+        if ($('.removedata1').is(':visible')) {
+            $('.removedata1').hide();
+        } else {
+            $('.removedata1').show();
+        }
+
+        if ($('.removedegreedata').is(':visible')) {
+            $('.removedegreedata').hide();
+        } else {
+            $('.removedegreedata').show();
+        }
+        
 
         // After toggling, enable/disable checkbox and save button appropriately
         var submitVisible = submitDiv && submitDiv.style.display === 'block';
@@ -1601,7 +1762,12 @@ $(document).ready(function() {
   const $submitDiv = $('#submitdiv');
   const $addQual = $('#addqualifbtn');
   const $subjectBtn = $('#subjectbtn');
+  const $addDegreeBtn = $('#adddegreebtn');
 
+  const $rmvData = $('.removedata');
+  const $rmvData1 = $('.removedata1');
+  const $rmvDegData = $('.removedegreedata');
+  
   // initial states
   $submitDiv.hide();
   if ($save.length) $save.prop('disabled', true);
@@ -1629,11 +1795,13 @@ $(document).ready(function() {
     // toggle submit area and related UI
     $submitDiv.toggle();
     $addQual.toggle();
+    $addDegreeBtn.toggle();
     $subjectBtn.toggle();
 
-    // show remove buttons when editing (keeps your existing behaviour)
-    $('.removedata').css('display', 'block');
-    $('.removedata1').css('display', 'block');
+    $rmvData.toggle();
+    $rmvData1.toggle();
+    $rmvDegData.toggle();
+
 
     const visible = $submitDiv.is(':visible');
 
