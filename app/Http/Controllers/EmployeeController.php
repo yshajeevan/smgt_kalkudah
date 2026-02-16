@@ -272,9 +272,11 @@ class EmployeeController extends Controller
         $degreesubs = DegSubject::get();
         $appcats = AppCategory::get();
         $cadresubs = Cadresubject::orderBy('cadre')->get(); 
+        $qualifData = ProfQualification::query()->orderBy('name')->get();
+        $instituteData = ProfQualificationInstitute::query()->orderBy('name')->get();
 
         return view('human_resource.createOrUpdate', compact('employee','employeeDummy','ds','gn','zones','transmodes','services','designations','institutes',
-        'highqualifs','degrees','degreesubs','appcats','cadresubs'));
+        'highqualifs','degrees','degreesubs','appcats','cadresubs','qualifData','instituteData'));
    
     }
 
