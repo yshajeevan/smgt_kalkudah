@@ -260,8 +260,8 @@ class EmployeeController extends Controller
     {
         $employee = null;
         $employeeDummy = null;
-        $ds = DsDivision::get();
-        $gn = GnDivision::get();
+        $ds = DsDivision::orderBy('ds')->get();
+        $gn = GnDivision::orderBy('gn')->get();
         $zones = Zone::get();
         $transmodes = TransMode::get();
         $services = EmpService::get();   
@@ -269,7 +269,7 @@ class EmployeeController extends Controller
         $institutes = Institute::orderBy('institute')->get();  
         $highqualifs = HighEduQualification::get(); 
         $degrees = Degree::get();
-        $degreesubs = DegSubject::get();
+        $degreesubs = DegSubject::orderBy('name')->get();
         $appcats = AppCategory::get();
         $cadresubs = Cadresubject::orderBy('cadre')->get(); 
         $qualifData = ProfQualification::query()->orderBy('name')->get();

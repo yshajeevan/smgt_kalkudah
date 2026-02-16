@@ -606,7 +606,7 @@
                     </div>
                     <div class="form-col-9">    
                         <select name="al_stream" id="al_stream" class="form-control form-control-sm" disabled>
-                            <option value="" @if(isset($employee) && $employee->al_stream==""){{"selected"}} @endif >--Select Degree Type--</option>
+                            <option value="" @if(isset($employee) && $employee->al_stream==""){{"selected"}} @endif >--Select A/L stream--</option>
                             <option value="bio science" @if(isset($employee) && $employee->al_stream=="bio science"){{"selected"}} @endif >Bio Science</option>
                             <option value="physical science" @if(isset($employee) && $employee->al_stream=="physical science"){{"selected"}} @endif >Physical Science</option>
                             <option value="commerce" @if(isset($employee) && $employee->al_stream=="commerce"){{"selected"}} @endif >Commerce</option>
