@@ -635,9 +635,20 @@
                 </div>
                 <br>
                 <!--............................................................Degree Subject....................................................-->
-                @if(!empty($employee->id))
-                    @include('human_resource.partials.emp_degree_subjects')
-                @endif
+                <table id="degreesubjecttable">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(!empty($employee->id))
+                            @include('human_resource.partials.emp_degree_subjects')
+                        @endif
+                    </tbody>
+                </table>
+
                 <!--.......................................Dynamic Degree Subject Area Start.............................................. -->
                 <div class="button-container float-left" id="adddegreebtn" style="display:none">
                     <button type="button" class="btn btn-success btn-sm addDegreeSubject"><i class="fa fa-plus"></i> Add degree subject</button>
@@ -648,9 +659,22 @@
                 
                 <br>
                 <!--............................................................Other Qualifications....................................................-->
-                @if(!empty($employee->id))
-                    @include('human_resource.partials.qualifications')
-                @endif
+                <table id="coursetable">
+                    <thead>
+                        <tr>
+                            <th>Qualification</th>
+                            <th>Institution</th>
+                            <th>Duration</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(!empty($employee->id))
+                            @include('human_resource.partials.qualifications')
+                        @endif
+                    </tbody>
+                </table>
+
                 <!--.......................................Dynamic Qualification Area Start.............................................. -->
                 <div class="button-container float-left" id="addqualifbtn" style="display:none">
                     <button type="button" class="btn btn-success btn-sm addcourse"><i class="fa fa-plus"></i> Add qualification</button>
@@ -720,9 +744,21 @@
                 </div>
                 @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->trained != $employee->trained) <span class="dummy-value">{{$employee->empdummy->trained}} <input type="hidden" name="dummy_trained" value="{{$employee->empdummy->trained}}"/></span>@endif @endif
                 <br>
-                @if(!empty($employee->id))
-                    @include('human_resource.partials.teachsubjects')
-                @endif
+                <table id="subjecttable">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Periods</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(!empty($employee->id))
+                            @include('human_resource.partials.teachsubjects')
+                        @endif
+                    </tbody>
+                </table>
+
                 <!--.......................................Dynamic Teaching Subject Area Start.............................................. -->
                 <div class="button-container float-left" id="subjectbtn" style="display:none">
                     <button type="button" class="btn btn-success btn-sm addsubject"><i class="fa fa-plus"></i> Add row</button>
@@ -1368,13 +1404,10 @@ $(document).ready(function () {
            });
 
     //..................................... Adding Degree Subject .....................................
-    $(".addDegreeSubject").click(function(e){
+    $(document).on("click", ".addDegreeSubject", function(e){
         e.preventDefault();
 
-        var total_element = $(".element").length;
-        var lastid = $(".element:last").attr("id");
-        var split_id = lastid.split("_");
-        var nextindex = Number(split_id[2] ?? split_id[1]) + 1;
+        var nextindex = $(".element").length + 1;
 
         $(".element:last").after("<div class='element' id='div_degree_"+ nextindex +"'></div>");
 
@@ -1386,7 +1419,7 @@ $(document).ready(function () {
         html += "<select class='form-control form-control-sm' name='subject_name[]' required>";
         html += "<option value=''>-- Choose Subject --</option>";
 
-        var subjectData = @json($degreesubs);
+        var subjectData = @json($degreesubs ?? []);
 
         if(subjectData && subjectData.length > 0){
             for(var i = 0; i < subjectData.length; i++){
@@ -1451,13 +1484,10 @@ $(document).ready(function () {
 
 
     //..........................................................Adding a Cource.........................................................       
-    $(".addcourse").click(function(e){
-    e.preventDefault();
+    $(document).on("click", ".addcourse", function(e){
 
-    var total_element = $(".element").length;
-    var lastid = $(".element:last").attr("id");
-    var split_id = lastid.split("_");
-    var nextindex = Number(split_id[1]) + 1;
+
+    var nextindex = $("#coursetable tbody tr").length + 1;
 
     $(".element:last").after("<div class='element' id='div_"+ nextindex +"'></div>");
 
@@ -1469,7 +1499,7 @@ $(document).ready(function () {
     html += "<select class='form-control form-control-sm' name='course_name[]' required>";
     html += "<option value=''>-- Select Qualification --</option>";
 
-    var qualifData = @json($qualifData);
+    var qualifData = @json($qualifData ?? []);
 
     if(qualifData.length > 0){
         for(var i = 0; i < qualifData.length; i++){
@@ -1486,7 +1516,7 @@ $(document).ready(function () {
     html += "<select class='form-control form-control-sm' name='institution[]' required>";
     html += "<option value=''>-- Select Institution --</option>";
 
-    var instituteData = @json($instituteData);
+    var instituteData = @json($instituteData ?? []);
 
     if(instituteData.length > 0){
         for(var i = 0; i < instituteData.length; i++){
@@ -1554,15 +1584,10 @@ $(".removedata").click(function(e){
 });
 
     //..........................................................Adding a Teaching Subject.........................................................
-    $(".addsubject").click(function(e){
+    $(document).on("click", ".addsubject", function(e){
         e.preventDefault();
-         // Finding total number of elements added
-        var total_element = $(".element1").length;
-        // last <div> with element1 class id
-        var lastid = $(".element1:last").attr("id");
-        var split_id = lastid.split("_");
-        var nextindex = Number(split_id[1]) + 1;
-
+         
+            var nextindex = $("#subjecttable tbody tr").length + 1;
  
             // Adding new div container after last occurance of element1 class
             $(".element1:last").after("<div class='element1' id='div_"+ nextindex +"'></div>");
@@ -1588,7 +1613,7 @@ $(".removedata").click(function(e){
         
             //Append to subject dropdown
             var len= 0;
-            var subjects = {!! isset($teachsubs) ? $teachsubs : 'null' !!};
+            var subjects = @json($teachsubs ?? []);
             len = subjects.length;
             if (len>0) {
                 for (var i = 0; i<len; i++) {
@@ -1803,11 +1828,24 @@ $(document).ready(function() {
 
   // When form is submitted, ensure disabled fields are enabled so they get posted
   $('#employee_form').on('submit', function(){
-    $(this).find(':disabled').each(function(){
-      $(this).removeAttr('disabled');
+
+    // Restore original values for masked fields
+    ['mobile','whatsapp','fixedphone'].forEach(function(id){
+        var input = document.getElementById(id);
+        if(input){
+            var original = input.getAttribute('data-original');
+            if(original){
+                input.value = original;
+            }
+        }
     });
-    // restore masked phone numbers if needed (existing logic kept earlier)
-  });
+
+    // Enable disabled fields so they get posted
+    $(this).find(':disabled').each(function(){
+        $(this).removeAttr('disabled');
+    });
+});
+
 });
 
 

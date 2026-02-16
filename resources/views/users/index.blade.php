@@ -44,7 +44,7 @@
         ajax: "{{ route('user.index') }}",
         columns: [
             {data: 'photo', name: 'photo', orderable: false, searchable: false},
-            {data: 'surname', name: 'employee.surname'},
+            {data: 'name_with_initial_e', name: 'employee.name_with_initial_e'},
             {data: 'email', name: 'email'},
             {data: 'roles', name: 'roles',
                 render: function(data, type, full, meta) {

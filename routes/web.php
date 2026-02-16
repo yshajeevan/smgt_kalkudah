@@ -45,6 +45,7 @@ use App\Http\Controllers\StudentResponseController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\StudentOptionalSubjectController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ProfQualificationController;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
@@ -260,6 +261,7 @@ Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(
 
     Route::resource('degrees', DegreeController::class);
     Route::resource('deg-institutes', DegreeInstituteController::class);
+    Route::resource('prof-qualifications', ProfQualificationController::class);
     Route::resource('deg-subjects', DegreeSubjectController::class);
 
     
@@ -407,10 +409,6 @@ Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(
 	
     //Services Routes
     Route::resource('service', ServiceController::class);
-    Route::get('getservice','App\Http\Controllers\ServiceController@index')->name('services.index');
-    Route::get('service-show/{id}','App\Http\Controllers\ServiceController@show')->name('services.show');
-    Route::post('/services/{id}','App\Http\Controllers\ServiceController@update')->name('services.update');
-    Route::get('/servicedel/{id}','App\Http\Controllers\ServiceController@destroy')->name('servicedel.destroy');
 
     //Checklist Routes
     Route::get('service-checklist/{id}','App\Http\Controllers\ChecklistController@index')->name('checklist.index');

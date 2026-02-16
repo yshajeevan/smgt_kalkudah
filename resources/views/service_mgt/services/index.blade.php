@@ -49,7 +49,7 @@ $(document).ready(function () {
 				'print'
 			    ],
         ajax: {
-          url: "{{ route('services.index') }}",
+          url: "{{ route('service.index') }}",
           data: function (d) {
                 _token: "{{csrf_token()}}",
                 d.search = $('input[type="search"]').val()

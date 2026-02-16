@@ -37,7 +37,7 @@
             ajax: "{{ route('deg-institutes.index') }}",
             columns: [
                 { data: 'id', name: 'id' },
-                { data: 'eduinsti', name: 'eduinsti' },
+                { data: 'name', name: 'name' },
                 { data: 'action', name: 'action', orderable: false, searchable: false },
             ]
         });

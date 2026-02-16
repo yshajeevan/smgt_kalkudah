@@ -29,7 +29,7 @@ class UsersController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = User::with('employee:id,surname,photo')->with('roles:id,name')->select('employee_id','users.email','users.id','users.is_active');
+            $data = User::with('employee:id,name_with_initial_e,photo')->with('roles:id,name')->select('employee_id','users.email','users.id','users.is_active');
 
             return Datatables::of($data)
                     ->addIndexColumn()
@@ -54,8 +54,8 @@ class UsersController extends Controller
 
                         return '<img src="'.$url.'" border="0" width="40" class="img-rounded" align="center" />';
                     })
-                    ->addColumn('surname', function(User $user){
-                        return $user->employee->surname;
+                    ->addColumn('name_with_initial_e', function(User $user){
+                        return $user->employee->name_with_initial_e ?? 'N/A';
                     })
                     ->addColumn('roles', function (User $user) {
                         return implode(', ', $user->roles->pluck('name')->toArray());

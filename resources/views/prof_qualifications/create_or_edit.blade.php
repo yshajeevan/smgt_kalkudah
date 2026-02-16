@@ -5,28 +5,28 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">
-            {{ isset($deg_institute) ? 'Edit Institute' : 'Add Institute' }}
+            {{ isset($prof_qualification) ? 'Edit Qualification' : 'Add Qualification' }}
         </h6>
     </div>
 
     <div class="card-body">
 
-        <form action="{{ isset($deg_institute)
-            ? route('deg-institutes.update', $deg_institute->id)
-            : route('deg-institutes.store') }}"
+        <form action="{{ isset($prof_qualification)
+            ? route('prof-qualifications.update', $prof_qualification->id)
+            : route('prof-qualifications.store') }}"
             method="POST">
 
             @csrf
-            @if(isset($deg_institute))
+            @if(isset($prof_qualification))
                 @method('PUT')
             @endif
 
             <div class="form-group">
-                <label for="name">Institute</label>
+                <label for="name">Qualification Name</label>
                 <input type="text"
                        name="name"
                        class="form-control"
-                       value="{{ old('name', $deg_institute->name ?? '') }}"
+                       value="{{ old('name', $prof_qualification->name ?? '') }}"
                        required>
 
                 @error('name')
@@ -35,10 +35,10 @@
             </div>
 
             <button type="submit" class="btn btn-primary">
-                {{ isset($deg_institute) ? 'Update' : 'Save' }}
+                {{ isset($prof_qualification) ? 'Update' : 'Save' }}
             </button>
 
-            <a href="{{ route('deg-institutes.index') }}"
+            <a href="{{ route('prof-qualifications.index') }}"
                class="btn btn-secondary">
                 Back
             </a>

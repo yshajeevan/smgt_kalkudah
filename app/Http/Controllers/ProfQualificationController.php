@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProfQualificationInstitute;
+use App\Models\ProfQualification;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class DegreeInstituteController extends Controller
+class ProfQualificationController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = ProfQualificationInstitute::orderBy('name', 'asc');
+
+            $data = ProfQualification::orderBy('name', 'asc');
 
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $edit = route('deg-institutes.edit', $row->id);
-                    $delete = route('deg-institutes.destroy', $row->id);
+
+                    $edit = route('prof-qualifications.edit', $row->id);
+                    $delete = route('prof-qualifications.destroy', $row->id);
 
                     return "
                         <a href='{$edit}' class='btn btn-primary btn-sm'>
@@ -37,52 +39,53 @@ class DegreeInstituteController extends Controller
                 ->make(true);
         }
 
-        return view('degree_institutes.index');
+        return view('prof_qualifications.index');
     }
 
     public function create()
     {
-        return view('degree_institutes.create_or_edit');
+        return view('prof_qualifications.create_or_edit');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:prof_qualification_institutes,name',
+            'name' => 'required|unique:prof_qualifications,name'
         ]);
 
-        ProfQualificationInstitute::create([
+        ProfQualification::create([
             'name' => $request->name
         ]);
 
-        return redirect()->route('deg-institutes.index')
-            ->with('success', 'Institute added successfully.');
+        return redirect()->route('prof-qualifications.index')
+            ->with('success', 'Qualification added successfully.');
     }
 
-    public function edit(ProfQualificationInstitute $deg_institute)
+    public function edit(ProfQualification $prof_qualification)
     {
-        return view('degree_institutes.create_or_edit', compact('deg_institute'));
+        return view('prof_qualifications.create_or_edit',
+            compact('prof_qualification'));
     }
 
-    public function update(Request $request, ProfQualificationInstitute $deg_institute)
+    public function update(Request $request, ProfQualification $prof_qualification)
     {
         $request->validate([
-            'name' => 'required|unique:prof_qualification_institutes,name,' . $deg_institute->id,
+            'name' => 'required|unique:prof_qualifications,name,' . $prof_qualification->id
         ]);
 
-        $deg_institute->update([
+        $prof_qualification->update([
             'name' => $request->name
         ]);
 
-        return redirect()->route('deg-institutes.index')
-            ->with('success', 'Institute updated successfully.');
+        return redirect()->route('prof-qualifications.index')
+            ->with('success', 'Qualification updated successfully.');
     }
 
-    public function destroy(ProfQualificationInstitute $deg_institute)
+    public function destroy(ProfQualification $prof_qualification)
     {
-        $deg_institute->delete();
+        $prof_qualification->delete();
 
-        return redirect()->route('deg-institutes.index')
-            ->with('success', 'Institute deleted successfully.');
+        return redirect()->route('prof-qualifications.index')
+            ->with('success', 'Qualification deleted successfully.');
     }
 }

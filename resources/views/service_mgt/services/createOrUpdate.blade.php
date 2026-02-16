@@ -11,8 +11,14 @@
     <h6 class="m-0 font-weight-bold text-primary float-left">Edit Service</h6>
   </div>
   <div class="card-body">
-    <form action="{{ isset($service) ? route('services.update',$service->id) : route('service.store') }}" id="service_form" name="service_form" method="post">
+    <form action="{{ isset($service) 
+    ? route('service.update',$service->id) 
+    : route('service.store') }}" 
+    method="POST">
     @csrf 
+    @if(isset($service))
+      @method('PUT')
+    @endif
     <div class="row">
       <div class="col-md-6">
         <div class="form-group text-dark">

@@ -287,10 +287,16 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $this->validate($request, [
-            // your validations
-        ]);
+{
+    $this->validate($request, [
+        'empno' => 'required',
+        'nic' => 'required|unique:employees,nic',
+        'name_with_initial_e' => 'required|max:30',
+    ]);
+
+    DB::beginTransaction();
+
+    try {
 
         if ($request->input('desigcatg') != 'SAC') {
             $insid = Institute::where('institute', $request->input('desigcatg'))
@@ -300,31 +306,80 @@ class EmployeeController extends Controller
             $institute1id = $request->input('institute_id');
         }
 
-        // ✅ If current_working_station is empty
         $currentWorkingStation = $request->input('current_working_station') 
                                     ?: $request->input('institute_id');
 
-        if (!Employee::where('nic', $request->input('nic'))->exists()) {
-
-            $status = Employee::create(
-                $request->all() + [
-                    'institute1_id' => $institute1id,
-                    'current_working_station' => $currentWorkingStation
-                ]
-            );
-
-            if ($status) {
-                session()->flash('success', 'Successfully added');
-            } else {
-                session()->flash('error', 'Error occurred while inserting');
-            }
-
-            return redirect()->route('employee.index');
-        } else {
+        if (Employee::where('nic', $request->input('nic'))->exists()) {
             session()->flash('error', 'Employee already exist!');
             return redirect()->back();
         }
+
+        // ✅ Create Employee
+        $employee = Employee::create(
+            $request->except([
+                'subject_name',
+                'course_name',
+                'institution',
+                'duration',
+                'teachsubject_id',
+                'periods'
+            ]) + [
+                'institute1_id' => $institute1id,
+                'current_working_station' => $currentWorkingStation
+            ]
+        );
+
+        $id = $employee->id;
+
+        // ================= DEGREE SUBJECTS =================
+        if ($request->get('subject_name')) {
+            foreach ($request->subject_name as $val) {
+                if (trim($val) == "") continue;
+                EmpDegreeSubject::create([
+                    'subject_name' => $val,
+                    'employee_id' => $id,
+                ]);
+            }
+        }
+
+        // ================= QUALIFICATIONS =================
+        if ($request->get('course_name')) {
+            foreach ($request->course_name as $i => $val) {
+                if (trim($val) == "") continue;
+                EmpQualification::create([
+                    'course_name' => $request->course_name[$i],
+                    'institution' => $request->institution[$i] ?? null,
+                    'duration' => $request->duration[$i] ?? null,
+                    'employee_id' => $id,
+                ]);
+            }
+        }
+
+        // ================= TEACHING SUBJECTS =================
+        if ($request->get('teachsubject_id')) {
+            foreach ($request->teachsubject_id as $i => $val) {
+                if (!$val) continue;
+                EmpTeachSubject::create([
+                    'cadresubject_id' => $val,
+                    'periods' => $request->periods[$i] ?? null,
+                    'employee_id' => $id,
+                ]);
+            }
+        }
+
+        DB::commit();
+
+        session()->flash('success', 'Successfully added');
+        return redirect()->route('employee.index');
+
+    } catch (\Exception $e) {
+
+        DB::rollBack();
+        session()->flash('error', 'Error: '.$e->getMessage());
+        return redirect()->back();
     }
+}
+
 
 
     /**

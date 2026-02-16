@@ -22,7 +22,7 @@
         </div>
         <div class="form-group">
             <label for="name" class="col-form-label">Name</label>
-            <input id="name" type="text" name="name" value="{{old('name', isset($item) ? $item->employee->surname : '')}}" class="form-control" required>
+            <input id="name" type="text" name="name" value="{{old('name', isset($item) ? $item->employee->name_with_initial_e : '')}}" class="form-control" required>
             @error('name')
               <span class="text-danger">{{$message}}</span>
             @enderror

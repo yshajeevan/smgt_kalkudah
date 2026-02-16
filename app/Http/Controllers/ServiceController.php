@@ -38,26 +38,40 @@ class ServiceController extends Controller
                         return CarbonInterval::minutes($request->timeallocated)->cascade()->forHumans(); // human readable format
                       })
                     ->addColumn('action', function($row){
-                        $show =  route('service.show',$row->id);
-                        $checklist =  route('checklist.index',$row->id);
-                        $edit =  route('service.edit',$row->id);
-                        $delete =  route('servicedel.destroy',$row->id);
-                        $user = auth()->user();
-                        $btn = '';
-                        if ($user->can('service-show')) {
-                            $btn = "<a href='{$show}' class='btn btn-xs btn-primary btn-sm' style='height:30px; width:30px;' title='show' data-placement='bottom'><i class='fas fa-eye'></i></a>";
+                        $show = route('service.show',$row->id);
+                        $edit = route('service.edit',$row->id);
+                        $delete = route('service.destroy',$row->id);
+
+                        $btn = "";
+
+                        if(auth()->user()->can('service-show')){
+                            $btn .= "<a href='{$show}' class='btn btn-primary btn-sm'>
+                                        <i class='fas fa-eye'></i>
+                                    </a> ";
                         }
-                        if ($user->can('service-show')) {
-                            $btn = $btn."<a href='{$checklist}' class='btn btn-xs btn-primary btn-sm' style='height:30px; width:30px;' title='checklist' data-placement='bottom'><i class='fas fa-list'></i></a>";
+
+                        if(auth()->user()->can('service-edit')){
+                            $btn .= "<a href='{$edit}' class='btn btn-primary btn-sm'>
+                                        <i class='fas fa-edit'></i>
+                                    </a> ";
                         }
-                        if ($user->can('service-edit')) {
-                            $btn = $btn."<a href='{$edit}' class='btn btn-xs btn-primary btn-sm' style='height:30px; width:30px;' title='edit' data-placement='bottom'><i class='fas fa-edit'></i></a>";
+
+                        if(auth()->user()->can('service-delete')){
+                            $btn .= "
+                            <form action='{$delete}' method='POST' style='display:inline'>
+                                " . csrf_field() . "
+                                " . method_field('DELETE') . "
+                                <button type='submit' class='btn btn-danger btn-sm'
+                                    onclick='return confirm(\"Are you sure?\")'>
+                                    <i class='fas fa-trash'></i>
+                                </button>
+                            </form>
+                            ";
                         }
-                        if ($user->can('service-delete')) {
-                            $btn = $btn."<a href='{$delete}' class='btn btn-xs btn-danger btn-sm' style='height:30px; width:30px;' title='delete' data-placement='bottom'><i class='fas fa-trash'></i></a>";
-                        }
-                         return $btn;
+
+                        return $btn;
                     })
+
                     ->filter(function ($instance) use ($request) {
                         if (!empty($request->get('search'))) {
                             $instance->where(function($w) use($request){
@@ -110,7 +124,7 @@ class ServiceController extends Controller
         $status = Service::create($input);
         if($status){
             request()->session()->flash('success','Successfully added');
-                return redirect()->route('services.index');
+                return redirect()->route('service.index');
         } else {
              request()->session()->flash('error','Error occured while inserting');
         }
@@ -163,14 +177,14 @@ class ServiceController extends Controller
             'servicetype1_id' => 'required',
         ]);
 
-        $status = Service::where('id', $id)->update($request->except('_token'));
+        $status = Service::where('id', $id)->update($request->except('_token','_method'));
         if($status){
             request()->session()->flash('success','Successfully updated');
         }
         else{
             request()->session()->flash('error','Error occured while updating');
         }
-        return redirect()->route('services.index');
+        return redirect()->route('service.index');
     }
 
     /**
@@ -185,7 +199,7 @@ class ServiceController extends Controller
         $status=$delete->delete();
         if($status){
             request()->session()->flash('success','Service Successfully deleted');
-            return redirect()->route('services.index');
+            return redirect()->route('service.index');
         }
         else{
             request()->session()->flash('error','There is an error while deleting Service');

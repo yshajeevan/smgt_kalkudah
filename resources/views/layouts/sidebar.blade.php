@@ -335,7 +335,7 @@ html { height: 100%;}
         <a href="#works" class="dropdown-toggle"  data-toggle="dropdown"><i class="fas fa-sitemap"></i> Services <span class="caret"></span></a>
           <ul class="dropdown-menu animated fadeInLeft" role="menu">
             <div class="dropdown-header">Dropdown heading</div>
-            <li><a href="{{ route('services.index') }}">Services</a></li>
+            <li><a href="{{ route('service.index') }}">Services</a></li>
             @can('service-edit')    
             <li><a href="{{ route('inst.viewclerk') }}">Manage Officers</a></li>
             @endcan
@@ -501,6 +501,7 @@ html { height: 100%;}
                 <li><a href="{{ route('gndivision.index') }}">Manage GN Divisions</a></li>
                 <li><a href="{{ route('degrees.index') }}">Manage Degrees</a></li>
                 <li><a href="{{ route('deg-institutes.index') }}">Manage Degree Institutes</a></li>
+                <li><a href="{{ route('prof-qualifications.index') }}">Manage Professional Qualifications</a></li>
                 <li><a href="{{ route('deg-subjects.index') }}">Manage Degree Subject</a></li>
             </ul>
         </li>
