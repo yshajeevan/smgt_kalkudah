@@ -114,10 +114,6 @@ class ServiceController extends Controller
         $this->validate($request,
         [
             'service'=> 'required',
-            'smsdesc' => 'required',
-            'remarks' => 'required',
-            'user1_id'=> 'required',
-            'res1time'=> 'required',
         ]);
         $input=$request->except('_token');
         
@@ -171,10 +167,6 @@ class ServiceController extends Controller
         $this->validate($request,
         [
             'service'=> 'required',
-            'smsdesc' => 'required',
-            'user1_id'=> 'required',
-            'res1time'=> 'required',
-            'servicetype1_id' => 'required',
         ]);
 
         $status = Service::where('id', $id)->update($request->except('_token','_method'));
