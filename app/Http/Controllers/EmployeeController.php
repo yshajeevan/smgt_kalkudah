@@ -296,8 +296,11 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'nic' => 'required|unique:employees,nic',
-            'name_with_initial_e' => 'required|max:30',
+            'nic' => 'required|unique:employees,nic,'.$id,
+            'name_with_initial_e' => 'string|required|max:30',
+            'status' => 'required',
+            'email' => 'nullable|email',
+            'institute_id' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -501,12 +504,11 @@ class EmployeeController extends Controller
         // validate only fields present (so modal-only doesn't fail).
         if (!$isDummySubmission) {
             $this->validate($request, [
-                'empno' => 'required',
                 'nic' => 'required|unique:employees,nic,'.$id,
                 'name_with_initial_e' => 'string|required|max:30',
-                'cadresubject_id' => 'required',
                 'status' => 'required',
                 'email' => 'nullable|email',
+                'institute_id' => 'required',
             ]);
         } else {
             // optional: add minimal validation for present dummy fields if desired
