@@ -296,7 +296,6 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'empno' => 'required',
             'nic' => 'required|unique:employees,nic',
             'name_with_initial_e' => 'required|max:30',
         ]);

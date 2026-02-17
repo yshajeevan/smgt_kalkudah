@@ -1014,7 +1014,7 @@
                     </div>
                     <div class="form-col-9">     
                         @php
-                            $selectedStatus = old('status', $employee->status ?? '');
+                            $selectedStatus = old('status', $employee->status ?? 'Active');
                         @endphp
 
                         <select name="status" 
@@ -1030,7 +1030,6 @@
                             <option value="Pension"  {{ $selectedStatus == 'Pension' ? 'selected' : '' }}>Pension</option>
 
                         </select>
-
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->status != $employee->status) <span class="dummy-value">{{$employee->empdummy->status}} <input type="hidden" name="dummy_status" value="{{$employee->empdummy->status}}"/></span>@endif @endif
                 </div>
