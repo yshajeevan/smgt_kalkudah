@@ -19,10 +19,10 @@
                     <tr>
                     <td style="width:50%">{{ $institute->institute }}</td>
                     <td style="width:25%">
-                        <a href="#" id="pfclerk" class="xedit" data-pk="{{ $institute->id }}" data-type="select" data-title="Enter name" data-name="pfclerk_id"> {{ $institute->pfclerk->name }}</a>
+                        <a href="#" id="pfclerk" class="xedit" data-pk="{{ $institute->id }}" data-type="select" data-title="Enter name" data-name="pfclerk_id"> {{ optional($institute->pfclerk)->name ?? 'Select Clerk' }}</a>
                     </td>
                     <td style="width:25%">
-                        <a href="#" id="acctclerk" class="xedit" data-pk="{{ $institute->id }}" data-type="select" data-title="Enter name" data-name="acctclerk_id"> {{ $institute->acctclerk->name }}</a>
+                        <a href="#" id="acctclerk" class="xedit" data-pk="{{ $institute->id }}" data-type="select" data-title="Enter name" data-name="acctclerk_id"> {{ optional($institute->acctclerk)->name ?? 'Select Clerk' }}</a>
                     </td>
                     </tr>
                     @endforeach
