@@ -419,7 +419,7 @@ html { height: 100%;}
           </ul>
       </li>
       @endcan
-      @can('cadre-view')
+      @can('results-manage')
       <li class="dropdown">
         <a href="#exam" class="dropdown-toggle"  data-toggle="dropdown"><i class="fas fa-chalkboard-teacher"></i> Exam<span class="caret"></span></a>
           <ul class="dropdown-menu animated fadeInLeft" role="menu">
