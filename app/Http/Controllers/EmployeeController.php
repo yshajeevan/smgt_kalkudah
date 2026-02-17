@@ -505,7 +505,7 @@ class EmployeeController extends Controller
         if (!$isDummySubmission) {
             $this->validate($request, [
                 'nic' => 'required|unique:employees,nic,'.$id,
-                'name_with_initial_e' => 'string|required|max:30',
+                'name_with_initial_e' => 'string|required|max:70',
                 'status' => 'required',
                 'email' => 'nullable|email',
                 'institute_id' => 'required',
