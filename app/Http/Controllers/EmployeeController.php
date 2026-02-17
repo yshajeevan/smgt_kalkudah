@@ -607,13 +607,6 @@ class EmployeeController extends Controller
                 $employee->institute1_id = $request->input('institute_id');
             }
 
-            // ✅ If current_working_station empty → use institute_id
-            if ($request->has('current_working_station')) {
-                $employee->current_working_station =
-                    $request->input('current_working_station')
-                    ?: $request->input('institute_id');
-            }
-
             $employee->save();
 
             // ================= DEGREE SUBJECTS =================
