@@ -199,14 +199,29 @@
                         <label for="" class="control-label">Religion</label>
                     </div>
                     <div class="form-col-9">    
-                        <select name="religion" id="religion" class="form-control form-control-sm" disabled>
-                            <option value="" @if(isset($employee) && $employee->religion==""){{"selected"}} @endif >--Select Religion--</option>
-                            <option value="Hindu" @if(isset($employee) && $employee->religion=="Hindu"){{"selected"}} @endif >Hindu</option>
-                            <option value="Islam" @if(isset($employee) && $employee->religion=="Islam"){{"selected"}} @endif >Islam</option>
-                            <option value="RC" @if(isset($employee) && $employee->religion=="RC"){{"selected"}} @endif >RC</option>
-                            <option value="NRC" @if(isset($employee) && $employee->religion=="NRC"){{"selected"}} @endif >NRC</option>
-                            <option value="Buddhist" @if(isset($employee) && $employee->religion=="Buddhist"){{"selected"}} @endif >Buddhist</option>
-                    	</select>
+                        <select name="religion" id="religion" class="form-control form-control-sm">
+                            <option value="">--Select Religion--</option>
+                            <option value="Hindu"
+                                {{ old('religion', $employee->religion ?? '') == 'Hindu' ? 'selected' : '' }}>
+                                Hindu
+                            </option>
+                            <option value="Islam"
+                                {{ old('religion', $employee->religion ?? '') == 'Islam' ? 'selected' : '' }}>
+                                Islam
+                            </option>
+                            <option value="RC"
+                                {{ old('religion', $employee->religion ?? '') == 'RC' ? 'selected' : '' }}>
+                                RC
+                            </option>
+                            <option value="NRC"
+                                {{ old('religion', $employee->religion ?? '') == 'NRC' ? 'selected' : '' }}>
+                                NRC
+                            </option>
+                            <option value="Buddhist"
+                                {{ old('religion', $employee->religion ?? '') == 'Buddhist' ? 'selected' : '' }}>
+                                Buddhist
+                            </option>
+                        </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->religion != $employee->religion) <span class="dummy-value">{{$employee->empdummy->religion}} <input type="hidden" name="dummy_religion" value="{{$employee->empdummy->religion}}"/></span>@endif @endif
                 </div>
@@ -215,13 +230,25 @@
                         <label for="" class="control-label">Civil Status</label>
                     </div>
                     <div class="form-col-9">
-                        <select name="civilstatus" id="civilstatus" class="form-control form-control-sm" disabled>
-                            <option value="" @if(isset($employee) && $employee->civilstatus==""){{"selected"}} @endif >--Select Civil Status--</option>
-                            <option value="Married" @if(isset($employee) && $employee->civilstatus=="Married"){{"selected"}} @endif >Married</option>
-                            <option value="Single" @if(isset($employee) && $employee->civilstatus=="Single"){{"selected"}} @endif >Single</option>
-                            <option value="Widowed" @if(isset($employee) && $employee->civilstatus=="Widowed"){{"selected"}} @endif >Widowed</option>
-                            <option value="Not Specified" @if(isset($employee) && $employee->civilstatus=="Not Specified"){{"selected"}} @endif >Not Specified</option>
-                    	</select>
+                        <select name="civilstatus_display" id="civilstatus" class="form-control form-control-sm" disabled>
+                        <option value="">--Select Civil Status--</option>
+                        <option value="Married"
+                            {{ old('civilstatus', $employee->civilstatus ?? '') == 'Married' ? 'selected' : '' }}>
+                            Married
+                        </option>
+                        <option value="Single"
+                            {{ old('civilstatus', $employee->civilstatus ?? '') == 'Single' ? 'selected' : '' }}>
+                            Single
+                        </option>
+                        <option value="Widowed"
+                            {{ old('civilstatus', $employee->civilstatus ?? '') == 'Widowed' ? 'selected' : '' }}>
+                            Widowed
+                        </option>
+                        <option value="Not Specified"
+                            {{ old('civilstatus', $employee->civilstatus ?? '') == 'Not Specified' ? 'selected' : '' }}>
+                            Not Specified
+                        </option>
+                    </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->civilstatus != $employee->civilstatus) <span class="dummy-value">{{$employee->empdummy->civilstatus}} <input type="hidden" name="dummy_civilstatus" value="{{$employee->empdummy->civilstatus}}"/></span>@endif @endif
                 </div>
