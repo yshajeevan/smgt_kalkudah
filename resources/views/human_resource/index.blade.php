@@ -169,12 +169,14 @@ $(document).ready(function () {
         // ✅ Add this block
         rowCallback: function(row, data, index) {
 
-            // Check working_station is not empty/null
-            if (data.working_station && data.working_station.trim() !== '' 
+            // Highlight ONLY if working_station has value AND is different
+            if (data.working_station 
+                && data.working_station !== '-' 
                 && data.institute !== data.working_station) {
 
-                $(row).addClass('table-warning'); // Yellow highlight
+                $(row).addClass('table-warning');
             }
+
         }
         
     });
