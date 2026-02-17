@@ -98,7 +98,7 @@
                     <th>Id</th>
                     <th>Name</th>
                     <th style="width:300px;">Permanent Station (as per salary)</th>
-                    <th style="width:300px;">Current Working Station</th>
+                    <th style="width:300px;">Temprory Working Station (if any)</th>
                     <th>Designation</th>
                     <th>Cadre</th>
                     <th>Status</th>
@@ -168,9 +168,12 @@ $(document).ready(function () {
 
         // ✅ Add this block
         rowCallback: function(row, data, index) {
-            // Compare rendered column text (institute vs working_station)
-            if (data.institute !== data.working_station) {
-                $(row).addClass('table-warning');  // Yellow highlight
+
+            // Check working_station is not empty/null
+            if (data.working_station && data.working_station.trim() !== '' 
+                && data.institute !== data.working_station) {
+
+                $(row).addClass('table-warning'); // Yellow highlight
             }
         }
         
@@ -205,15 +208,6 @@ $(document).ready(function () {
         table.draw();
     });
 
-    // let column = table.column(2);
-    // let user = @json(Auth::check() ? Auth::user()->roles->pluck('name')->implode(', ') : '');
-
-    // if(user === 'Sch_Admin'){
-    //     column.visible(false);
-    // } else{
-    //     column.visible(true);
-    // }
-    
     $('#cadre').change(function(){
         table.draw(); 
     });

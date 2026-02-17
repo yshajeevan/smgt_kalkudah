@@ -580,10 +580,8 @@ class EmployeeController extends Controller
 
             // Validate only fields present in $other (so combined submissions validate required fields if present)
             $dynamicRules = [];
-            if (array_key_exists('empno', $other)) $dynamicRules['empno'] = 'required';
             if (array_key_exists('nic', $other)) $dynamicRules['nic'] = 'required|unique:employees,nic,'.$id;
             if (array_key_exists('name_with_initial_e', $other)) $dynamicRules['name_with_initial_e'] = 'string|required|max:30';
-            if (array_key_exists('cadresubject_id', $other)) $dynamicRules['cadresubject_id'] = 'required';
             if (array_key_exists('status', $other)) $dynamicRules['status'] = 'required';
             if (array_key_exists('email', $other)) $dynamicRules['email'] = 'nullable|email';
 
