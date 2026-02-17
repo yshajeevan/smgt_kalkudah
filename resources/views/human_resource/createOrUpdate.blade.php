@@ -107,13 +107,29 @@
                         <label for="" class="control-label">Title</label>
                     </div>
                     <div class="form-col-9">
-                        <select name="title" id="title" class="form-control form-control-sm" required disabled>
-                            <option value="" @if(isset($employee) && $employee->title==""){{"selected"}} @endif >--Select Title--</option>
-                            <option value="Miss" @if(isset($employee) && $employee->title=="Rev"){{"selected"}} @endif >Rev</option>
-                            <option value="Mr" @if(isset($employee) && $employee->title=="Mr"){{"selected"}} @endif >Mr</option>
-                            <option value="Mrs" @if(isset($employee) && $employee->title=="Mrs"){{"selected"}} @endif >Mrs</option>
-                            <option value="Miss" @if(isset($employee) && $employee->title=="Miss"){{"selected"}} @endif >Miss</option>
-                    	</select>
+                        <select name="title" 
+                            id="title" 
+                            class="form-control form-control-sm" 
+                            required
+                            disabled>
+                        <option value="">--Select Title--</option>
+                        <option value="Rev"
+                            {{ old('title', $employee->title ?? '') == 'Rev' ? 'selected' : '' }}>
+                            Rev
+                        </option>
+                        <option value="Mr"
+                            {{ old('title', $employee->title ?? '') == 'Mr' ? 'selected' : '' }}>
+                            Mr
+                        </option>
+                        <option value="Mrs"
+                            {{ old('title', $employee->title ?? '') == 'Mrs' ? 'selected' : '' }}>
+                            Mrs
+                        </option>
+                        <option value="Miss"
+                            {{ old('title', $employee->title ?? '') == 'Miss' ? 'selected' : '' }}>
+                            Miss
+                        </option>
+                    </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->title != $employee->title) <span class="dummy-value">{{$employee->empdummy->title}} <input type="hidden" name="dummy_title" value="{{$employee->empdummy->title}}"/></span>@endif @endif
                 </div>
@@ -170,11 +186,21 @@
                         <label for="" class="control-label">Gender</label>
                     </div>
                     <div class="form-col-9">
-                        <select name="gender" id="gender" class="form-control form-control-sm" required disabled>
-                            <option value="" @if(isset($employee) && $employee->gender==""){{"selected"}} @endif >--Select Gender--</option>
-                            <option value="Male" @if(isset($employee) && $employee->gender=="Male"){{"selected"}} @endif >Male</option>
-                            <option value="Female" @if(isset($employee) && $employee->gender=="Female"){{"selected"}} @endif >Female</option>
-                    	</select>
+                        <select name="gender" 
+                            id="gender" 
+                            class="form-control form-control-sm" 
+                            required
+                            disabled>
+                        <option value="">--Select Gender--</option>
+                        <option value="Male"
+                            {{ old('gender', $employee->gender ?? '') == 'Male' ? 'selected' : '' }}>
+                            Male
+                        </option>
+                        <option value="Female"
+                            {{ old('gender', $employee->gender ?? '') == 'Female' ? 'selected' : '' }}>
+                            Female
+                        </option>
+                    </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->gender != $employee->gender) <span class="dummy-value">{{$employee->empdummy->gender}} <input type="hidden" name="dummy_gender" value="{{$employee->empdummy->gender}}"/></span>@endif @endif
                 </div>
@@ -183,14 +209,32 @@
                         <label for="" class="control-label">Ethnicity</label>
                     </div>
                     <div class="form-col-9">
-                        <select name="ethinicity" id="ethinicity" class="form-control form-control-sm" disabled>
-                            <option value="" @if(isset($employee) && $employee->ethinicity==""){{"selected"}} @endif >--Select Ethnicity--</option>
-                            <option value="Tamil" @if(isset($employee) && $employee->ethinicity=="Tamil"){{"selected"}} @endif >Tamil</option>
-                            <option value="Muslim" @if(isset($employee) && $employee->ethinicity=="Muslim"){{"selected"}} @endif >Muslim</option>
-                            <option value="Sinhala" @if(isset($employee) && $employee->ethinicity=="Sinhala"){{"selected"}} @endif >Sinhala</option>
-                            <option value="Burger" @if(isset($employee) && $employee->ethinicity=="Burger"){{"selected"}} @endif >Burger</option>
-                            <option value="Others" @if(isset($employee) && $employee->ethinicity=="Others"){{"selected"}} @endif >Others</option>
-                    	</select>
+                        <select name="ethinicity" 
+                            id="ethinicity" 
+                            class="form-control form-control-sm" 
+                            disabled>
+                        <option value="">--Select Ethnicity--</option>
+                        <option value="Tamil"
+                            {{ old('ethinicity', $employee->ethinicity ?? '') == 'Tamil' ? 'selected' : '' }}>
+                            Tamil
+                        </option>
+                        <option value="Muslim"
+                            {{ old('ethinicity', $employee->ethinicity ?? '') == 'Muslim' ? 'selected' : '' }}>
+                            Muslim
+                        </option>
+                        <option value="Sinhala"
+                            {{ old('ethinicity', $employee->ethinicity ?? '') == 'Sinhala' ? 'selected' : '' }}>
+                            Sinhala
+                        </option>
+                        <option value="Burger"
+                            {{ old('ethinicity', $employee->ethinicity ?? '') == 'Burger' ? 'selected' : '' }}>
+                            Burger
+                        </option>
+                        <option value="Others"
+                            {{ old('ethinicity', $employee->ethinicity ?? '') == 'Others' ? 'selected' : '' }}>
+                            Others
+                        </option>
+                    </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->ethinicity != $employee->ethinicity) <span class="dummy-value">{{$employee->empdummy->ethinicity}} <input type="hidden" name="dummy_ethinicity" value="{{$employee->empdummy->ethinicity}}"/></span>@endif @endif
                 </div>
@@ -199,7 +243,7 @@
                         <label for="" class="control-label">Religion</label>
                     </div>
                     <div class="form-col-9">    
-                        <select name="religion" id="religion" class="form-control form-control-sm">
+                        <select name="religion" id="religion" class="form-control form-control-sm" disabled>
                             <option value="">--Select Religion--</option>
                             <option value="Hindu"
                                 {{ old('religion', $employee->religion ?? '') == 'Hindu' ? 'selected' : '' }}>
@@ -230,7 +274,7 @@
                         <label for="" class="control-label">Civil Status</label>
                     </div>
                     <div class="form-col-9">
-                        <select name="civilstatus_display" id="civilstatus" class="form-control form-control-sm" disabled>
+                        <select name="civilstatus" id="civilstatus" class="form-control form-control-sm" disabled>
                         <option value="">--Select Civil Status--</option>
                         <option value="Married"
                             {{ old('civilstatus', $employee->civilstatus ?? '') == 'Married' ? 'selected' : '' }}>
@@ -283,11 +327,20 @@
                         <label for="" class="control-label">Residential DS</label>
                     </div>   
                     <div class="form-col-9"> 
-                        <select name="dsdivision_id" id="dsdivision_id" class="form-control form-control-sm" disabled>
-                            <option>--Select DS Division--</option>
-                            @foreach ($ds as $ds)
-                            <option value="{{ $ds->id}}" {{(isset($employee) && $employee->dsdivision_id == $ds->id)  ? 'selected' : ''}}>{{$ds->ds}}</option>
-                            @endforeach    
+                        <select name="dsdivision_id" 
+                                id="dsdivision_id" 
+                                class="form-control form-control-sm" 
+                                disabled>
+
+                            <option value="">--Select DS Division--</option>
+
+                            @foreach ($ds as $division)
+                                <option value="{{ $division->id }}"
+                                    {{ old('dsdivision_id', $employee->dsdivision_id ?? '') == $division->id ? 'selected' : '' }}>
+                                    {{ $division->ds }}
+                                </option>
+                            @endforeach
+
                         </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->dsdivision_id != $employee->dsdivision_id) <span class="dummy-value">{{$employee->empdummy->dsdivision->ds}} <input type="hidden" name="dummy_dsdivision_id" value="{{$employee->empdummy->dsdivision_id}}"/></span>@endif @endif
@@ -297,10 +350,18 @@
                         <label for="" class="control-label">Residential GN</label>
                     </div>
                     <div class="form-col-9">
-                        <select name="gndivision_id" id="gndivision_id" class="form-control form-control-sm" disabled>
-                            <option>-- Select GN Division --</option>
-                            @foreach ($gn as $gn)
-                            <option value="{{ $gn->id}}" {{(isset($employee) && $employee->gndivision_id == $gn->id)  ? 'selected' : ''}}>{{$gn->gn}}</option>
+                        <select name="gndivision_id" 
+                                id="gndivision_id" 
+                                class="form-control form-control-sm" 
+                                disabled>
+
+                            <option value="">-- Select GN Division --</option>
+
+                            @foreach ($gn as $division)
+                                <option value="{{ $division->id }}"
+                                    {{ old('gndivision_id', $employee->gndivision_id ?? '') == $division->id ? 'selected' : '' }}>
+                                    {{ $division->gn }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -311,11 +372,19 @@
                         <label for="" class="control-label">Residential Zone</label>
                     </div>
                     <div class="form-col-9">    
-                        <select name="zone_id" id="zone_id" class="form-control form-control-sm" disabled>
+                        <select name="zone_id" 
+                                id="zone_id" 
+                                class="form-control form-control-sm" 
+                                disabled>
+
                             <option value="">--Select Education Zone--</option>
+
                             @foreach ($zones as $zone)
-                            <option value="{{ $zone->id }}" {{(isset($employee) && $employee->zone_id == $zone->id)  ? 'selected' : ''}}>{{ $zone->zone}}</option>
-                            @endforeach 
+                                <option value="{{ $zone->id }}"
+                                    {{ old('zone_id', $employee->zone_id ?? '') == $zone->id ? 'selected' : '' }}>
+                                    {{ $zone->zone }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->zone_id != $employee->zone_id) <span class="dummy-value">{{$employee->empdummy->zone->zone}} <input type="hidden" name="dummy_zone_id" value="{{$employee->empdummy->zone_id}}"/></span>@endif @endif
@@ -325,11 +394,19 @@
                         <label for="" class="control-label">Transportaion Mode</label>
                     </div>
                     <div class="form-col-9">
-                        <select name="transmode_id" id="transmode_id" class="form-control form-control-sm" disabled>
+                        <select name="transmode_id" 
+                                id="transmode_id" 
+                                class="form-control form-control-sm" 
+                                disabled>
+
                             <option value="">--Select Transportation Mode--</option>
+
                             @foreach ($transmodes as $transmode)
-                            <option value="{{ $transmode->id}}" {{(isset($employee) && $employee->transmode_id == $transmode->id)  ? 'selected' : ''}}>{{ $transmode->tranmode}}</option>
-                            @endforeach 
+                                <option value="{{ $transmode->id }}"
+                                    {{ old('transmode_id', $employee->transmode_id ?? '') == $transmode->id ? 'selected' : '' }}>
+                                    {{ $transmode->tranmode }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->transmode_id != $employee->transmode_id) <span class="dummy-value">{{$employee->empdummy->transmode->tranmode}} <input type="hidden" name="dummy_transmode_id" value="{{$employee->empdummy->transmode_id}}"/></span>@endif @endif
@@ -413,12 +490,20 @@
                         <label for="" class="control-label">Present Service</label>
                     </div>
                     <div class="form-col-8">
-                        <select name="empservice_id" id="empservice_id" class="form-control form-control-sm float" disabled>
+                        <select name="empservice_id" 
+                            id="empservice_id" 
+                            class="form-control form-control-sm float" 
+                            disabled>
+
                             <option value="">--Select Service--</option>
-                    		@foreach ($services as $service)
-                            <option value="{{ $service->id}}" {{(isset($employee) && $employee->empservice_id == $service->id)  ? 'selected' : ''}}>{{ $service->service}}</option>
-                            @endforeach 
-                    	</select>
+
+                            @foreach ($services as $service)
+                                <option value="{{ $service->id }}"
+                                    {{ old('empservice_id', $employee->empservice_id ?? '') == $service->id ? 'selected' : '' }}>
+                                    {{ $service->service }}
+                                </option>
+                            @endforeach
+                        </select>
                         <div class="image-set"><a data-gallery="photoviewer" id="{{isset($employee->virtualfile->id) ? $employee->virtualfile->id : ''}}" data-title="SMGT-Scanned Documents" data-group="a" href="{{isset($employee->virtualfile->firstappltr) ? asset('/vfiles/' ).'/'.$employee->virtualfile->firstappltr : asset('/vfiles/No_Image_Available.jpg') }}">
                         <img src="{{isset($employee->virtualfile->firstappltr) ? asset('/vfiles/' ).'/'.$employee->virtualfile->firstappltr : asset('/vfiles/No_Image_Available.jpg') }}" class="img-fluid img-thumbnail" alt="">
                         </a></div>@can('employee-edit')<button class="imgedit" type="button" id="firstappltr" data-toggle="modal" data-target="#imageupload"><i class="fas fa-edit"></i>@endcan</button>
@@ -430,18 +515,29 @@
                         <label for="" class="control-label">Grade/Class</label>
                     </div>
                     <div class="form-col-8">    
-                        <select name="grade" id="grade" class="form-control form-control-sm float" disabled>
-                            <option value="" @if(isset($employee) && $employee->grade==""){{"selected"}} @endif >--Select Grade--</option>
-                            <option value="3-II" @if(isset($employee) && $employee->grade=="3-II"){{"selected"}} @endif >3-II</option>
-                            <option value="3-IA" @if(isset($employee) && $employee->grade=="3-IA"){{"selected"}} @endif >3-IA</option>
-                            <option value="3-IB" @if(isset($employee) && $employee->grade=="3-IB"){{"selected"}} @endif >3-IB</option>
-                            <option value="3-IC" @if(isset($employee) && $employee->grade=="3-IC"){{"selected"}} @endif >3-IC</option>
-                            <option value="III" @if(isset($employee) && $employee->grade=="III"){{"selected"}} @endif >III</option>
-                            <option value="2-II" @if(isset($employee) && $employee->grade=="2-II"){{"selected"}} @endif >2-II</option>
-                            <option value="2-I" @if(isset($employee) && $employee->grade=="2-I"){{"selected"}} @endif >2-I</option>
-                            <option value="II" @if(isset($employee) && $employee->grade=="II"){{"selected"}} @endif >II</option>
-                            <option value="I" @if(isset($employee) && $employee->grade=="I"){{"selected"}} @endif >I</option>
-                    	</select>
+                        <select name="grade" 
+                                id="grade" 
+                                class="form-control form-control-sm float" 
+                                disabled>
+
+                            <option value="">--Select Grade--</option>
+
+                            @php
+                                $selectedGrade = old('grade', $employee->grade ?? '');
+                            @endphp
+
+                            <option value="3-II" {{ $selectedGrade == '3-II' ? 'selected' : '' }}>3-II</option>
+                            <option value="3-IA" {{ $selectedGrade == '3-IA' ? 'selected' : '' }}>3-IA</option>
+                            <option value="3-IB" {{ $selectedGrade == '3-IB' ? 'selected' : '' }}>3-IB</option>
+                            <option value="3-IC" {{ $selectedGrade == '3-IC' ? 'selected' : '' }}>3-IC</option>
+                            <option value="III"  {{ $selectedGrade == 'III' ? 'selected' : '' }}>III</option>
+                            <option value="2-II" {{ $selectedGrade == '2-II' ? 'selected' : '' }}>2-II</option>
+                            <option value="2-I"  {{ $selectedGrade == '2-I' ? 'selected' : '' }}>2-I</option>
+                            <option value="II"   {{ $selectedGrade == 'II' ? 'selected' : '' }}>II</option>
+                            <option value="I"    {{ $selectedGrade == 'I' ? 'selected' : '' }}>I</option>
+
+                        </select>
+
                         <div class="image-set"><a data-gallery="photoviewer" id="{{isset($employee->virtualfile->id) ? $employee->virtualfile->id : ''}}" data-title="SMGT-Scanned Documents" data-group="a" href="{{isset($employee->virtualfile->promoltr) ? asset('/vfiles/' ).'/'.$employee->virtualfile->promoltr : asset('/vfiles/No_Image_Available.jpg') }}">
                         <img src="{{isset($employee->virtualfile->promoltr) ? asset('/vfiles/' ).'/'.$employee->virtualfile->promoltr : asset('/vfiles/No_Image_Available.jpg') }}" class="img-fluid img-thumbnail" alt="">
                         </a></div>@can('employee-edit')<button class="imgedit" type="button" id="promoltr" data-toggle="modal" data-target="#imageupload"><i class="fas fa-edit"></i>@endcan</button>
@@ -480,12 +576,24 @@
                         <label for="" class="control-label">Permanent working station (as per paysheet)</label>
                     </div>
                     <div class="form-col-8">    
-                        <select name="institute_id" id="institute_id" class="form-control form-control-sm" required disabled>
+                        @php
+                            $selectedInstitute = old('institute_id', $employee->institute_id ?? '');
+                        @endphp
+
+                        <select name="institute_id" 
+                                id="institute_id" 
+                                class="form-control form-control-sm" 
+                                disabled>
+
                             <option value="">--Select Institution--</option>
-                    		@foreach ($institutes as $institute)
-                            <option value="{{ $institute->id}}" {{(isset($employee) && $employee->institute_id == $institute->id)  ? 'selected' : ''}}>{{ $institute->institute}}</option>
-                             @endforeach
-                    	</select>
+
+                            @foreach ($institutes as $institute)
+                                <option value="{{ $institute->id }}"
+                                    {{ $selectedInstitute == $institute->id ? 'selected' : '' }}>
+                                    {{ $institute->institute }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->institute_id != $employee->institute_id) <span class="dummy-value">{{$employee->empdummy->institute->institute}} <input type="hidden" name="dummy_institute_id" value="{{$employee->empdummy->institute_id}}"/></span>@endif @endif
                 </div>
@@ -495,30 +603,48 @@
                         <label for="" class="control-label">Temprory working station (Attachment/Temprory)</label>
                     </div>
                     <div class="form-col-8">    
-                        <select name="current_working_station" id="current_working_station" class="form-control form-control-sm" required disabled>
+                        @php
+                            $selectedStation = old('current_working_station', $employee->current_working_station ?? '');
+                        @endphp
+                        <select name="current_working_station" 
+                                id="current_working_station" 
+                                class="form-control form-control-sm" 
+                                disabled>
+
                             <option value="">--Select Institution--</option>
-                    		@foreach ($institutes as $institute)
-                            <option value="{{ $institute->id}}" {{(isset($employee) && $employee->current_working_station == $institute->id)  ? 'selected' : ''}}>{{ $institute->institute}}</option>
-                             @endforeach
-                    	</select>
+
+                            @foreach ($institutes as $institute)
+                                <option value="{{ $institute->id }}"
+                                    {{ $selectedStation == $institute->id ? 'selected' : '' }}>
+                                    {{ $institute->institute }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->current_working_station != $employee->current_working_station) <span class="dummy-value">{{$employee->empdummy->workingStation->institute}} <input type="text" name="dummy_current_working_station" value="{{$employee->empdummy->current_working_station}}"/></span>@endif @endif
                 </div>
-
                  <div class="form-group">
                     <div class="form-col-4">
                         <label for="" class="control-label">Reason of temprory attachment/Releases</label>
                     </div>
                     <div class="form-col-8">    
-                        <select name="reason_attachment" id="reason_attachment" class="form-control form-control-sm" disabled>
-                            <option value="" @if(isset($employee) && $employee->reason_attachment==""){{"selected"}} @endif >--Select reason--</option>
-                            <option value="maternity" @if(isset($employee) && $employee->reason_attachment=="maternity"){{"selected"}} @endif >Maternity</option>
-                            <option value="accident" @if(isset($employee) && $employee->reason_attachment=="accident"){{"selected"}} @endif >Accident</option>
-                            <option value="sick" @if(isset($employee) && $employee->reason_attachment=="sick"){{"selected"}} @endif >Sick</option>
-                            <option value="training" @if(isset($employee) && $employee->reason_attachment=="training"){{"selected"}} @endif >Training</option>
-                            <option value="abroad" @if(isset($employee) && $employee->reason_attachment=="abroad"){{"selected"}} @endif >Abroad</option>
-                            <option value="other_release" @if(isset($employee) && $employee->reason_attachment=="other_release"){{"selected"}} @endif >Other Release</option>
-                    	</select>
+                        @php
+                            $selectedReason = old('reason_attachment', $employee->reason_attachment ?? '');
+                        @endphp
+                        <select name="reason_attachment" 
+                                id="reason_attachment" 
+                                class="form-control form-control-sm" 
+                                disabled>
+
+                            <option value="">--Select reason--</option>
+
+                            <option value="maternity"     {{ $selectedReason == 'maternity' ? 'selected' : '' }}>Maternity</option>
+                            <option value="accident"      {{ $selectedReason == 'accident' ? 'selected' : '' }}>Accident</option>
+                            <option value="sick"          {{ $selectedReason == 'sick' ? 'selected' : '' }}>Sick</option>
+                            <option value="training"      {{ $selectedReason == 'training' ? 'selected' : '' }}>Training</option>
+                            <option value="abroad"        {{ $selectedReason == 'abroad' ? 'selected' : '' }}>Abroad</option>
+                            <option value="other_release" {{ $selectedReason == 'other_release' ? 'selected' : '' }}>Other Release</option>
+                        </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->reason_attachment != $employee->reason_attachment) <span class="dummy-value">{{$employee->empdummy->reason_attachment}} <input type="hidden" name="dummy_reason_attachment" value="{{$employee->empdummy->reason_attachment}}"/></span>@endif @endif
                 </div>
@@ -551,12 +677,25 @@
                         <label for="" class="control-label">Designation in permanent working station</label>
                     </div>
                     <div class="form-col-8">
-                        <select name="designation_id" id="designation_id" class="form-control form-control-sm float" required disabled>
+                        @php
+                            $selectedDesignation = old('designation_id', $employee->designation_id ?? '');
+                        @endphp
+
+                        <select name="designation_id" 
+                                id="designation_id" 
+                                class="form-control form-control-sm float" 
+                                disabled>
+
                             <option value="">--Select Designation--</option>
-                    		@foreach ($designations as $designation)
-                            <option value="{{ $designation->id}}" {{(isset($employee) && $employee->designation_id == $designation->id)  ? 'selected' : ''}}>{{ $designation->designation}} </option>
+
+                            @foreach ($designations as $designation)
+                                <option value="{{ $designation->id }}"
+                                    {{ $selectedDesignation == $designation->id ? 'selected' : '' }}>
+                                    {{ $designation->designation }}
+                                </option>
                             @endforeach
-                    	</select>
+
+                        </select>
                         <div class="image-set"><a data-gallery="photoviewer" id="{{isset($employee->virtualfile->id) ? $employee->virtualfile->id : ''}}" data-title="SMGT-Scanned Documents" data-group="a" href="{{isset($employee->virtualfile->designationltr) ? asset('/vfiles/' ).'/'.$employee->virtualfile->designationltr : asset('/vfiles/No_Image_Available.jpg') }}">
                         <img src="{{isset($employee->virtualfile->designationltr) ? asset('/vfiles/' ).'/'.$employee->virtualfile->designationltr : asset('/vfiles/No_Image_Available.jpg') }}" class="img-fluid img-thumbnail" alt="">
                         </a></div>@can('employee-edit')<button class="imgedit" type="button" id="designationltr" data-toggle="modal" data-target="#imageupload"><i class="fas fa-edit"></i>@endcan</button>
@@ -605,11 +744,24 @@
                         <label for="" class="control-label">Higher education qualification</label>
                     </div>
                     <div class="form-col-9">    
-                        <select name="highqualification_id" id="highqualification_id" class="form-control form-control-sm float" disabled>
+                        @php
+                            $selectedQualification = old('highqualification_id', $employee->highqualification_id ?? '');
+                        @endphp
+
+                        <select name="highqualification_id" 
+                                id="highqualification_id" 
+                                class="form-control form-control-sm float" 
+                                disabled>
+
                             <option value="">--Select Highest Qualification--</option>
+
                             @foreach ($highqualifs as $highqualif)
-                            <option value="{{ $highqualif->id}}" {{(isset($employee) && $employee->highqualification_id	== $highqualif->id)  ? 'selected' : ''}}>{{$highqualif->qualif}}</option>
+                                <option value="{{ $highqualif->id }}"
+                                    {{ $selectedQualification == $highqualif->id ? 'selected' : '' }}>
+                                    {{ $highqualif->qualif }}
+                                </option>
                             @endforeach
+
                         </select>
                         <div class="image-set"><a data-gallery="photoviewer" id="{{isset($employee->virtualfile->id) ? $employee->virtualfile->id : ''}}" data-title="SMGT-Scanned Documents" data-group="a" href="{{isset($employee->virtualfile->hiqualif) ? asset('/vfiles/' ).'/'.$employee->virtualfile->hiqualif : asset('/vfiles/No_Image_Available.jpg') }}">
                         <img src="{{isset($employee->virtualfile->hiqualif) ? asset('/vfiles/' ).'/'.$employee->virtualfile->hiqualif : asset('/vfiles/No_Image_Available.jpg') }}" class="img-fluid img-thumbnail" alt="">
@@ -632,17 +784,26 @@
                         <label for="" class="control-label">A/L stream</label>
                     </div>
                     <div class="form-col-9">    
-                        <select name="al_stream" id="al_stream" class="form-control form-control-sm" disabled>
-                            <option value="" @if(isset($employee) && $employee->al_stream==""){{"selected"}} @endif >--Select A/L stream--</option>
-                            <option value="bio science" @if(isset($employee) && $employee->al_stream=="bio science"){{"selected"}} @endif >Bio Science</option>
-                            <option value="physical science" @if(isset($employee) && $employee->al_stream=="physical science"){{"selected"}} @endif >Physical Science</option>
-                            <option value="commerce" @if(isset($employee) && $employee->al_stream=="commerce"){{"selected"}} @endif >Commerce</option>
-                            <option value="e_tech" @if(isset($employee) && $employee->al_stream=="e_tech"){{"selected"}} @endif >E-Technology</option>
-                            <option value="b_tech" @if(isset($employee) && $employee->al_stream=="b_tech"){{"selected"}} @endif >B-Technology</option>
-                            <option value="arts" @if(isset($employee) && $employee->al_stream=="arts"){{"selected"}} @endif >Arts</option>
-                            <option value="others" @if(isset($employee) && $employee->al_stream=="others"){{"selected"}} @endif >Other Stream</option>
-                            <option value="not sat for A/L" @if(isset($employee) && $employee->al_stream=="not sat for A/L"){{"selected"}} @endif >Not Sat for A/L</option>
-                    	</select>
+                        @php
+                            $selectedStream = old('al_stream', $employee->al_stream ?? '');
+                        @endphp
+
+                        <select name="al_stream" 
+                                id="al_stream" 
+                                class="form-control form-control-sm" 
+                                disabled>
+
+                            <option value="">--Select A/L stream--</option>
+
+                            <option value="bio science"      {{ $selectedStream == 'bio science' ? 'selected' : '' }}>Bio Science</option>
+                            <option value="physical science" {{ $selectedStream == 'physical science' ? 'selected' : '' }}>Physical Science</option>
+                            <option value="commerce"         {{ $selectedStream == 'commerce' ? 'selected' : '' }}>Commerce</option>
+                            <option value="e_tech"           {{ $selectedStream == 'e_tech' ? 'selected' : '' }}>E-Technology</option>
+                            <option value="b_tech"           {{ $selectedStream == 'b_tech' ? 'selected' : '' }}>B-Technology</option>
+                            <option value="arts"             {{ $selectedStream == 'arts' ? 'selected' : '' }}>Arts</option>
+                            <option value="others"           {{ $selectedStream == 'others' ? 'selected' : '' }}>Other Stream</option>
+                            <option value="not sat for A/L"  {{ $selectedStream == 'not sat for A/L' ? 'selected' : '' }}>Not Sat for A/L</option>
+                        </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->al_stream != $employee->al_stream) <span class="dummy-value">{{$employee->empdummy->al_stream}} <input type="hidden" name="dummy_al_stream" value="{{$employee->empdummy->al_stream}}"/></span>@endif @endif
                 </div>
@@ -651,22 +812,35 @@
                         <label for="" class="control-label">Name of basic degree</label>
                     </div>
                     <div class="form-col-9">
-                        <select name="degree_id" id="degree_id" class="form-control form-control-sm" disabled>
+                        @php
+                            $selectedDegree = old('degree_id', $employee->degree_id ?? '');
+                        @endphp
+
+                        <select name="degree_id" 
+                                id="degree_id" 
+                                class="form-control form-control-sm" 
+                                disabled>
+
                             <option value="">--Select Degree--</option>
-                    		@foreach ($degrees as $degree)
-                            <option value="{{ $degree->id}}" {{(isset($employee) && $employee->degree_id == $degree->id)  ? 'selected' : ''}}>{{$degree->degree}}</option>
+
+                            @foreach ($degrees as $degree)
+                                <option value="{{ $degree->id }}"
+                                    {{ $selectedDegree == $degree->id ? 'selected' : '' }}>
+                                    {{ $degree->degree }}
+                                </option>
                             @endforeach
-                    	</select>
+                        </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->degree_id != $employee->degree_id) <span class="dummy-value">{{$employee->empdummy->degree->degree}} <input type="hidden" name="dummy_degree_id" value="{{$employee->empdummy->degree_id}}"/></span>@endif @endif
                 </div>
                 <br>
                 <!--............................................................Degree Subject....................................................-->
+                <label class="card-title">Degree Subjects</label>
                 <table id="degreesubjecttable">
                     <thead>
                         <tr>
-                            <th>Subject</th>
-                            <th></th>
+                            <th style="width:90%;">Subject Name</th>
+                            <th style="width:10%;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -686,13 +860,14 @@
                 
                 <br>
                 <!--............................................................Other Qualifications....................................................-->
+                <label class="card-title">Professional Qualifications</label>
                 <table id="coursetable">
                     <thead>
                         <tr>
-                            <th>Qualification</th>
-                            <th>Institution</th>
-                            <th>Duration</th>
-                            <th></th>
+                            <th style="width:35%;">Course Name</th>
+                            <th style="width:35%;">Institution</th>
+                            <th style="width:20%;">Duration (Months)</th>
+                            <th style="width:10%;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -733,10 +908,22 @@
                         <label for="" class="control-label">Appointment Category</label>
                     </div>
                     <div class="form-col-9">     
-                        <select name="appcategory_id" id="appcategory_id" class="form-control form-control-sm" disabled>
+                        @php
+                            $selectedAppCategory = old('appcategory_id', $employee->appcategory_id ?? '');
+                        @endphp
+
+                        <select name="appcategory_id" 
+                                id="appcategory_id" 
+                                class="form-control form-control-sm" 
+                                disabled>
+
                             <option value="">--Select Appointment Category--</option>
-                    		@foreach ($appcats as $appcat)
-                            <option value="{{$appcat->id}}" {{(isset($employee) && $employee->appcategory_id == $appcat->id)  ? 'selected' : ''}}>{{$appcat->appcat}}</option>
+
+                            @foreach ($appcats as $appcat)
+                                <option value="{{ $appcat->id }}"
+                                    {{ $selectedAppCategory == $appcat->id ? 'selected' : '' }}>
+                                    {{ $appcat->appcat }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -747,12 +934,25 @@
                         <label for="" class="control-label">Cadre Subject</label>
                     </div>
                     <div class="form-col-9">
-                        <select name="cadresubject_id" id="cadresubject_id" class="form-control form-control-sm" disabled required>
-                            <option value="">--Select cadre Subject--</option>
+                        @php
+                            $selectedCadre = old('cadresubject_id', $employee->cadresubject_id ?? '');
+                        @endphp
+
+                        <select name="cadresubject_id" 
+                                id="cadresubject_id" 
+                                class="form-control form-control-sm" 
+                                disabled>
+
+                            <option value="">--Select Cadre Subject--</option>
+
                             @foreach ($cadresubs as $cadresub)
-                            <option value="{{$cadresub->id}}" {{(isset($employee) && $employee->cadresubject_id == $cadresub->id)  ? 'selected' : ''}}>{{$cadresub->cadre}}</option>
+                                <option value="{{ $cadresub->id }}"
+                                    {{ $selectedCadre == $cadresub->id ? 'selected' : '' }}>
+                                    {{ $cadresub->cadre }}
+                                </option>
                             @endforeach
-                    	</select>
+
+                        </select>
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->cadresubject_id != $employee->cadresubject_id) <span class="dummy-value">{{$employee->empdummy->cadresubject->cadre}} <input type="hidden" name="dummy_cadresubject_id" value="{{$employee->empdummy->cadresubject_id}}"/></span>@endif @endif
                 </div>
@@ -761,22 +961,31 @@
                         <label for="" class="control-label">Trained Status</label>
                     </div>
                     <div class="form-col-9">
-                        <select name="trained" id="trained" class="form-control form-control-sm" disabled>
-                            <option value="" @if(isset($employee) && $employee->trained==""){{"selected"}} @endif >--Select Trained Status--</option>
-                            <option value="trained" @if(isset($employee) && $employee->trained=="trained"){{"selected"}} @endif >Trained</option>
-                            <option value="untrained" @if(isset($employee) && $employee->trained=="untrained"){{"selected"}} @endif >Un-Trained</option>
-                            <option value="undertraining" @if(isset($employee) && $employee->trained=="undertraining"){{"selected"}} @endif >Under Training</option>
-                    	</select>
+                        @php
+                            $selectedTrained = old('trained', $employee->trained ?? '');
+                        @endphp
+
+                        <select name="trained" 
+                                id="trained" 
+                                class="form-control form-control-sm" 
+                                disabled>
+
+                            <option value="">--Select Trained Status--</option>
+
+                            <option value="trained"       {{ $selectedTrained == 'trained' ? 'selected' : '' }}>Trained</option>
+                            <option value="untrained"     {{ $selectedTrained == 'untrained' ? 'selected' : '' }}>Un-Trained</option>
+                            <option value="undertraining" {{ $selectedTrained == 'undertraining' ? 'selected' : '' }}>Under Training</option>
+                        </select>
                     </div>
                 </div>
                 @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->trained != $employee->trained) <span class="dummy-value">{{$employee->empdummy->trained}} <input type="hidden" name="dummy_trained" value="{{$employee->empdummy->trained}}"/></span>@endif @endif
                 <br>
+                <label class="card-title">Teaching Subjects</label>
                 <table id="subjecttable">
                     <thead>
                         <tr>
-                            <th>Subject</th>
-                            <th>Periods</th>
-                            <th></th>
+                            <th style="width:40%;">Teaching Subject</th>
+                            <th style="width:40%;">Periods (Per week)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -804,13 +1013,24 @@
                         <label for="" class="control-label">Status(Active/In-Active)</label>
                     </div>
                     <div class="form-col-9">     
-                        <select name="status" id="status" class="form-control form-control-sm" required disabled>
-                            <option value="" @if(isset($employee) && $employee->status==""){{"selected"}} @endif >--Select Status--</option>
-                            <option value="Active" @if(isset($employee) && $employee->status=="Active"){{"selected"}} @endif >Active</option>
-                            <option value="TrOut" @if(isset($employee) && $employee->status=="TrOut"){{"selected"}} @endif >TrOut</option>
-                            <option value="Inactive" @if(isset($employee) && $employee->status=="Inactive"){{"selected"}} @endif >Inactive</option>
-                            <option value="Pension" @if(isset($employee) && $employee->status=="Pension"){{"selected"}} @endif >Pension</option>
+                        @php
+                            $selectedStatus = old('status', $employee->status ?? '');
+                        @endphp
+
+                        <select name="status" 
+                                id="status" 
+                                class="form-control form-control-sm" 
+                                disabled>
+
+                            <option value="">--Select Status--</option>
+
+                            <option value="Active"   {{ $selectedStatus == 'Active' ? 'selected' : '' }}>Active</option>
+                            <option value="TrOut"    {{ $selectedStatus == 'TrOut' ? 'selected' : '' }}>TrOut</option>
+                            <option value="Inactive" {{ $selectedStatus == 'Inactive' ? 'selected' : '' }}>Inactive</option>
+                            <option value="Pension"  {{ $selectedStatus == 'Pension' ? 'selected' : '' }}>Pension</option>
+
                         </select>
+
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->status != $employee->status) <span class="dummy-value">{{$employee->empdummy->status}} <input type="hidden" name="dummy_status" value="{{$employee->empdummy->status}}"/></span>@endif @endif
                 </div>
@@ -844,9 +1064,13 @@
                     <div class="form-col-3">
                         <label for="" class="control-label">Designation Category</label>
                     </div>
-                    <div class="form-col-9">
-                        <input type="text" class="form-control form-control-sm" id="desigcatg" name="desigcatg" value="{{ $employee?->designation?->catg ?? '' }}" required readonly>
-                    </div>
+                    <input type="text" 
+                        class="form-control form-control-sm" 
+                        id="desigcatg" 
+                        name="desigcatg" 
+                        value="{{ old('desigcatg', $employee?->designation?->catg ?? '') }}" 
+                        required 
+                        readonly>
                 </div>
             </div>
         </div>
@@ -1511,8 +1735,7 @@ $(document).ready(function () {
 
 
     //..........................................................Adding a Cource.........................................................       
-    $(document).on("click", ".addcourse", function(e){
-
+$(document).on("click", ".addcourse", function(e){
 
     var nextindex = $("#coursetable tbody tr").length + 1;
 

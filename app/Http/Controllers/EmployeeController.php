@@ -272,11 +272,18 @@ class EmployeeController extends Controller
         $degreesubs = DegSubject::orderBy('name')->get();
         $appcats = AppCategory::get();
         $cadresubs = Cadresubject::orderBy('cadre')->get(); 
+        $teachsubs = Cadresubject::whereNotIn('category', [
+                        'office_academic',
+                        'school_administration',
+                        'others',
+                        'school_non_academic',
+                        'office_non_academic'
+                    ])->orderBy('cadre')->get(); 
         $qualifData = ProfQualification::query()->orderBy('name')->get();
         $instituteData = ProfQualificationInstitute::query()->orderBy('name')->get();
 
         return view('human_resource.createOrUpdate', compact('employee','employeeDummy','ds','gn','zones','transmodes','services','designations','institutes',
-        'highqualifs','degrees','degreesubs','appcats','cadresubs','qualifData','instituteData'));
+        'highqualifs','degrees','degreesubs','appcats','cadresubs','teachsubs','qualifData','instituteData'));
    
     }
 
@@ -287,98 +294,98 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-{
-    $this->validate($request, [
-        'empno' => 'required',
-        'nic' => 'required|unique:employees,nic',
-        'name_with_initial_e' => 'required|max:30',
-    ]);
+    {
+        $this->validate($request, [
+            'empno' => 'required',
+            'nic' => 'required|unique:employees,nic',
+            'name_with_initial_e' => 'required|max:30',
+        ]);
 
-    DB::beginTransaction();
+        DB::beginTransaction();
 
-    try {
+        try {
 
-        if ($request->input('desigcatg') != 'SAC') {
-            $insid = Institute::where('institute', $request->input('desigcatg'))
-                        ->value('id');
-            $institute1id = $insid;
-        } else {
-            $institute1id = $request->input('institute_id');
-        }
+            if ($request->input('desigcatg') != 'SAC') {
+                $insid = Institute::where('institute', $request->input('desigcatg'))
+                            ->value('id');
+                $institute1id = $insid;
+            } else {
+                $institute1id = $request->input('institute_id');
+            }
 
-        $currentWorkingStation = $request->input('current_working_station') 
-                                    ?: $request->input('institute_id');
+            $currentWorkingStation = $request->input('current_working_station') 
+                                        ?: $request->input('institute_id');
 
-        if (Employee::where('nic', $request->input('nic'))->exists()) {
-            session()->flash('error', 'Employee already exist!');
+            if (Employee::where('nic', $request->input('nic'))->exists()) {
+                session()->flash('error', 'Employee already exist!');
+                return redirect()->back();
+            }
+
+            // ✅ Create Employee
+            $employee = Employee::create(
+                $request->except([
+                    'subject_name',
+                    'course_name',
+                    'institution',
+                    'duration',
+                    'teachsubject_id',
+                    'periods'
+                ]) + [
+                    'institute1_id' => $institute1id,
+                    'current_working_station' => $currentWorkingStation
+                ]
+            );
+
+            $id = $employee->id;
+
+            // ================= DEGREE SUBJECTS =================
+            if ($request->get('subject_name')) {
+                foreach ($request->subject_name as $val) {
+                    if (trim($val) == "") continue;
+                    EmpDegreeSubject::create([
+                        'subject_name' => $val,
+                        'employee_id' => $id,
+                    ]);
+                }
+            }
+
+            // ================= QUALIFICATIONS =================
+            if ($request->get('course_name')) {
+                foreach ($request->course_name as $i => $val) {
+                    if (trim($val) == "") continue;
+                    EmpQualification::create([
+                        'course_name' => $request->course_name[$i],
+                        'institution' => $request->institution[$i] ?? null,
+                        'duration' => $request->duration[$i] ?? null,
+                        'employee_id' => $id,
+                    ]);
+                }
+            }
+
+            // ================= TEACHING SUBJECTS =================
+            if ($request->get('teachsubject_id')) {
+                foreach ($request->teachsubject_id as $i => $val) {
+                    if (!$val) continue;
+                    EmpTeachSubject::create([
+                        'cadresubject_id' => $val,
+                        'periods' => $request->periods[$i] ?? null,
+                        'employee_id' => $id,
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            session()->flash('success', 'Successfully added');
+            return redirect()->route('employee.index');
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+            session()->flash('error', 'Error: '.$e->getMessage());
             return redirect()->back();
         }
-
-        // ✅ Create Employee
-        $employee = Employee::create(
-            $request->except([
-                'subject_name',
-                'course_name',
-                'institution',
-                'duration',
-                'teachsubject_id',
-                'periods'
-            ]) + [
-                'institute1_id' => $institute1id,
-                'current_working_station' => $currentWorkingStation
-            ]
-        );
-
-        $id = $employee->id;
-
-        // ================= DEGREE SUBJECTS =================
-        if ($request->get('subject_name')) {
-            foreach ($request->subject_name as $val) {
-                if (trim($val) == "") continue;
-                EmpDegreeSubject::create([
-                    'subject_name' => $val,
-                    'employee_id' => $id,
-                ]);
-            }
-        }
-
-        // ================= QUALIFICATIONS =================
-        if ($request->get('course_name')) {
-            foreach ($request->course_name as $i => $val) {
-                if (trim($val) == "") continue;
-                EmpQualification::create([
-                    'course_name' => $request->course_name[$i],
-                    'institution' => $request->institution[$i] ?? null,
-                    'duration' => $request->duration[$i] ?? null,
-                    'employee_id' => $id,
-                ]);
-            }
-        }
-
-        // ================= TEACHING SUBJECTS =================
-        if ($request->get('teachsubject_id')) {
-            foreach ($request->teachsubject_id as $i => $val) {
-                if (!$val) continue;
-                EmpTeachSubject::create([
-                    'cadresubject_id' => $val,
-                    'periods' => $request->periods[$i] ?? null,
-                    'employee_id' => $id,
-                ]);
-            }
-        }
-
-        DB::commit();
-
-        session()->flash('success', 'Successfully added');
-        return redirect()->route('employee.index');
-
-    } catch (\Exception $e) {
-
-        DB::rollBack();
-        session()->flash('error', 'Error: '.$e->getMessage());
-        return redirect()->back();
     }
-}
 
 
 

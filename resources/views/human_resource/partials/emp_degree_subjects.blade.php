@@ -1,12 +1,4 @@
-<label class="card-title">Degree Subjects</label>
-                <table id="degreesubjecttable">
-                    <thead>
-                        <tr>
-                            <th style="width:90%;">Subject Name</th>
-                            <th style="width:10%;"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
+
                         @foreach($empDegreeSubjects as $item)
                             <input type="hidden" name="degree_subjects[{{$loop->index}}][id]" value="{{$item->id}}">
                             
@@ -33,7 +25,4 @@
                                 </td>
                             </tr>
                         @endforeach
-
-                        <tr class='element' id='div_degree_1'></tr>
-                    </tbody>
-                </table>
+ 

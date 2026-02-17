@@ -1,14 +1,4 @@
-                <label class="card-title">Professional Qualifications</label>
-                <table id="coursetable">
-                    <thead>
-                        <tr>
-                            <th style="width:35%;">Course Name</th>
-                            <th style="width:35%;">Institution</th>
-                            <th style="width:20%;">Duration (Months)</th>
-                            <th style="width:10%;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+
                         @foreach($qualifications as $item)
                             <input type="hidden" name="qualifications[{{$loop->index}}][id]" value="{{$item->id}}">
                             <tr id="rowdata_{{$item->id}}">
@@ -58,6 +48,4 @@
                             </tr>
 
                         @endforeach
-                        <div class='element' id='div_1'></div>
-                    </tbody>
-                </table>
+0               
