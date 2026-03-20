@@ -136,7 +136,7 @@ class ServiceController extends Controller
     public function show($id)
     {
         $service = Service::find($id);
-        $users = User::where('institute_id','=', 69)->orWhere('institute_id','=', 73)->get();
+        $users = User::where('institute_id','=', 86)->orWhere('institute_id','=', 90)->get();
         return view('service_mgt.services.show', compact('service','users'));
     }
 
@@ -150,7 +150,7 @@ class ServiceController extends Controller
     {
         $servicetypes = ServiceType::orderBy('name')->get();
         $service = Service::find($id);
-        $users = User::where('institute_id','=', 69)->orWhere('institute_id','=', 73)->get();
+        $users = User::where('institute_id','=', 86)->orWhere('institute_id','=', 90)->get();
         return view('service_mgt.services.createOrUpdate', compact('service','users','servicetypes'));
     }
 

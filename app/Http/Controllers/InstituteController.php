@@ -115,7 +115,7 @@ class InstituteController extends Controller
     }
 
     public function view_clerk(){
-        $institutes = Institute::where('id','<',75)->get();
+        $institutes = Institute::get();
         $users = User::select('id','name')->get();
         return view('institutes.updateclerks',compact('institutes','users'));
     }
