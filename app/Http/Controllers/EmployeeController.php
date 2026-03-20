@@ -306,6 +306,7 @@ class EmployeeController extends Controller
         DB::beginTransaction();
 
         try {
+            dd($request->dsdivision_id, $request->gndivision_id);
 
             if ($request->input('desigcatg') != 'SAC') {
                 $insid = Institute::where('institute', $request->input('desigcatg'))

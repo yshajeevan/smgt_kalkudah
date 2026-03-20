@@ -98,7 +98,7 @@ class ServiceController extends Controller
     public function create()
     {
         $servicetypes = ServiceType::orderBy('name')->get();
-        $users = User::where('institute_id','=', 69)->orWhere('institute_id','=', 73)->orderBy('name')->get();
+        $users = User::where('institute_id','=', 86)->orWhere('institute_id','=', 90)->orderBy('name')->get();
 
         return view('service_mgt.services.createOrUpdate', compact('users','servicetypes')); 
     }
