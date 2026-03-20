@@ -241,18 +241,18 @@ class ProcessController extends Controller
         //Update next resposible officer's ID
         if(!empty($request->input('nres_id'))){
             $service = Service::where('id', $request->input('service_id'))->first();
-            if($service->user2_id == 31){
+            if($service->user2_id == 14){
                 $nxtres = $process->employee->institute1->pfclerk_id; 
                 $LUU = 1;
-            }elseif($service->user2_id == 32){
+            }elseif($service->user2_id == 14){
                 $nxtres = $process->employee->institute1->acctclerk_id;
                 $LUU = 1;
             }else{
                 if($service->user2->is_skipped && $service->user3->is_skipped){
-                    if($service->user4_id == 31){
+                    if($service->user4_id == 14){
                         $nxtres = $process->employee->institute1->pfclerk_id; 
                         $LUU = 3;
-                    }elseif($service->user4_id == 32){
+                    }elseif($service->user4_id == 15){
                         $nxtres = $process->employee->institute1->acctclerk_id;
                         $LUU = 3;
                     }else{
@@ -260,10 +260,10 @@ class ProcessController extends Controller
                         $LUU = 3;
                     }
                 }elseif($service->user2->is_skipped){
-                    if($service->user3_id == 31){
+                    if($service->user3_id == 14){
                         $nxtres = $process->employee->institute1->pfclerk_id; 
                         $LUU = 2;
-                    }elseif($service->user3_id == 32){
+                    }elseif($service->user3_id == 15){
                         $nxtres = $process->employee->institute1->acctclerk_id;
                         $LUU = 2;
                     }else{
@@ -485,9 +485,9 @@ class ProcessController extends Controller
         // Get next responsible officer ID
         $nextRes = "user".($countproc + 2);
         if(!empty($service->$nextRes->id)){
-            if($service->$nextRes->id == 31){
+            if($service->$nextRes->id == 14){
                 $nxtres = $process->employee->institute1->pfclerk_id; 
-            }elseif($service->$nextRes->id == 32){
+            }elseif($service->$nextRes->id == 15){
                 $nxtres = $process->employee->institute1->acctclerk_id;
             }else{
                 $nxtres = $service->$nextRes->id;
@@ -499,9 +499,9 @@ class ProcessController extends Controller
         // Get Current responsible officer 
         $cntres = "user".($countproc + 1);
         if(!empty($service->$cntres->id)){
-            if($service->$cntres->id == 31){
+            if($service->$cntres->id == 14){
                 $cntres_id = $process->employee->institute1->pfclerk_id; 
-            }elseif($service->$cntres->id == 32){
+            }elseif($service->$cntres->id == 15){
                 $cntres_id = $process->employee->institute1->acctclerk_id;
             }else{
                 $cntres_id = $service->$cntres->id;
@@ -632,19 +632,19 @@ class ProcessController extends Controller
             $nextres3 = "user".($LUU + 4)."_id";
             $service = Service::where('id', $process->service_id)->first();
             if(!empty($service->$nextres1)){    
-                if($service->$nextres1 == 31){
+                if($service->$nextres1 == 14){
                     $nxtres = $process->employee->institute1->pfclerk_id; 
                     $LUU = $LUU + 1;
-                }elseif($service->$nextres1== 32){
+                }elseif($service->$nextres1== 15){
                     $nxtres = $process->employee->institute1->acctclerk_id;
                     $LUU = $LUU + 1;
                 }else{
                     if(!empty($service->$n1user) && !empty($service->$n2user)){
                         if($service->$n1user->is_skipped && $service->$n2user->is_skipped){
-                            if($service->$nextres3 == 31){
+                            if($service->$nextres3 == 14){
                                 $nxtres = $process->employee->institute1->pfclerk_id; 
                                 $LUU = $LUU + 3;
-                            }elseif($service->$nextres3 == 32){
+                            }elseif($service->$nextres3 == 15){
                                 $nxtres = $process->employee->institute1->acctclerk_id;
                                 $LUU = $LUU + 3;
                             }else{
@@ -652,10 +652,10 @@ class ProcessController extends Controller
                                 $LUU = $LUU + 3;
                             }
                         }elseif($service->$n1user->is_skipped){
-                            if($service->$nextres2 == 31){
+                            if($service->$nextres2 == 14){
                                 $nxtres = $process->employee->institute1->pfclerk_id; 
                                 $LUU = $LUU + 2;
-                            }elseif($service->$nextres2 == 32){
+                            }elseif($service->$nextres2 == 15){
                                 $nxtres = $process->employee->institute1->acctclerk_id;
                                 $LUU = $LUU + 2;
                             }else{
@@ -864,9 +864,9 @@ class ProcessController extends Controller
                 $service = Service::where('id', $row['serviceid'])->first();
                 $nextRes = "user".($row['countproc'] + 2);
                 if(!empty($service->$nextRes->id)){
-                    if($service->$nextRes->id == 31){
+                    if($service->$nextRes->id == 14){
                         $nxtres = $process->employee->institute1->pfclerk_id; 
-                    }elseif($service->$nextRes->id == 32){
+                    }elseif($service->$nextRes->id == 15){
                         $nxtres = $process->employee->institute1->acctclerk_id;
                     }else{
                        $nxtres = $service->$nextRes->id;
