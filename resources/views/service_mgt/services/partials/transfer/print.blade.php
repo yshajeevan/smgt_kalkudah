@@ -44,10 +44,10 @@
        height: 290mm;
      }
     .letter-head{
-        height:38mm;
+        height:40mm;
     } 
     .box {
-        height:38mm; 
+        height:40mm; 
         display: flex;
         align-items: center;
         text-align: center;
@@ -60,11 +60,11 @@
         justify-content: center;
     }
     .logo-right{
-        height:38mm; 
+        height:35mm; 
         width:auto;
     }  
     .logo-left{
-        height:38mm; 
+        height:35mm; 
         width:auto;
     } 
     hr.header-line {
