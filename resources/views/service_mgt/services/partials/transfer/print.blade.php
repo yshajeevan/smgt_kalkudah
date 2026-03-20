@@ -155,13 +155,13 @@
                     </div>
                     <div class="col-6">
                         <div class="box">
-                            <h5>வலயக்கல்வி அலுவலகம்,  மட்டக்களப்பு மேற்கு<br>
-                                කලාප අධ්‍යාපන කාර්යාලය, මඩකලපුව බටහිර <br>
-                                Zonal Education Office, Batticaloa West</h4>
+                            <h5>கல்குடா வலயக்கல்வி அலுவலகம்,  வாழைச்சேனை<br>
+                                කල්කුඩා කලාප අධ්‍යාපන කාර්යාලය, වාළයිච්චේනයි <br>
+                                Kalkudah Zonal Education Office, Valaichenai</h4>
                         </div>
                     </div>
                     <div class="col-3 logo-container">
-                        <img src="https://smgt.battiwestzeo.lk/images/bwzeo_logo.jpg" class="logo-right" alt="" border="0"> 
+                        <img src="https://smgt.battiwestzeo.lk/images/kkzeo_logo.jpg" class="logo-right" alt="" border="0"> 
                     </div>
                 </div>
                 <hr class="header-line">
@@ -209,16 +209,16 @@
                             <!--@endif-->
                             <div class="e-signature"></div>
                             <p>வலயக்கல்வி பணிப்பாளர்<br>
-                            வலயக்கல்வி அலுவலகம்<br>
-                            மட்டக்களப்பு மேற்கு</p>
+                            கல்குடா வலயக்கல்வி அலுவலகம்<br>
+                            வாழைச்சேனை</p>
                         </div>
                     </div>
                     <br>
                     <div class="row corbon-copy float-left">
                         <div class="col-12">
                             <p>பிரதி:</p>
-                            <P>1. பிரதிக்கல்வி பணிப்பாளர்-திட்டமிடல், வலயக்கல்வி அலுவலகம், மட்டக்களப்பு மேற்கு</P>               
-                            <P>2. கணக்காளர், வலயக்கல்வி அலுவலகம், மட்டக்களப்பு மேற்கு</P>              
+                            <P>1. பிரதிக்கல்வி பணிப்பாளர்-திட்டமிடல், கல்குடா வலயக்கல்வி அலுவலகம், வாழைச்சேனை</P>               
+                            <P>2. கணக்காளர், கல்குடா வலயக்கல்வி அலுவலகம், வாழைச்சேனை</P>              
                             <p>3. அதிபர், {{$transfer->institute1->institute}}</p>
                             <p>4. அதிபர், {{$transfer->institute->institute}}</p>
                             <p>5. சுய விபரக்கோவை</p>
@@ -229,14 +229,15 @@
                 <div class="letter-footer">
                     <div class="row ">
                         <div class="col-6">
-                            <P>Address: Kurinchamunai, Kannankudah</P>
-                            <P>email: baw@edudept.ep.gov.lk</P>
-                            <p>Website: www.battiwestzeo.lk</p>
+                            <P>Address: Kalkudah, Valaichenai</P>
+                            <P>email: kal@edudept.ep.gov.lk</P>
+                            <p>Website: https://kalkudahzone.edu.lk</p>
                         </div>
                         <div class="col-6" style="padding-left:80px;">
-                            <P>General Number: +94652052983</P>
-                            <P>Admin: +94652052986</P>
-                            <p>Fax: +94652052983</p>
+                            <P>General Number: +94652257365</P>
+                            <P>ZDE: +94652258130</P>
+                            <P>Admin: +94652258130</P>
+                            <p>Fax: +94652257365 </p>
                         </div>
                     </div>
                 </div>
