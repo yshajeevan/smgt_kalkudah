@@ -44,10 +44,10 @@
        height: 290mm;
      }
     .letter-head{
-        height:35mm;
+        height:38mm;
     } 
     .box {
-        height:35mm; 
+        height:38mm; 
         display: flex;
         align-items: center;
         text-align: center;
@@ -60,11 +60,11 @@
         justify-content: center;
     }
     .logo-right{
-        height:35mm; 
+        height:38mm; 
         width:auto;
     }  
     .logo-left{
-        height:30mm; 
+        height:38mm; 
         width:auto;
     } 
     hr.header-line {
@@ -151,7 +151,7 @@
             <div class="sub-page">
                 <div class="row letter-head">
                     <div class="col-3 logo-container">
-                        <img src="https://smgt.battiwestzeo.lk/images/government_logo.png" class="logo-left" alt="" border="0">
+                        <img src="https://smgt.kalkudahzone.edu.lk/images/government_logo.png" class="logo-left" alt="" border="0">
                     </div>
                     <div class="col-6">
                         <div class="box">
@@ -161,7 +161,7 @@
                         </div>
                     </div>
                     <div class="col-3 logo-container">
-                        <img src="https://smgt.battiwestzeo.lk/images/kkzeo_logo.jpg" class="logo-right" alt="" border="0"> 
+                        <img src="https://smgt.kalkudahzone.edu.lk/images/kkzeo_logo.jpg" class="logo-right" alt="" border="0"> 
                     </div>
                 </div>
                 <hr class="header-line">
