@@ -690,47 +690,28 @@ $("#resetbtn").click(function(){
 });  
 
 
-//Sending SMS Functions
 function SMSFunction() {
 
     var service = document.getElementById("servicename").value;
-    var dropDown_mf = document.getElementById("remarks_mf").value;
-    var dropDown_mt = document.getElementById("remarks_mt").value;
-    var date_o = document.getElementById("remarks_o").value;
-    var dropDown_cfund = document.getElementById("cfund").value;
+    var mobile = document.getElementById("mobile").value;
 
-    var remarks = '';
-
-    if (dropDown_mf != '') {
-        if (dropDown_mt != '') {
-            remarks = ' from ' + dropDown_mf + ' to ' + dropDown_mt;
-        } else {
-            remarks = ' for the month of ' + dropDown_mf;
-        }
-    } else if (date_o != '') {
-        remarks = ' for the date of ' + date_o;
-    } else if (dropDown_cfund != '') {
-        remarks = ' with activity code: ' + dropDown_cfund;
-    }
-
-    var tmessage = 'Your recent service ' + service + remarks +
+    var message = 'Your recent service ' + service +
         ' has been taken into process. Ref.no:' + {!! json_encode($maxid + 1) !!} +
         '. Visit https://smgt.kalkudahzone.edu.lk';
 
-    var mnumber = '94' + document.getElementById("mobile").value;
+    var mnumber = '94' + mobile;
 
-    // ✅ CALL YOUR BACKEND ONLY
     $.ajax({
         url: "/send-sms",
         type: "POST",
         data: {
-            _token: '{{ csrf_token() }}',
+            _token: "{{ csrf_token() }}",
             number: mnumber,
-            message: tmessage
+            message: message
         },
         success: function (response) {
             console.log(response);
-            alert("SMS sent!");
+            alert("SMS sent successfully!");
         },
         error: function (xhr) {
             console.log(xhr.responseText);

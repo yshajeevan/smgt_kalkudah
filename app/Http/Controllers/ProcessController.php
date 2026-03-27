@@ -922,16 +922,31 @@ class ProcessController extends Controller
 
     public function sendSMS(Request $request)
     {
-        $userId = '31051';
-        $apiKey = '4ncvOVq3FeMOW5pv27i1';
-
-        $response = Http::get('https://app.notify.lk/api/v1/send', [
-            'user_id'   => $userId,
-            'api_key'   => $apiKey,
-            'sender_id' => 'NTLKDEMO',
-            'to'        => $request->number,
-            'message'   => $request->message
+        $url = "https://app.notify.lk/api/v1/send?" . http_build_query([
+            'user_id'   => env('NOTIFY_USER_ID'),
+            'api_key'   => env('NOTIFY_API_KEY'),
+            'sender_id' => env('NOTIFY_SENDER_ID'),
+            'to' => $request->number,
+            'message' => $request->message
         ]);
-        return response()->json($response->json());
+
+        $response = file_get_contents($url);
+
+        return response()->json(json_decode($response, true));
+    }
+
+    public function sendSMSfinish(Request $request)
+    {
+        $url = "https://app.notify.lk/api/v1/send?" . http_build_query([
+            'user_id'   => env('NOTIFY_USER_ID'),
+            'api_key'   => env('NOTIFY_API_KEY'),
+            'sender_id' => env('NOTIFY_SENDER_ID'),
+            'to' => $request->number,
+            'message' => $request->message
+        ]);
+
+        $response = file_get_contents($url);
+
+        return response()->json(json_decode($response, true));
     }
 }

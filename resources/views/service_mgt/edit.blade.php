@@ -501,22 +501,37 @@ $(document).ready(function(){
 
 //Sending SMS Functions
 function SMSFunction() {
-		var xhr = new XMLHttpRequest();
+
     var checkBox = document.getElementById("pendingchk");
 
-    if (checkBox.checked == true){
-      var tmessage = '{{'your service '.$service->service.' (Ref.no: '.$process->id.') is on hold'}}';
+    var tmessage = '';
+
+    if (checkBox.checked == true) {
+        tmessage = "your service {{$service->service}} (Ref.no: {{$process->id}}) is on hold";
     } else {
-      var tmessage = '{{$service->smsdesc.'Ref.no: '.$process->id.". Click here to send us a feedback https://smgt.battiwestzeo.lk/feedback/".$process->uniquekey}}';
+        tmessage = "{{$service->smsdesc}} Ref.no: {{$process->id}}. Click here to send us a feedback https://smgt.kalkudahzone.edu.lk/feedback/{{$process->uniquekey}}";
     }
-		var mnumber = '{{'94'.$process->employee->mobile}}';
-		xhr.open("GET", "https://richcommunication.dialog.lk/api/sms/inline/send?q=e78f434d6604755&destination=" + mnumber + "&message=" + tmessage + "&from=BATWESTZEO", true);
-			xhr.onreadystatechange = function(){
-				if (xhr.readyState == 4 && xhr.status == 200) {			
-				}
-			}; 	    	
-		xhr.send();	
-}      
+
+    var mnumber = "94{{$process->employee->mobile}}";
+
+    $.ajax({
+        url: "/send-sms-finish",
+        type: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            number: mnumber,
+            message: tmessage
+        },
+        success: function (response) {
+            console.log(response);
+            alert("SMS sent successfully!");
+        },
+        error: function (xhr) {
+            console.log(xhr.responseText);
+            alert("SMS failed!");
+        }
+    });
+}     
 
 $( "#saveBtn" ).click(function() {
   var nextRes = {!! json_encode($nxtres, JSON_HEX_TAG) !!};

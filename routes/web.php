@@ -285,6 +285,9 @@ Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(
 
     //Send SMS when process start (Created)
     Route::post('/send-sms', [ProcessController::class, 'sendSMS']);
+
+    //Send SMS when process finished (end)
+    Route::post('/send-sms-finish', [ProcessController::class, 'sendSMSfinish']);
     
     //Virtual File
     Route::post('vfile-store','App\Http\Controllers\VirtualFileController@store')->name('vfile.store');
