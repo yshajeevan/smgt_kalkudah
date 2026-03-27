@@ -44,7 +44,7 @@ class ProcessController extends Controller
 
         $columns = array( 
                             0 =>'id', 
-                            1 =>'surname',
+                            1 =>'name_with_initial_e',
                             2 =>'designation',
                             3=> 'service',
                             4=> 'cres',
@@ -141,13 +141,12 @@ class ProcessController extends Controller
                 $edit =  route('process.edit',$process->id);
                 $delete =  route('process.delete',$process->id);
 
-                $title = $process->employee->title;
-                $initial = $process->employee->initial;
-                $surname = $process->employee->surname;
-                $namewtinitial = $title.".".$initial.".".$surname;
+                $title = $process->employee->title ?? '';
+                $initial = $process->employee->name_with_initial_e ?? '';
+                $namewtinitial = $title . '. ' . $initial;
                 //Nested data
                 $nestedData['id'] = $process->id;
-                $nestedData['surname'] = $namewtinitial;
+                $nestedData['name_with_initial_e'] = $namewtinitial;
                 $nestedData['designation'] = $process->employee->designation->designation;
                 if(!empty($process->remarks)){
                     $nestedData['service'] = $process->service->service."-".$process->remarks;
