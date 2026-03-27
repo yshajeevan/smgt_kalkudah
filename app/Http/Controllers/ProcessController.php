@@ -143,7 +143,7 @@ class ProcessController extends Controller
 
                 $title = $process->employee->title ?? '';
                 $initial = $process->employee->name_with_initial_e ?? '';
-                $namewtinitial = $title . '. ' . $initial;
+                $namewtinitial = $title . '.' . $initial;
                 //Nested data
                 $nestedData['id'] = $process->id;
                 $nestedData['name_with_initial_e'] = $namewtinitial;
