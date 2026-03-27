@@ -82,7 +82,7 @@
                    },
             "columns": [
                 { "data": "id" },
-                { "data": "surname",
+                { "data": "name_with_initial_e",
                     render: function (data, type, full, meta) {
                         return "<div class='text-wrap width-200'>" + data + "</div>";
                     } 
