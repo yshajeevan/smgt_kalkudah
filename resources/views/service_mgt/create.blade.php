@@ -552,27 +552,27 @@ $(document).ready(function(){
             },
             success: function(response){
               // Message card start
-              if(response.res2 == 31){
+              if(response.res2 == 14){
                 $('.photo').css('background-image', 'url(' + response.pfphoto + ')'); 
-              } else if(response.res2 == 32){
+              } else if(response.res2 == 15){
                 $('.photo').css('background-image', 'url(' + response.acctphoto + ')'); 
               } else{
                 $('.photo').css('background-image', 'url(' + response.res2photo + ')'); 
               }
               //Set user1_id value
-              if(response.res1 == 31){
+              if(response.res1 == 14){
                 $("#user1_id").val(response.pfclkid);
-              } else if(response.res1 == 32){
+              } else if(response.res1 == 15){
                 $("#user1_id").val(response.acctclkid);
               } else{
                 $("#user1_id").val(response.res1);
               }
 
               //Set next responsible user
-              if(response.res2 == 31){
+              if(response.res2 == 14){
                 $("#res2name").html(response.pfname);
                 $("#nres_id").val(response.pfclkid);
-              } else if(response.res2 == 32){
+              } else if(response.res2 == 15){
                 $("#res2name").html(response.acctname);
                 $("#nres_id").val(response.acctclkid);
               } else{
@@ -692,38 +692,51 @@ $("#resetbtn").click(function(){
 
 //Sending SMS Functions
 function SMSFunction() {
-		var xhr = new XMLHttpRequest();
-    var service = document.getElementById("servicename").value
+
+    var service = document.getElementById("servicename").value;
     var dropDown_mf = document.getElementById("remarks_mf").value;
     var dropDown_mt = document.getElementById("remarks_mt").value;
     var date_o = document.getElementById("remarks_o").value;
     var dropDown_cfund = document.getElementById("cfund").value;
 
-    if(dropDown_mf != ''){
-      if(dropDown_mt != ''){
-        var remarks = ' from ' + dropDown_mf + ' to ' + dropDown_mt;
-      } else{
-        var remarks = ' for the month of ' + dropDown_mf;
-      }
-    } else if(date_o != ''){
-        var remarks = ' for the date of ' + date_o;
-    } else if(dropDown_cfund != ''){
-        var remarks = ' with activity code: ' + dropDown_cfund;
-    } else {
-        var remarks = '';
+    var remarks = '';
+
+    if (dropDown_mf != '') {
+        if (dropDown_mt != '') {
+            remarks = ' from ' + dropDown_mf + ' to ' + dropDown_mt;
+        } else {
+            remarks = ' for the month of ' + dropDown_mf;
+        }
+    } else if (date_o != '') {
+        remarks = ' for the date of ' + date_o;
+    } else if (dropDown_cfund != '') {
+        remarks = ' with activity code: ' + dropDown_cfund;
     }
-    var tmessage = 'Your recent service ' + service + remarks + ' has been taken into process. Ref.no:' + {!! json_encode($maxid + 1, JSON_HEX_TAG) !!} + '. Click the below mentioned link and register to view your services. https://smgtc.battiwestzeo.lk';
-		var mnumber = '94'+ document.getElementById("mobile").value;
-		xhr.open("GET", "https://richcommunication.dialog.lk/api/sms/inline/send?q=e78f434d6604755&destination=" + mnumber + "&message=" + tmessage + "&from=BATWESTZEO", true);
-			xhr.onreadystatechange = function(){
-				if (xhr.readyState == 4 && xhr.status == 200) {			
-				}
-			}; 	    
-    // if (confirm("Service is started!, Do you want to send SMS to benificiary?")) {	
-		xhr.send();	
-    // } else {
-		// 	alert("Service started without sending SMS!");
-    // }
+
+    var tmessage = 'Your recent service ' + service + remarks +
+        ' has been taken into process. Ref.no:' + {!! json_encode($maxid + 1) !!} +
+        '. Visit https://smgt.kalkudahzone.edu.lk';
+
+    var mnumber = '94' + document.getElementById("mobile").value;
+
+    // ✅ CALL YOUR BACKEND ONLY
+    $.ajax({
+        url: "/send-sms",
+        type: "POST",
+        data: {
+            _token: '{{ csrf_token() }}',
+            number: mnumber,
+            message: tmessage
+        },
+        success: function (response) {
+            console.log(response);
+            alert("SMS sent!");
+        },
+        error: function (xhr) {
+            console.log(xhr.responseText);
+            alert("SMS failed!");
+        }
+    });
 }
 
 $( "#submit" ).click(function() {

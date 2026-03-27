@@ -282,6 +282,9 @@ Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(
     Route::post('/send-web-notification', [WebNotificationController::class, 'sendWebNotification'])->name('send.web-notification');
     
     Route::get('notify', [HomeController::class,'notify']);
+
+    //Send SMS when process start (Created)
+    Route::post('/send-sms', [ProcessController::class, 'sendSMS']);
     
     //Virtual File
     Route::post('vfile-store','App\Http\Controllers\VirtualFileController@store')->name('vfile.store');
@@ -292,7 +295,9 @@ Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(
     Route::post('employee-create','App\Http\Controllers\EmployeeController@store')->name('employee.store');
     Route::put('/employee-edit/{id}','App\Http\Controllers\EmployeeController@update')->name('employee.update');
     Route::delete('employee/{id}','App\Http\Controllers\EmployeeController@destroy')->name('employee.destroy');
-    Route::post('/photoupdate/{id}','App\Http\Controllers\EmployeeController@photoupdate')->name('employee.photoupdate');
+    Route::post('/employee/photo/{id}', [EmployeeController::class, 'photoUpload']);
+    // Route::post('/photoupdate/{id}','App\Http\Controllers\EmployeeController@photoupdate')->name('employee.photoupdate');
+
     Route::get('teacherprofile','App\Http\Controllers\EmployeeController@profile')->name('employee.profile');
     Route::get('employee-show/{id}','App\Http\Controllers\EmployeeController@show')->name('employee.show');
     Route::get('employee-appendclk','App\Http\Controllers\EmployeeController@appendview')->name('employee.appendview');

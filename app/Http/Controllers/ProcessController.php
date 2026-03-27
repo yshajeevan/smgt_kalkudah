@@ -772,34 +772,65 @@ class ProcessController extends Controller
         return response()->json($dataModified);
     }
 
-    public function getService(Request $reqest)
+    public function getService(Request $request)
     {
-        $serviceid = $reqest->serviceid;
+        $serviceid = $request->serviceid;
 
-        $data = Service::with('user1','user2','user3')->Find($serviceid);
+        // Load service users
+        $data = Service::with(['user1','user2','user3'])->findOrFail($serviceid);
 
-        $emplid = $reqest->empid;
-        $employee = Employee::LastSync()->findOrFail($emplid);
-        // Get photo of PF clerk
- 
-        return response()->json(['res1' => $data->user1_id,
-                        'res1time' => $data->res1time,
-                        'res1name' => $data->user1->name,
-                        'res1photo' => $data->user1->photo,
-                        'res2' => $data->user2_id,
-                        'res2time' => $data->res2time,
-                        'res2name' => $data->user2->name,
-                        'res2photo' => $data->user2->photo,
-                        'pfname' => $employee->institute1->pfclerk->name,
-                        'pfclkid' => $employee->institute1->pfclerk_id,
-                        'pfphoto' => $employee->institute1->pfclerk->photo,
-                        'acctname' => $employee->institute1->acctclerk->name,
-                        'acctclkid' => $employee->institute1->acctclerk_id,
-                        'acctphoto' => $employee->institute1->acctclerk->photo,
-                        'servicename' => $data->service,
-                        'remarks' => $data->remarks,
-                        'slug' => $data->slug,
-                        ]);
+        $emplid = $request->empid;
+
+        // Load employee + institute + clerks + their employee records
+        $employee = Employee::with([
+            'institute1.pfclerk.employee',
+            'institute1.acctclerk.employee'
+        ])->LastSync()->findOrFail($emplid);
+
+        // ---------- Helper for photo ----------
+        $getPhoto = function ($photo) {
+            return (!empty($photo) && file_exists(public_path('vfiles/profileimg/' . $photo)))
+                ? asset('vfiles/profileimg/' . $photo)
+                : asset('backend/img/avatar.png');
+        };
+
+        // ---------- Relations ----------
+        $pfclerk   = optional($employee->institute1)->pfclerk;
+        $acctclerk = optional($employee->institute1)->acctclerk;
+
+        // ---------- Get photo from EMPLOYEE table ----------
+        $pfPhoto   = optional(optional($pfclerk)->employee)->photo;
+        $acctPhoto = optional(optional($acctclerk)->employee)->photo;
+
+        return response()->json([
+
+            // ===== RESPONSIBLE 1 =====
+            'res1'      => $data->user1_id,
+            'res1time'  => $data->res1time,
+            'res1name'  => optional($data->user1)->name,
+            'res1photo' => $getPhoto(optional(optional($data->user1)->employee)->photo),
+
+            // ===== RESPONSIBLE 2 =====
+            'res2'      => $data->user2_id,
+            'res2time'  => $data->res2time,
+            'res2name'  => optional($data->user2)->name,
+            'res2photo' => $getPhoto(optional(optional($data->user2)->employee)->photo),
+
+            // ===== PF CLERK =====
+            'pfname'   => optional($pfclerk)->name,
+            'pfclkid'  => optional($employee->institute1)->pfclerk_id,
+            'pfphoto'  => $getPhoto($pfPhoto),
+
+            // ===== ACCOUNT CLERK =====
+            'acctname'  => optional($acctclerk)->name,
+            'acctclkid' => optional($employee->institute1)->acctclerk_id,
+            'acctphoto' => $getPhoto($acctPhoto),
+
+            // ===== SERVICE =====
+            'servicename' => $data->service,
+            'remarks'     => $data->remarks,
+            'slug'        => $data->slug,
+        ]);
     }
     
     public function feedback($scale){
@@ -887,5 +918,20 @@ class ProcessController extends Controller
         return redirect()->back();
        
         
+    }
+
+    public function sendSMS(Request $request)
+    {
+        $userId = '31051';
+        $apiKey = '4ncvOVq3FeMOW5pv27i1';
+
+        $response = Http::get('https://app.notify.lk/api/v1/send', [
+            'user_id'   => $userId,
+            'api_key'   => $apiKey,
+            'sender_id' => 'NTLKDEMO',
+            'to'        => $request->number,
+            'message'   => $request->message
+        ]);
+        return response()->json($response->json());
     }
 }

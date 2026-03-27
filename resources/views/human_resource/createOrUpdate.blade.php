@@ -15,8 +15,6 @@
         <div class="card lookup">
             <div class="card">
                 <div class="image">
-                    <form action="{{isset($employee) ? route('employee.photoupdate',$employee->id) : ''}}" name="profile_photo" method="post" enctype="multipart/form-data">
-                    @csrf
                     <div class="profile-pic-div">
                         @if(!empty($employee->photo))
                         <img class="card-img-top img-fluid roundend-circle mt-4" style="border-radius:50%;height:120px;width:120px;margin:auto;" src="{{asset('vfiles/profileimg/').'/'.$employee->photo}}" id="photo">
@@ -42,7 +40,6 @@
                       <a class="card-text text-left" href="mailto: {{isset($employee->email) ? $employee->email : 'N/A'}}"><i class="fa fa-envelope"></i><small>{{$employee->email}}</small></a>
                     </div>
                      @endif
-                </form>
             </div>
             <div class="card-header">
                 Go to section
@@ -1387,6 +1384,40 @@
 @push('scripts')
 <script src="{{asset('/js/photoviewer.js')}}"></script>
 <script>
+//Upload employee photo
+$('#filepro').on('change', function () {
+
+    let file = this.files[0];
+    if (!file) return;
+
+    let formData = new FormData();
+    formData.append('file', file);
+    formData.append('_token', '{{ csrf_token() }}');
+
+    // employee id (important)
+    let empId = "{{ $employee->id ?? '' }}";
+
+    $.ajax({
+        url: '/employee/photo/' + empId, // create this route
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+
+            // update image preview
+            $('#photo').attr('src', response.path + '?t=' + new Date().getTime());
+
+            alert('Photo updated successfully');
+        },
+        error: function (xhr) {
+            alert('Upload failed');
+            console.log(xhr.responseText);
+        }
+    });
+
+});
+
 // Add remove loading class on body element based on Ajax request status
 $(document).on({
     ajaxStart: function(){
