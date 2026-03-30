@@ -65,11 +65,6 @@ class InstituteController extends Controller
         return view('institutes.index');
     }
 
-    public function create()
-    {
-        //
-    }
-
     public function store(Request $request)
     {
         $status = Institute::create($request->except('_token', 'document'));

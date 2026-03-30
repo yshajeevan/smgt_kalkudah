@@ -367,7 +367,9 @@ Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(
     Route::get('institute-show/{id}','App\Http\Controllers\InstituteController@show')->name('institute.show');
     Route::post('institute-edit/{id}','App\Http\Controllers\InstituteController@update')->name('institute.update');
     Route::delete('institutes/{id}','App\Http\Controllers\InstituteController@destroy')->name('institute.destroy');
-    Route::get('instituteexport','App\Http\Controllers\InstituteController@export')->name('instituteexport.export');
+
+    Route::get('instituteexport','App\Http\Controllers\InstituteController@export')->name('institute.export');
+
     Route::post('institute/media', 'App\Http\Controllers\InstituteController@storeMedia')->name('institute.storeMedia');
     Route::get('insclerks', 'App\Http\Controllers\InstituteController@view_clerk')->name('inst.viewclerk');
     Route::get('clerk', 'App\Http\Controllers\InstituteController@clerks');

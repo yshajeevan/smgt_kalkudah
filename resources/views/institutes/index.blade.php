@@ -12,8 +12,7 @@
     </div>
     <div class="card-body">
       @can('institute-create')
-      <!--<a href="#" class="btn btn-primary btn-sm float-left" data-toggle="tooltip" data-placement="bottom" title="Add User" style="margin:5px;"><i class="fas fa-plus"></i> Add Institute</a>-->
-      <a href="{{route('instituteexport.export')}}" class="btn btn-primary btn-sm float-left" data-toggle="tooltip" data-placement="bottom" title="Add User" style="margin:5px;"><i class="fa fa-file-excel-o"></i> Export</a>
+      <a href="{{route('institute.export')}}" class="btn btn-primary btn-sm float-left" data-toggle="tooltip" data-placement="bottom" title="Export" style="margin:5px;"><i class="fa fa-file-excel-o"></i> Export</a>
       <br>
       @endcan
       <div class="table-responsive">

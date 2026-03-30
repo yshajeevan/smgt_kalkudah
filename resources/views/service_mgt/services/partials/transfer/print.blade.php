@@ -178,7 +178,7 @@
                     </div>
                     <div class="row letter-address" style="margin-bottom:0;">
                         <div class="col-12">
-                            <p>{{$transfer->employee->title.".".$transfer->employee->initial.".".$transfer->employee->surname}}</p>
+                            <p>{{$transfer->employee->title.".".$transfer->name_with_initial_e}}</p>
                             <p>{{$transfer->employee->nic}}</p>
                             <p>{{$transfer->institute1->institute}}</p>
                             @if($transfer->employee->designation_id == 22)
@@ -238,7 +238,6 @@
                             <P>General Number: +94652257365</P>
                             <P>ZDE: +94652258130</P>
                             <P>Admin: +94652258130</P>
-                            <p>Fax: +94652257365 </p>
                         </div>
                     </div>
                 </div>
