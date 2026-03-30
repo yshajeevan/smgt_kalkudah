@@ -119,7 +119,7 @@
     }
     .letter-footer p{
         margin-bottom:0;
-        font-size:0.8em;
+        font-size:0.7em;
         padding-left: 15mm;
         padding-right: 05mm;
     }
