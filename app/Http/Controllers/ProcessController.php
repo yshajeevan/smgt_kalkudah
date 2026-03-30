@@ -142,8 +142,8 @@ class ProcessController extends Controller
                 $delete =  route('process.delete',$process->id);
 
                 $title = $process->employee->title ?? '';
-                $initial = $process->employee->name_with_initial_e ?? '';
-                $namewtinitial = $title . '.' . $initial;
+                $name_with_initial = $process->employee->name_with_initial_e ?? '';
+                $namewtinitial = $title . '.' . $name_with_initial;
                 //Nested data
                 $nestedData['id'] = $process->id;
                 $nestedData['name_with_initial_e'] = $namewtinitial;

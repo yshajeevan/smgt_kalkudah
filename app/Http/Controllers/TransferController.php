@@ -21,7 +21,13 @@ class TransferController extends Controller
             $data = ServiceTransfer::all();
             return Datatables::of($data)
                     ->editColumn('employee_id', function(ServiceTransfer $transfer) {
-                            return $transfer->employee->title.".".$transfer->employee->initial.".".$transfer->employee->surname." (".$transfer->employee->cadresubject->cadre."), ".$transfer->employee->designation->designation;
+                        $emp = $transfer->employee;
+
+                        if (!$emp) return '';
+
+                        return $emp->title . "." . $emp->name_with_initial_e .
+                            " (" . optional($emp->cadresubject)->cadre . "), " .
+                            optional($emp->designation)->designation;
                     })
                     ->editColumn('transfer_from', function(ServiceTransfer $transfer) {
                             return $transfer->institute1->institute;
