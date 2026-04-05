@@ -169,7 +169,10 @@
                     <div class="letter-info">
                         <div class="row">
                             <div class="col-6">
-                                <p class="float-left font-weight-bold">My No: BT/BW/ZEO/@if($transfer->employee->empno < 8000){{$transfer->employee->empno}}@else TRAGN @endif/REF-{{$transfer->process_id}}</p>
+                                <p class="float-left font-weight-bold">
+                                My No: BT/KK/ZEO/ADMIN/TRAGN/{{$subject_number}}/
+                                {{ $transfer->employee->empno < 10000 ? $transfer->employee->empno : ''}}
+                                </p>
                             </div>
                             <div class="col-6">
                                 <p class="float-right font-weight-bold" style="padding-right:14px;">Date: {{$transfer->letter_date}}</p>

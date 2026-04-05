@@ -421,7 +421,8 @@ class ProcessController extends Controller
     
     public function print_transfer($id){
         $transfer = ServiceTransfer::Find($id);
-        return view('service_mgt.services.partials.transfer.print',compact('transfer'));
+        $subject_number = User::where('employee_id', Institute::where('id', $transfer->transfer_from)->value('pfclerk_id'))->value('subject_number');
+        return view('service_mgt.services.partials.transfer.print',compact('transfer', 'subject_number'));
     }
     
     public function differ_transfer(){
