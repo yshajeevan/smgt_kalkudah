@@ -371,7 +371,7 @@ html { height: 100%;}
           </ul>
       </li>
       @endcan
-      @can('employee-create')
+      @can('employee-edit')
       <li class="dropdown">
         <a href="#works" class="dropdown-toggle"  data-toggle="dropdown"><i class="far fa-address-card"></i> Employees<span class="caret"></span></a>
           <ul class="dropdown-menu animated fadeInLeft" role="menu">
