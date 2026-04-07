@@ -37,7 +37,7 @@ class TransferController extends Controller
                     })
                     ->addColumn('pfclerk', function(ServiceTransfer $transfer)
                     {
-                        return $transfer->employee->institute1->pfclerk->name;
+                        return $transfer->employee->institute1?->pfclerk?->name ?? 'N/A';
                     })
                     ->addIndexColumn()
                     ->make(true);
