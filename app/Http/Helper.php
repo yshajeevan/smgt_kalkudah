@@ -59,7 +59,7 @@ class Helper{
     } 
     public static function getinstitutes()
     {
-            $principal = Employee::select(DB::raw("institute_id,concat(title,'. ',initial,'. ',surname) as principal,mobile"))
+            $principal = Employee::select(DB::raw("institute_id,concat(title,'.',name_with_initial_e) as principal,mobile"))
                 ->where('status', '=', 'Active')
                 ->whereIn('designation_id', array(7,9));
 
