@@ -51,6 +51,12 @@ class ServiceController extends Controller
                                     </a> ";
                         }
 
+                        if(auth()->user()->can('service-show')){
+                            $btn .= "<a href='{$checklist}' class='btn btn-primary btn-sm'>
+                                        <i class='fas fa-check-square'></i>
+                                    </a> ";
+                        }
+
                         if(auth()->user()->can('service-edit')){
                             $btn .= "<a href='{$edit}' class='btn btn-primary btn-sm'>
                                         <i class='fas fa-edit'></i>
