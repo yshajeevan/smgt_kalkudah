@@ -87,7 +87,7 @@
                 <label for="" class="control-label">Acct Clerk:</label>
               </div>
               <div class="col-sm-8">
-                <input type="text" class="form-control form-control-sm" name="acctclerk" id="acctclerk" value="{{$process->employee->institute1->acctclerk->name}}" readonly>
+                <input type="text" class="form-control form-control-sm" name="acctclerk" id="acctclerk" value="{{ $process->employee?->institute1?->acctclerk?->name ?? 'Not assigned' }}" readonly>
               </div>
             </div>
             <br/>
@@ -183,13 +183,13 @@
 
                         if ($user['id'] == 31) {
                             $photo = $process->employee->institute1->pfclerk->employee_id ?? asset('backend/img/avatar.png');
-                            $name = $process->employee->institute1->pfclerk->name;
+                            $name = $process->employee?->institute1?->pfclerk?->name ?? 'Not assigned';
                         } elseif ($user['id'] == 32) {
                             $photo = $process->employee->institute1->acctclerk->employee_id ?? asset('backend/img/avatar.png');
-                            $name = $process->employee->institute1->acctclerk->name;
+                            $name = $process->employee?->institute1?->acctclerk?->name ?? 'Not assigned';
                         } else {
                             $photo = $service->{'user' . ($index + 1)}->employee_id ?? asset('backend/img/avatar.png');
-                            $name = $service->{'user' . ($index + 1)}->name;
+                            $name = $service->{'user' . ($index + 1)}->name ?? 'Not assigned';
                         }
                     @endphp
                     
