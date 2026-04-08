@@ -171,7 +171,7 @@
                             <div class="col-6">
                                 <p class="float-left font-weight-bold">
                                 My No: BT/KK/ZEO/ADMIN/TRAGN/{{$subject_number}}/
-                                {{ $transfer->employee->empno < 10000 ? $transfer->employee->empno : ''}}
+                                {{ $transfer->employee->empno < 100000 ? $transfer->employee->empno : ''}}
                                 </p>
                             </div>
                             <div class="col-6">
