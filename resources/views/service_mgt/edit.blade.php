@@ -31,7 +31,7 @@
                 <label for="" class="control-label">Employee Name:</label>
               </div>
               <div class="col-sm-8">
-                <input type="text" class="form-control form-control-sm" name="empname" id="empname" value="{{$process->employee->title.'.'.$process->employee->initial.'.'.$process->employee->surname}}" readonly>
+                <input type="text" class="form-control form-control-sm" name="empname" id="empname" value="{{$process->employee->title.'.'.$process->employee->name_with_initial_e}}" readonly>
               </div>
             </div>
             <div class="row">
