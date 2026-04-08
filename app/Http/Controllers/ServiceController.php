@@ -39,6 +39,7 @@ class ServiceController extends Controller
                       })
                     ->addColumn('action', function($row){
                         $show = route('service.show',$row->id);
+                        $checklist =  route('checklist.index',$row->id);
                         $edit = route('service.edit',$row->id);
                         $delete = route('service.destroy',$row->id);
 
