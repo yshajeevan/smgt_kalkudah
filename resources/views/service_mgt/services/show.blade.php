@@ -25,7 +25,7 @@
                     <div class="row">
                       <div class="col-lg-6">
                         <div class="form-group">
-                          {{$service->user1->name}}
+                          {{ $service->user1?->name ?? 'No User' }}
                         </div>
                       </div>
                       <div class="col-lg-6">
@@ -48,7 +48,7 @@
                     <div class="row">
                       <div class="col-lg-6">
                         <div class="form-group">
-                          {{$service->user2->name}}
+                          {{ $service->user2?->name ?? 'No User' }}
                         </div>
                       </div>
                       <div class="col-lg-6">
@@ -72,7 +72,7 @@
                     <div class="row">
                       <div class="col-lg-6">
                         <div class="form-group">
-                          {{$service->user3->name}}
+                          {{ $service->user3?->name ?? 'No User' }}
                         </div>
                       </div>
                       <div class="col-lg-6">
@@ -96,7 +96,7 @@
                     <div class="row">
                       <div class="col-lg-6">
                         <div class="form-group">
-                          {{$service->user4->name}}
+                          {{ $service->user4?->name ?? 'No User' }}
                         </div>
                       </div>
                       <div class="col-lg-6">
@@ -120,7 +120,7 @@
                     <div class="row">
                       <div class="col-lg-6">
                         <div class="form-group">
-                          {{$service->user5->name}}
+                          {{ $service->user5?->name ?? 'No User' }}
                         </div>
                       </div>
                       <div class="col-lg-6">
@@ -144,7 +144,7 @@
                     <div class="row">
                       <div class="col-lg-6">
                         <div class="form-group">
-                          {{$service->user6->name}}
+                          {{ $service->user6?->name ?? 'No User' }}
                         </div>
                       </div>
                       <div class="col-lg-6">
@@ -168,7 +168,7 @@
                     <div class="row">
                       <div class="col-lg-6">
                         <div class="form-group">
-                          {{$service->user7->name}}
+                          {{ $service->user7?->name ?? 'No User' }}
                         </div>
                       </div>
                       <div class="col-lg-6">
@@ -192,7 +192,7 @@
                     <div class="row">
                       <div class="col-lg-6">
                         <div class="form-group">
-                           {{$service->user8->name}} 
+                           {{ $service->user8?->name ?? 'No User' }}
                         </div>
                       </div>
                       <div class="col-lg-6">
@@ -216,7 +216,7 @@
                     <div class="row">
                       <div class="col-lg-6">
                         <div class="form-group">
-                          {{$service->user9->name}} 
+                          {{ $service->user9?->name ?? 'No User' }} 
                         </div>
                       </div>
                       <div class="col-lg-6">
@@ -240,7 +240,7 @@
                     <div class="row">
                       <div class="col-lg-6">
                         <div class="form-group">
-                            {{$service->user10->name}} 
+                            {{ $service->user10?->name ?? 'No User' }}
                         </div>
                       </div>
                       <div class="col-lg-6">
