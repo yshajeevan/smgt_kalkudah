@@ -168,13 +168,13 @@
                 <div class="main-content">
                     <div class="letter-info">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-9">
                                 <p class="float-left font-weight-bold">
                                 My No: BT/KK/ZEO/ADMIN/TRAGN/{{$subject_number}}/
                                 {{ $transfer->employee->empno < 100000 ? $transfer->employee->empno : ''}}/{{$transfer->id}}
                                 </p>
                             </div>
-                            <div class="col-6">
+                            <div class="col-3">
                                 <p class="float-right font-weight-bold" style="padding-right:14px;">Date: {{$transfer->letter_date}}</p>
                             </div>
                         </div>
