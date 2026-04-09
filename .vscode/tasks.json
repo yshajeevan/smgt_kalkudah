@@ -3,6 +3,7 @@
     "tasks": [
         {
             "label": "Git Add, Commit, and Push",
+            
             "type": "shell",
             "command": "powershell",
             "args": [

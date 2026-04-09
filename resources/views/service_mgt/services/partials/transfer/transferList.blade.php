@@ -82,6 +82,13 @@
 </div>
 @endsection
 
+@push('styles')
+<style>
+#employees_filter input {
+    width: 300px !important;
+}
+</style>
+@endpush
 
 @push('scripts')
 <script>
@@ -128,6 +135,7 @@ $(document).ready(function () {
         table.draw();
     });
 
+    $('#employees_filter input').attr('placeholder', 'Search by Process ID/Name/NIC');
 });
 </script>
 @endpush

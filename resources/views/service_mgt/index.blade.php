@@ -39,6 +39,10 @@
 @push('styles')
 <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css" rel="stylesheet" />
 <style>
+#process_filter input {
+    width: 300px !important;
+}
+
 @media (max-width: 767px){
     .pagination .paginate_button:not(.previous):not(.next):not(.first):not(.last){
         display: none;
@@ -99,6 +103,9 @@
                 { "data": "options" }
             ]
         });
+
+        $('#process_filter input').attr('placeholder', 'Search by Process ID/Name/NIC');
     });
+
 </script>
 @endpush

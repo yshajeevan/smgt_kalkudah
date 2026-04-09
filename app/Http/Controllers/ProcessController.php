@@ -100,15 +100,49 @@ class ProcessController extends Controller
             $durations = ServiceLog::select(DB::raw('process_id,sum(time_allocated) as timeallocated,sum(time_taken) as timespent'))
                 ->whereNull('on_hold')->groupBy('process_id')->orderBy('process_id');
 
-            $query = Process::leftjoinSub($durations, 'durations', function ($join) {
+            $query = Process::leftJoinSub($durations, 'durations', function ($join) {
                     $join->on('processes.id', '=', 'durations.process_id');
-                    })->select('processes.id','processes.employee_id','processes.service_id','processes.user_id','durations.timespent','durations.timeallocated',
-                    DB::raw('((CASE WHEN processtime1 IS NOT NULL THEN 1 ELSE 0 END) +  (CASE WHEN processtime2 IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN processtime3 IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN processtime4 IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN processtime5 IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN processtime6 IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN processtime7 IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN processtime8 IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN processtime9 IS NOT NULL THEN 1 ELSE 0 END) + (CASE WHEN processtime10 IS NOT NULL THEN 1 ELSE 0 END)) / ((CASE WHEN smgt_services.user1_id != 0 THEN 1 ELSE 0 END) +  (CASE WHEN smgt_services.user2_id != 0 THEN 1 ELSE 0 END) + (CASE WHEN smgt_services.user3_id != 0 THEN 1 ELSE 0 END) + (CASE WHEN smgt_services.user4_id != 0 THEN 1 ELSE 0 END) + (CASE WHEN smgt_services.user5_id != 0 THEN 1 ELSE 0 END) + (CASE WHEN smgt_services.user6_id != 0 THEN 1 ELSE 0 END) + (CASE WHEN smgt_services.user7_id != 0 THEN 1 ELSE 0 END) + (CASE WHEN smgt_services.user8_id != 0 THEN 1 ELSE 0 END) + (CASE WHEN smgt_services.user9_id != 0 THEN 1 ELSE 0 END) + (CASE WHEN smgt_services.user10_id != 0 THEN 1 ELSE 0 END)) * 100 as progress'))
-                    ->join('services', 'services.id', '=', 'processes.service_id')
-                                ->where('processes.id','LIKE',"%{$search}%")
-                                ->offset($start)
-                                ->limit($limit)
-                                ->orderBy($order,$dir);
+                })
+                ->join('services', 'services.id', '=', 'processes.service_id')
+                ->join('employees', 'employees.id', '=', 'processes.employee_id') // ✅ add this
+                ->select(
+                    'processes.id',
+                    'processes.employee_id',
+                    'processes.service_id',
+                    'processes.user_id',
+                    'durations.timespent',
+                    'durations.timeallocated',
+                    DB::raw('((CASE WHEN processtime1 IS NOT NULL THEN 1 ELSE 0 END) +
+                    (CASE WHEN processtime2 IS NOT NULL THEN 1 ELSE 0 END) +
+                    (CASE WHEN processtime3 IS NOT NULL THEN 1 ELSE 0 END) +
+                    (CASE WHEN processtime4 IS NOT NULL THEN 1 ELSE 0 END) +
+                    (CASE WHEN processtime5 IS NOT NULL THEN 1 ELSE 0 END) +
+                    (CASE WHEN processtime6 IS NOT NULL THEN 1 ELSE 0 END) +
+                    (CASE WHEN processtime7 IS NOT NULL THEN 1 ELSE 0 END) +
+                    (CASE WHEN processtime8 IS NOT NULL THEN 1 ELSE 0 END) +
+                    (CASE WHEN processtime9 IS NOT NULL THEN 1 ELSE 0 END) +
+                    (CASE WHEN processtime10 IS NOT NULL THEN 1 ELSE 0 END)
+                    ) / (
+                    (CASE WHEN smgt_services.user1_id != 0 THEN 1 ELSE 0 END) +
+                    (CASE WHEN smgt_services.user2_id != 0 THEN 1 ELSE 0 END) +
+                    (CASE WHEN smgt_services.user3_id != 0 THEN 1 ELSE 0 END) +
+                    (CASE WHEN smgt_services.user4_id != 0 THEN 1 ELSE 0 END) +
+                    (CASE WHEN smgt_services.user5_id != 0 THEN 1 ELSE 0 END) +
+                    (CASE WHEN smgt_services.user6_id != 0 THEN 1 ELSE 0 END) +
+                    (CASE WHEN smgt_services.user7_id != 0 THEN 1 ELSE 0 END) +
+                    (CASE WHEN smgt_services.user8_id != 0 THEN 1 ELSE 0 END) +
+                    (CASE WHEN smgt_services.user9_id != 0 THEN 1 ELSE 0 END) +
+                    (CASE WHEN smgt_services.user10_id != 0 THEN 1 ELSE 0 END)
+                    ) * 100 as progress')
+                )
+                ->where(function ($q) use ($search) {
+                    $q->where('processes.id', 'LIKE', "%{$search}%")
+                    ->orWhere('employees.name_with_initial_e', 'LIKE', "%{$search}%") // ✅ name search
+                    ->orWhere('employees.nic', 'LIKE', "%{$search}%"); // ✅ NIC search
+                })
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir);
 
             if ($pageid == '1'){
                 $processes = $query->where('processes.user_id',$userid)->get();
