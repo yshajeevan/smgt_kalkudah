@@ -444,7 +444,7 @@ html { height: 100%;}
       </li>
       
       @endcan
-      @can('cadre-export')
+      @can('attendance-list')
         <li class="dropdown">
             <a href="#works" class="dropdown-toggle"  data-toggle="dropdown"><i class="fas fa-clipboard-check"></i> Attendance<span class="caret"></span></a>
               <ul class="dropdown-menu animated fadeInLeft" role="menu">

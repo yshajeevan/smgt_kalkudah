@@ -2,186 +2,246 @@
 
 @section('main-content')
 <div class="card shadow mb-4">
-     <div class="row">
-         <div class="col-md-12">
-            @include('layouts.notification')
-         </div>
-     </div>
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary float-left">@if($uname != 'Sch_Admin' && $currentPath != 'schoolatten') Zonal Attendance @else {{ $institute }} @endif</h6>
+
+    <!-- 🔹 HEADER -->
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">
+            @if($currentPath == 'zonalattendance')
+                Zonal Student Attendance
+            @elseif($currentPath == 'attendance-schools')
+                School wise Student Attendance
+            @else
+                {{ $institute }}
+            @endif
+        </h6>
+
         @can('attendance-create')
             @if($uname != 'Sch_Admin')
-                <a href="{{route('submitform.index',4)}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add Atendance"><i class="fas fa-plus"></i> Add Attendance</a>
+                <a href="{{route('submitform.index',4)}}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i> Add Attendance
+                </a>
             @else
-                <a href="{{route('attendance.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add Atendance"><i class="fas fa-plus"></i> Add Attendance</a>
+                <a href="{{route('attendance.create')}}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i> Add Attendance
+                </a>
             @endif
         @endcan
     </div>
+
+    <!-- 🔹 BODY -->
     <div class="card-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <input type="text" name="from_date" id="from_date" class="form-control input-daterange1" placeholder="From Date" autocomplete="off">
-                </div>
-                <!--<div class="col-md-4">-->
-                <!--    <input type="text" name="to_date" id="to_date" class="form-control input-daterange2" placeholder="To Date" autocomplete="off">-->
-                <!--</div>-->
-                <div class="col-md-2">
-                    <button type="button" name="filter" id="filter" class="btn btn-primary">Filter</button>
-                    <button type="button" name="refresh" id="refresh" class="btn btn-default">Refresh</button>
-                </div>
-                @if($uname != 'Sch_Admin' && $currentPath != 'schoolatten')
-                <div class="col-md-2">
-                    <div class="nbox float-right">
-                        {{$countatten}}
-                    </div>
-                </div>
-                @endif
+
+        @include('layouts.notification')
+
+        <!-- 🔹 FILTER BAR -->
+        <div class="row mb-3 align-items-end">
+
+            <!-- Date -->
+            <div class="col-md-3">
+                <label>Date</label>
+                <input type="text" id="from_date" class="form-control input-daterange1" placeholder="Select Date">
             </div>
-            <div class="table-responsive">
-                <table class="table table-bordered" id="attendance">
-                        <thead>
-                            @if($currentPath == 'attendance-schools')
+
+            <!-- School -->
+            <div class="col-md-3">
+                <label>School</label>
+                <select id="school_filter" class="form-control">
+                    <option value="">All Schools</option>
+                    @foreach($schools as $school)
+                        <option value="{{ $school->id }}">{{ $school->institute }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Class -->
+            <div class="col-md-4">
+                <label>Class / Stream</label>
+                <select id="class_filter" class="form-control">
+                    <option value="">All</option>
+
+                    <option disabled>──────── Grades ────────</option>
+                    <option value="1_5">Grade 1-5</option>
+                    <option value="6_9">Grade 6-9</option>
+                    <option value="10_11">Grade 10-11</option>
+
+                    <option disabled>──────── Combined ────────</option>
+                    <option value="secondary">Secondary (6-11)</option>
+
+                    <option disabled>──────── A/L 1st Year ────────</option>
+                    <option value="arts_1st">Arts</option>
+                    <option value="com_1st">Commerce</option>
+                    <option value="physc_1st">Physical</option>
+                    <option value="biosc_1st">Bio</option>
+                    <option value="etech_1st">ETech</option>
+                    <option value="btech_1st">BTech</option>
+
+                    <option disabled>──────── A/L 2nd Year ────────</option>
+                    <option value="arts_2nd">Arts</option>
+                    <option value="com_2nd">Commerce</option>
+                    <option value="biosc_2nd">Bio</option>
+                    <option value="physc_2nd">Physical</option>
+                    <option value="etech_2nd">ETech</option>
+                    <option value="btech_2nd">BTech</option>
+
+                    <option disabled>──────── Summary ────────</option>
+                    <option value="al_1">A/L 1st Year (All)</option>
+                    <option value="al_2">A/L 2nd Year (All)</option>
+                </select>
+            </div>
+
+            <!-- Clear Button -->
+            <div class="col-md-2">
+                <button id="refresh" class="btn btn-outline-secondary w-100">
+                    Clear
+                </button>
+            </div>
+        </div>
+
+        <!-- 🔹 TOP INFO -->
+        @if($uname != 'Sch_Admin' && $currentPath != 'schoolatten')
+        <div class="row mb-2">
+            <div class="col-md-12 text-right">
+                <span class="badge badge-success p-2">
+                    Total Entries Today: {{$countatten}}
+                </span>
+            </div>
+        </div>
+        @endif
+
+        <!-- 🔹 TABLE -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="attendance">
+                <thead>
+                    <tr>
+                        @if($currentPath == 'attendance-schools')
                             <th>S/N</th>
                             <th>Institute</th>
-                            @endif
-                            @if($currentPath != 'attendance-schools')
+                        @endif
+
+                        @if($currentPath != 'attendance-schools')
                             <th>Date</th>
-                            @endif
-                            <th>Principal</th>
-                            <th>Total Students</th>
-                            <th>Presented Studnts</th>
-                            <th>%</th>
-                            <th>Total Teachers</th>
-                            <th>Presented Teachers</th>
-                            <th>%</th>
-                            <th>Total DOs</th>
-                            <th>Presented DOs</th>
-                            <th>%</th>
-                            <th>Total Non-Acedamic</th>
-                            <th>Presented Non-Acedamic</th>
-                            <th>%</th>
-                        </thead>				
-                </table>
-            </div>
+                        @endif
+
+                        <th>Principal</th>
+                        <th>Total Students</th>
+                        <th>Presented Students</th>
+                        <th>%</th>
+
+                        @if($currentPath == 'attendance-schools')
+                            <th>Rank</th>
+                        @endif
+
+                        <th>Total Teachers</th>
+                        <th>Presented Teachers</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
     </div>
 </div>
 @endsection
+
 
 @push('styles')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" />
 
 <style>
 td {
-text-align:center;
-}
-div.nbox {
-  position: relative;
-  /*top: 5px;*/
-  /*right: 15px;*/
-  width: 30px;
-  height: 30px;
-  border: 3px solid #73AD21;
-  text-align: center;
+    text-align: center;
+    vertical-align: middle;
 }
 
+.table th {
+    text-align: center;
+}
+
+label {
+    font-weight: 600;
+    font-size: 13px;
+}
 </style>
 @endpush
+
 
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/fixedheader/3.3.1/js/dataTables.fixedHeader.min.js"></script>
+
 <script>
 $(document).ready(function () {
+
     $('.input-daterange1').datepicker({
         todayBtn:'linked',
         format:'yyyy-mm-dd',
         autoclose:true
     });
 
-    $('.input-daterange2').datepicker({
-        todayBtn:'linked',
-        format:'yyyy-mm-dd',
-        autoclose:true
+    // ✅ Select2
+    $('#school_filter, #class_filter').select2({
+        width: '100%',
+        allowClear: true
     });
 
     var table = $('#attendance').DataTable({
         processing: true,
         serverSide: true,
         stateSave:true,
-        // responsive: true,
         paging: false,
         ordering: false,
-        dom: '<"dt-buttons"Bf><"clear">lirtp',
-        autoWidth: true,
-        buttons: [
-				'colvis',
-				'copyHtml5',
-                'csvHtml5',
-				'excelHtml5',
-                'pdfHtml5',
-				'print'
-			    ],
-		columnDefs: [
-            {
-                targets: 1,
-                className: 'dt-body-left'
-            }
-          ],
+
         ajax: {
-          url: "{{ route('attendance.index') }}",
-          data: function (d) {
-                _token: "{{csrf_token()}}"
-                d.search = $('input[type="search"]').val(),
-                d.from_date = $('#from_date').val(),
-                d.to_date = $('#to_date').val(),
-                d.insid = {!! json_encode($insid, JSON_HEX_TAG) !!}
-                d.currentPath = {!! json_encode($currentPath, JSON_HEX_TAG) !!}
-                
+            url: "{{ route('attendance.index') }}",
+            data: function (d) {
+                d.from_date = $('#from_date').val();
+                d.insid = {!! json_encode($insid) !!};
+                d.currentPath = {!! json_encode($currentPath) !!};
+                d.school_id = $('#school_filter').val();
+                d.class_filter = $('#class_filter').val();
             }
         },
+
         columns: [
             @if($currentPath == 'attendance-schools')
-            {data: 'DT_RowIndex',orderable: false, searchable: false},
-            {data: 'institute', name: 'institute.institute'},
+                {data: 'DT_RowIndex', orderable:false, searchable:false},
+                {data: 'institute_name'},
             @endif
+
             @if($currentPath != 'attendance-schools')
-            {data: 'created_at', name: 'created_at'},
+                {data: 'created_at'},
             @endif
-            {data: 'principal', name: 'principal'},
-            {data: 'totstu', name: 'totstu'},
-            {data: 'prstu', name: 'prstu'},
-            {data: 'percstu', name: 'percstu'},
-            {data: 'tottea', name: 'tottea'},
-            {data: 'prtea', name: 'prtea'},
-            {data: 'perctea', name: 'perctea'},
-            {data: 'tottrainee', name: 'tottrainee'},
-            {data: 'prtrainee', name: 'prtrainee'},
-            {data: 'perctrainee', name: 'perctrainee'},
-            {data: 'totnonacademic', name: 'totnonacademic'},
-            {data: 'prnonacademic', name: 'prnonacademic'},
-            {data: 'percnonacademic', name: 'percnonacademic'},
+
+            {data: 'principal'},
+            {data: 'totstu'},
+            {data: 'prstu'},
+            {data: 'percstu'},
+
+            @if($currentPath == 'attendance-schools')
+                {data: 'rank'},
+            @endif
+
+            {data: 'tottea'},
+            {data: 'prtea'},
+            {data: 'perctea'},
         ]
     });
-    new $.fn.dataTable.FixedHeader( table );
-    
-    $('#filter').click(function(){
-        var from_date = $('#from_date').val();
-        // var to_date = $('#to_date').val();
-        if(from_date != ''){
-            table.draw();
-        }
-        else{
-            alert('Please select a date');
-        }
+
+    new $.fn.dataTable.FixedHeader(table);
+
+    // 🔄 Events
+    $('#refresh').click(function () {
+        $('#from_date').val('');
+        $('#school_filter').val(null).trigger('change');
+        $('#class_filter').val(null).trigger('change');
+        table.draw();
     });
 
-    $('#refresh').click(function(){ 
-        $('#from_date').val('');
-        // $('#to_date').val('');
+    $('#from_date, #school_filter, #class_filter').change(function () {
         table.draw();
-    });     
-});
+    });
 
+});
 </script>
 @endpush
