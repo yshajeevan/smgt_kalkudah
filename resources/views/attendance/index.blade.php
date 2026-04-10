@@ -39,9 +39,10 @@
             <!-- Date -->
             <div class="col-md-3">
                 <label>Date</label>
-                <input type="text" id="from_date" class="form-control input-daterange1" placeholder="Select Date">
+                <input type="text" id="from_date" class="form-control input-daterange1" 
+                            value="{{ \Carbon\Carbon::today()->format('Y-m-d') }}">
             </div>
-
+            
             <!-- School -->
             <div class="col-md-3">
                 <label>School</label>
@@ -102,7 +103,7 @@
         <div class="row mb-2">
             <div class="col-md-12 text-right">
                 <span class="badge badge-success p-2">
-                    Total Entries Today: {{$countatten}}
+                    Total Entries: <span id="countBox">{{$countatten}}</span>
                 </span>
             </div>
         </div>
@@ -176,8 +177,9 @@ $(document).ready(function () {
     $('.input-daterange1').datepicker({
         todayBtn:'linked',
         format:'yyyy-mm-dd',
-        autoclose:true
-    });
+        autoclose:true,
+        todayHighlight: true
+    }).datepicker('setDate', new Date());
 
     // ✅ Select2
     $('#school_filter, #class_filter').select2({
@@ -230,6 +232,42 @@ $(document).ready(function () {
 
     new $.fn.dataTable.FixedHeader(table);
 
+    $('#from_date').change(function () {
+        let selectedDate = $(this).val();
+
+        // ✅ Reload DataTable
+        table.draw();
+
+        // ✅ AJAX call
+        $.ajax({
+            url: "{{ route('schools.by.date') }}",
+            type: "GET",
+            data: { date: selectedDate },
+
+            success: function (response) {
+
+                // 🔹 Update schools dropdown
+                let schoolSelect = $('#school_filter');
+
+                schoolSelect.empty();
+                schoolSelect.append('<option value="">All Schools</option>');
+
+                response.schools.forEach(function (school) {
+                    schoolSelect.append(
+                        `<option value="${school.id}">${school.institute}</option>`
+                    );
+                });
+
+                // 🔹 Refresh Select2
+                schoolSelect.trigger('change.select2');
+
+                // 🔹 Update count
+                $('#countBox').text(response.count);
+            }
+        });
+
+    });
+
     // 🔄 Events
     $('#refresh').click(function () {
         $('#from_date').val('');
@@ -238,10 +276,9 @@ $(document).ready(function () {
         table.draw();
     });
 
-    $('#from_date, #school_filter, #class_filter').change(function () {
+    $('#school_filter, #class_filter').change(function () {
         table.draw();
     });
-
 });
 </script>
 @endpush

@@ -202,7 +202,6 @@ class AttendanceController extends Controller
 
             } elseif ($request->currentPath == 'attendance-schools') {
                 $data = $baseQuery
-                    ->whereDate('attendances.created_at', Carbon::today())
                     ->orderByDesc('perc');
             
             } elseif ($uname == 'Sch_Admin' && $request->currentPath == 'schoolatten') {
@@ -286,8 +285,8 @@ class AttendanceController extends Controller
 
                     if (!empty($request->from_date)) {
                         $instance->whereDate('attendances.created_at', $request->from_date);
-                    } elseif ($currentPath != 'zonalattendance') {
-                        $instance->whereDate('attendances.created_at', Carbon::today());
+                    } else {
+                        $instance->whereDate('attendances.created_at', Carbon::today()); // ✅ default
                     }
 
                     if (!empty($request->search['value']) && $request->currentPath == 'attendance-schools') {
@@ -576,5 +575,25 @@ class AttendanceController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getSchoolsByDate(Request $request)
+    {
+        $date = $request->date ?? Carbon::today();
+
+        $schools = DB::table('institutes as i')
+            ->join('attendances as a', 'a.institute_id', '=', 'i.id')
+            ->whereDate('a.created_at', $date)
+            ->select('i.id', 'i.institute')
+            ->distinct()
+            ->orderBy('i.institute')
+            ->get();
+
+        $count = Attendance::whereDate('created_at', $date)->count();
+
+        return response()->json([
+            'schools' => $schools,
+            'count' => $count
+        ]);
     }
 }

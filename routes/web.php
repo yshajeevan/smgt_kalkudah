@@ -437,6 +437,8 @@ Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(
     Route::get('zonalattendance', 'App\Http\Controllers\AttendanceController@index')->name('attendance.index');
     Route::get('schoolatten', 'App\Http\Controllers\AttendanceController@index');
     Route::get('attendance-schools', 'App\Http\Controllers\AttendanceController@index')->name('attendance.list');
+    Route::get('/schools-by-date', [AttendanceController::class, 'getSchoolsByDate'])
+    ->name('schools.by.date');
 
     //User Role Routes
     Route::resource('roles', RoleController::class);
