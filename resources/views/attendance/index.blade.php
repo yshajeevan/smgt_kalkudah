@@ -44,6 +44,7 @@
             </div>
             
             <!-- School -->
+            @if($currentPath == 'attendance-schools')
             <div class="col-md-3">
                 <label>School</label>
                 <select id="school_filter" class="form-control">
@@ -53,6 +54,7 @@
                     @endforeach
                 </select>
             </div>
+            @endif
 
             <!-- Class -->
             <div class="col-md-4">
