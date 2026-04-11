@@ -55,7 +55,7 @@
                       </div>
 
                       <div class="form-group">
-                        <label class="col-form-label">Mobile</label>
+                        <label class="col-form-label">Mobile (ex: 774XXXXXX)</label>
                         <input type="text" name="mobile" value="{{ $profile->employee->mobile ?? '' }}" class="form-control">
                     </div>
               
