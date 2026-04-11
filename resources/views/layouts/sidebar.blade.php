@@ -378,12 +378,14 @@ html { height: 100%;}
             <div class="dropdown-header">Dropdown heading</div>
             @can('employee-list')
             <li><a href="{{ route('employee.index') }}">Employees</a></li>
+            @endcan
+            @can('employee-create')
             <li><a href="{{ route('employee.analysis') }}">Analyse Employees</a></li>
             @endcan
             @can('employee-create')
             <li><a href="{{ route('employee.dummy_index') }}">Approval for Updation</a></li>
             @endcan
-            @can('employee-list')
+            @can('employee-create')
             <li><a href="{{ route('submitform.index',6) }}">Profile</a></li>
             @endcan
             @can('employee-delete')

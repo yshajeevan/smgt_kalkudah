@@ -6,7 +6,7 @@
         <div class="col-xl-12">
             <div class="card-slider">
                 <div id="test1"><p>Service Management System</p></div>
-                <div id="test2"><p>Zonal Education Office, Kalkudah.</p></div>
+                <div id="test2"><p>Kalkudah Zonal Education Office, Valaichenai.</p></div>
             </div>
         </div>
     </div>
@@ -320,19 +320,18 @@
     background: #FB7146;
 }
 
-.card-body{
+.card-body {
     height: 120px;
     font-family: "Roboto", sans-serif;
     color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-.float-left{
-    float: left;
-}
-.float-right{
-    float: right;
-}
+
 .card-body h3{
     margin-top: 15px;
     margin-bottom: 5px;
