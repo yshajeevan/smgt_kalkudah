@@ -2126,6 +2126,24 @@ $(document).ready(function() {
     });
 });
 
+$('#institute_id').select2({
+        placeholder: "--Select Institute--",
+        allowClear: true,
+        width: '100%'
+    });
+
+    $('#designation_id').select2({
+        placeholder: "--Select Designation--",
+        allowClear: true,
+        width: '100%'
+    });
+
+    $('#cadresubject_id').select2({
+        placeholder: "--Select Cadre Subject--",
+        allowClear: true,
+        width: '100%'
+});
+
 });
 
 

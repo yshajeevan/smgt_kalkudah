@@ -225,6 +225,24 @@ $(document).ready(function () {
     $('#attachmentFilter').change(function () {
         table.draw();
     });
+
+    $('#institute').select2({
+        placeholder: "--Select Institute--",
+        allowClear: true,
+        width: '100%'
+    });
+
+    $('#designation').select2({
+        placeholder: "--Select Designation--",
+        allowClear: true,
+        width: '100%'
+    });
+
+    $('#cadre').select2({
+        placeholder: "--Select Cadre Subject--",
+        allowClear: true,
+        width: '100%'
+    });
 });
 </script>
 @endpush

@@ -135,7 +135,7 @@ class EmployeeController extends Controller
                     // 5) Transfer validation
                     if ($request->filled('transferValidate')) {
                         $instance->whereHas('servicetransfer', function($w) {
-                            $w->whereColumn('service_transfers.institute_id', '!=', 'service_transfers.transfer_to');
+                            $w->whereColumn('service_transfers.transfer_from', '!=', 'service_transfers.transfer_to');
                         });
                     }
 
