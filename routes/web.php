@@ -102,6 +102,7 @@ Route::group( ['middleware' => 'auth'], function(){
     Route::get('attencreate', 'App\Http\Controllers\AttendanceController@create')->name('attendance.create');
     Route::get('attencreate/{instid}', 'App\Http\Controllers\AttendanceController@createlink')->name('attendance.createlink');
     Route::post('attendance', 'App\Http\Controllers\AttendanceController@store')->name('attendance.store');
+    Route::get('/attendance-graph', [AttendanceController::class, 'attendanceGraph'])->name('attendance.graph');
     
     Route::get('/gndetails/{id}','App\Http\Controllers\GnController@getgn');
         
@@ -437,8 +438,7 @@ Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(
     Route::get('zonalattendance', 'App\Http\Controllers\AttendanceController@index')->name('attendance.index');
     Route::get('schoolatten', 'App\Http\Controllers\AttendanceController@index');
     Route::get('attendance-schools', 'App\Http\Controllers\AttendanceController@index')->name('attendance.list');
-    Route::get('/schools-by-date', [AttendanceController::class, 'getSchoolsByDate'])
-    ->name('schools.by.date');
+    Route::get('/schools-by-date', [AttendanceController::class, 'getSchoolsByDate'])->name('schools.by.date');
 
     //User Role Routes
     Route::resource('roles', RoleController::class);

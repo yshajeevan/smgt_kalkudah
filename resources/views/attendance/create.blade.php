@@ -28,6 +28,9 @@
 
             {{-- Grade 1-5 --}}
             @if($stupop && $stupop->{"1_5_tot"} >= 1)
+            <tr class="group-row">
+                <td colspan="2">Primary</td>
+            </tr>
             <tr>
                 <td>Grade 1 - 5</td>
                 <td>
@@ -52,6 +55,9 @@
 
             {{-- Grade 6-9 --}}
             @if($stupop && $stupop->{"6_9_tot"} >= 1)
+            <tr class="group-row">
+                <td colspan="2">Junior Secondary</td>
+            </tr>
             <tr>
                 <td>Grade 6 - 9</td>
                 <td>
@@ -100,6 +106,9 @@
 
             {{-- A/L Arts 1st --}}
             @if($stupop && $stupop->{"al_arts_1st_tot"} >= 1)
+            <tr class="group-row">
+                <td colspan="2">A/L 1st Year</td>
+            </tr>
             <tr>
                 <td>A/L Arts 1st Year</td>
                 <td>
@@ -244,6 +253,9 @@
 
             {{-- A/L Arts 2nd --}}
             @if($stupop && $stupop->{"al_arts_2nd_tot"} >= 1)
+            <tr class="group-row">
+                <td colspan="2">A/L 2nd Year</td>
+            </tr>
             <tr>
                 <td>A/L Arts 2nd Year</td>
                 <td>
@@ -385,6 +397,68 @@
                 </td>
             </tr>
             @endif
+            
+            {{-- Teachers --}}
+            <tr class="group-row">
+                <td colspan="2">Staffr</td>
+            </tr>
+            <tr>
+                <td>Teachers</td>
+
+                <td colspan="2"> {{-- merge 2 columns for clean layout --}}
+                    <div style="display:flex; justify-content:center; gap:6px;">
+
+                        {{-- TOTAL --}}
+                        <div class="text-center">
+                            <div class="input-wrap">
+                                <input type="number"
+                                    class="textbox"
+                                    name="tottea"
+                                    id="tottea"
+                                    value="{{ old('tottea', $attendance->tottea ?? '') }}"
+                                    min="0"
+                                    style="width:50px;">
+
+                                <span class="tick-wrap">
+                                    <svg class="tick-svg" viewBox="0 0 24 24">
+                                        <polyline class="tick-line" points="4,13 9,18 20,6"/>
+                                    </svg>
+                                </span>
+                            </div>
+
+                            <p class="hint">Total Teachers</p>
+                        </div>
+
+                        {{-- PRESENT --}}
+                        <div class="text-center">
+                            <div class="input-wrap">
+                                <input type="number"
+                                    class="textbox pr-input"
+                                    name="prtea"
+                                    id="prtea"
+                                    value="{{ old('prtea', $attendance->prtea ?? '') }}"
+                                    min="0"
+                                    style="width:50px;">
+
+                                <span class="tick-wrap">
+                                    <svg class="tick-svg" viewBox="0 0 24 24">
+                                        <polyline class="tick-line" points="4,13 9,18 20,6"/>
+                                    </svg>
+                                </span>
+                            </div>
+
+                            <p class="hint">
+                                Total: <span id="total_hint">{{ $attendance->tottea ?? 0 }}</span>
+                            </p>
+
+                            <p class="exceed-error" id="teacher_error" style="display:none;">
+                                Cannot exceed total
+                            </p>
+                        </div>
+
+                    </div>
+                </td>
+            </tr>
 
             {{-- Principal --}}
             <tr>
@@ -425,9 +499,24 @@
     margin: 2px 0;
 }
 
+.group-row td {
+    background: #f1f3f5;
+    font-weight: 600;
+    text-align: center;
+    padding: 1px 1px;
+    border-top: 2px solid #dee2e6;
+}
+
+.table td, .table th {
+    padding: 1px !important;
+    vertical-align: middle;
+}
+
+
 .textbox {
-    width: 75%;
-    padding: 5px;
+    width: 70px;   /* reduce width */
+    height: 36px;  /* compact */
+    padding: 4px;
     text-align: right;
     border-radius: 8px;
     border: 1px solid #ccc;
@@ -452,7 +541,7 @@
     color: #6c757d;
     font-size: 12px;
     font-style: italic;
-    margin: 2px 0;
+    margin: 2px 0 0;
 }
 
 .card-heading {
@@ -473,6 +562,7 @@
     gap: 6px;
     width: 100%;
     justify-content: center;
+    margin-bottom: 1px;
 }
 
 .tick-wrap {
@@ -507,6 +597,7 @@
 .tick-svg.animate .tick-line {
     animation: drawTick 0.35s ease forwards;
 }
+
 
 @keyframes drawTick {
     to {
@@ -572,5 +663,22 @@
             tickSvg.classList.add('animate');
         }
     }
+
+    $(document).on('input', '#tottea', function () {
+        let total = parseInt($(this).val()) || 0;
+        $('#total_hint').text(total);
+    });
+
+    $(document).on('input', '#prtea', function () {
+        let total = parseInt($('#tottea').val()) || 0;
+        let present = parseInt($(this).val()) || 0;
+
+        if (present > total) {
+            $('#teacher_error').show();
+            $(this).val(total);
+        } else {
+            $('#teacher_error').hide();
+        }
+    });
 </script>
 @endpush

@@ -37,10 +37,15 @@
         <div class="row mb-3 align-items-end">
 
             <!-- Date -->
+             @php
+                $currentPath = request()->path();
+            @endphp
+
             <div class="col-md-3">
                 <label>Date</label>
-                <input type="text" id="from_date" class="form-control input-daterange1" 
-                            value="{{ \Carbon\Carbon::today()->format('Y-m-d') }}">
+                <input type="text" id="from_date" 
+                    class="form-control input-daterange1"
+                    value="{{ $currentPath == 'attendance-schools' ? \Carbon\Carbon::today()->format('Y-m-d') : '' }}">
             </div>
             
             <!-- School -->
@@ -48,7 +53,7 @@
             <div class="col-md-3">
                 <label>School</label>
                 <select id="school_filter" class="form-control">
-                    <option value="">All Schools</option>
+                    <option value="">All</option>
                     @foreach($schools as $school)
                         <option value="{{ $school->id }}">{{ $school->institute }}</option>
                     @endforeach
@@ -101,7 +106,7 @@
         </div>
 
         <!-- 🔹 TOP INFO -->
-        @if($uname != 'Sch_Admin' && $currentPath != 'schoolatten')
+        @if($currentPath == 'attendance-schools')
         <div class="row mb-2">
             <div class="col-md-12 text-right">
                 <span class="badge badge-success p-2">
@@ -125,10 +130,19 @@
                             <th>Date</th>
                         @endif
 
-                        <th>Principal</th>
                         <th>Total Students</th>
                         <th>Presented Students</th>
                         <th>%</th>
+
+                        @if($currentPath != 'zonalattendance')
+                        <th>Principal</th>
+                        @endif
+
+                        @if($currentPath == 'zonalattendance')
+                            <th>Total Schools</th>
+                            <th>Principal Present</th>
+                            <th>%</th>
+                        @endif
 
                         @if($currentPath == 'attendance-schools')
                             <th>Rank</th>
@@ -140,6 +154,9 @@
                     </tr>
                 </thead>
             </table>
+            <div class="mt-4">
+                <canvas id="attendanceChart" height="100"></canvas>
+            </div>
         </div>
 
     </div>
@@ -151,6 +168,31 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css" />
 
 <style>
+
+.form-control,
+.select2-container .select2-selection--single {
+    height: 38px !important;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+/* Fix select2 alignment */
+.select2-container--default .select2-selection--single {
+    display: flex;
+    align-items: center;
+}
+
+/* Fix select2 arrow height */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px;
+}
+
+/* Button same height */
+#refresh {
+    height: 38px;
+}
+
 td {
     text-align: center;
     vertical-align: middle;
@@ -172,20 +214,27 @@ label {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/fixedheader/3.3.1/js/dataTables.fixedHeader.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 $(document).ready(function () {
+
+    let currentPath = "{{ request()->path() }}";
 
     $('.input-daterange1').datepicker({
         todayBtn:'linked',
         format:'yyyy-mm-dd',
         autoclose:true,
         todayHighlight: true
-    }).datepicker('setDate', new Date());
+    });
+
+    if(currentPath === 'attendance-schools'){
+        $('.input-daterange1').datepicker('setDate', new Date());
+    }
 
     // ✅ Select2
     $('#school_filter, #class_filter').select2({
         width: '100%',
+        placeholder: "All",
         allowClear: true
     });
 
@@ -217,13 +266,22 @@ $(document).ready(function () {
                 {data: 'created_at'},
             @endif
 
-            {data: 'principal'},
             {data: 'totstu'},
             {data: 'prstu'},
             {data: 'percstu'},
 
             @if($currentPath == 'attendance-schools')
                 {data: 'rank'},
+            @endif
+
+            @if($currentPath != 'zonalattendance')
+                {data: 'principal'},
+            @endif
+
+            @if($currentPath == 'zonalattendance')
+                {data: 'total_schools'},
+                {data: 'principal_present'},
+                {data: 'principal_perc'},
             @endif
 
             {data: 'tottea'},
@@ -276,11 +334,60 @@ $(document).ready(function () {
         $('#school_filter').val(null).trigger('change');
         $('#class_filter').val(null).trigger('change');
         table.draw();
+        loadChart();
     });
 
     $('#school_filter, #class_filter').change(function () {
         table.draw();
+        loadChart();
     });
+
+    loadChart();
 });
+
+
+let chart;
+
+function loadChart() {
+
+    $.ajax({
+        url: "{{ route('attendance.graph') }}",
+        data: {
+            from_date: $('#from_date').val(),
+            insid: $('#school_filter').val(),
+            currentPath: "{{ $currentPath }}",
+            class_filter: $('#class_filter').val(),
+        },
+        success: function (res) {
+
+            if (chart) chart.destroy();
+
+            let ctx = document.getElementById('attendanceChart').getContext('2d');
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: res.labels,
+                    datasets: [{
+                        label: 'Student Attendance %',
+                        data: res.student,
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+    });
+}
 </script>
 @endpush

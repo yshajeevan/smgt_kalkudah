@@ -194,35 +194,52 @@ class AttendanceController extends Controller
                 DB::raw("($prExpr / NULLIF($totExpr,0)) as perc")
             ]);
             // ✅ CONDITIONS
-            if (isset($request->insid)) {
+            $currentPath = $request->currentPath ?? '';
 
-               $data = $baseQuery
+            if (!empty($request->insid)) {
+
+                $data = $baseQuery
                     ->where('institute_id', $request->insid)
                     ->orderBy('adate', 'desc');
 
-            } elseif ($request->currentPath == 'attendance-schools') {
-                $data = $baseQuery
-                    ->orderByDesc('perc');
-            
-            } elseif ($uname == 'Sch_Admin' && $request->currentPath == 'schoolatten') {
+            } elseif ($currentPath == 'attendance-schools') {
+
+                $data = $baseQuery->orderByDesc('perc');
+
+            } elseif ($uname == 'Sch_Admin' && $currentPath == 'schoolatten') {
 
                 $data = $baseQuery
                     ->where('institute_id', Auth::user()->institute_id)
                     ->orderBy('adate', 'desc');
-            } elseif ($request->currentPath == 'zonalattendance') {
 
-                // ✅ ZONAL SUMMARY (FIXED)
+            } elseif ($currentPath == 'zonalattendance') {
+
+                // ✅ FIXED ZONAL QUERY
                 $data = Attendance::selectRaw("
                     DATE(created_at) as adate,
-                    SUM(principal) as principal,
+
+                    COUNT(DISTINCT institute_id) as total_schools,
+
+                    SUM(CASE WHEN principal = 1 THEN 1 ELSE 0 END) as principal_present,
+
+                    (SUM(CASE WHEN principal = 1 THEN 1 ELSE 0 END) 
+                        / NULLIF(COUNT(DISTINCT institute_id),0)) * 100 as principal_perc,
+
                     SUM(tottea) as tottea,
                     SUM(prtea) as prtea,
-                    $totExpr as totstu,
-                    $prExpr as prstu,
-                    ($prExpr / NULLIF($totExpr,0)) as perc
+                    (SUM(prtea) / NULLIF(SUM(tottea),0)) * 100 as perctea,
+
+                    SUM($totExpr) as totstu,
+                    SUM($prExpr) as prstu,
+                    (SUM($prExpr) / NULLIF(SUM($totExpr),0)) as perc
                 ")
                 ->groupBy('adate')
                 ->orderBy('adate', 'desc');
+
+            } else {
+
+                // ✅ fallback (VERY IMPORTANT)
+                $data = $baseQuery->orderBy('adate', 'desc');
             }
 
         
@@ -244,11 +261,29 @@ class AttendanceController extends Controller
                     return $rank;
                 })
 
+                ->addColumn('total_schools', function ($row) {
+                    return $row->total_schools ?? 0;
+                })
+
+                ->addColumn('principal_present', function ($row) {
+                    return $row->principal_present ?? 0;
+                })
+
+                ->addColumn('principal_perc', function ($row) {
+                    if ($row->total_schools > 0) {
+                        $perc = round($row->principal_perc, 2);
+                        return '<div class="progress">
+                            <div class="progress-bar bg-info" style="width:' . $perc . '%">' . $perc . '%</div>
+                        </div>';
+                    }
+                    return 0;
+                })
+
                 ->editColumn('percstu', function ($row) {
                     if ($row->totstu > 0) {
                         $perc = round(($row->prstu / $row->totstu) * 100, 2);
                         return '<div class="progress">
-                            <div class="progress-bar" style="width:' . $perc . '%">' . $perc . '%</div>
+                            <div class="progress-bar bg-danger" style="width:' . $perc . '%">' . $perc . '%</div>
                         </div>';
                     }
                     return 0;
@@ -257,24 +292,24 @@ class AttendanceController extends Controller
                 ->editColumn('perctea', function ($row) {
                     if ($row->tottea > 0) {
                         $perc = round(($row->prtea / $row->tottea) * 100, 2);
+
                         return '<div class="progress">
-                            <div class="progress-bar" style="width:' . $perc . '%">' . $perc . '%</div>
+                            <div class="progress-bar bg-success" style="width:' . $perc . '%">' . $perc . '%</div>
                         </div>';
                     }
                     return 0;
                 })
 
                 ->editColumn('principal', function ($row) {
+                    if ($row->principal == 1) {
+                            return '<span class="badge badge-success">On-duty</span>';
+                        } elseif ($row->principal == 2) {
+                            return '<span class="badge badge-warning">Duty Leave</span>';
+                        } elseif ($row->principal == 3) {
+                            return '<span class="badge badge-danger">Personal Leave</span>';
+                        }
 
-                if ($row->principal == 1) {
-                        return '<span class="badge badge-success">On-duty</span>';
-                    } elseif ($row->principal == 2) {
-                        return '<span class="badge badge-warning">Duty Leave</span>';
-                    } elseif ($row->principal == 3) {
-                        return '<span class="badge badge-danger">Personal Leave</span>';
-                    }
-
-                    return '-';
+                        return '-';
                 })
 
                 ->editColumn('created_at', function ($row) {
@@ -285,8 +320,8 @@ class AttendanceController extends Controller
 
                     if (!empty($request->from_date)) {
                         $instance->whereDate('attendances.created_at', $request->from_date);
-                    } else {
-                        $instance->whereDate('attendances.created_at', Carbon::today()); // ✅ default
+                    } elseif ($request->currentPath == 'attendance-schools') {
+                        $instance->whereDate('attendances.created_at', Carbon::today()); // default
                     }
 
                     if (!empty($request->search['value']) && $request->currentPath == 'attendance-schools') {
@@ -303,7 +338,7 @@ class AttendanceController extends Controller
                     }
                 })
 
-                ->rawColumns(['percstu','institute_name', 'perctea', 'principal','rank'])
+                ->rawColumns(['percstu','institute_name', 'perctea', 'principal','rank','principal_perc'])
                 ->make(true);
         }
 
@@ -315,6 +350,172 @@ class AttendanceController extends Controller
             'institute',
             'schools'
         ));
+    }
+
+    public function attendanceGraph(Request $request)
+    {
+        $currentPath = $request->currentPath ?? '';
+        $insid = $request->insid;
+        $fromDate = $request->from_date;
+        $uname = Auth::user()->roles->pluck('name')->implode(', ');
+        $class = $request->class_filter;
+
+        // =========================
+        // ✅ CLASS FILTER (SAME AS TABLE)
+        // =========================
+        $totExpr = '';
+        $prExpr  = '';
+
+        switch ($class) {
+
+            case '1_5':
+                $totExpr = 'COALESCE(tot_1_5,0)';
+                $prExpr  = 'COALESCE(pr_1_5,0)';
+                break;
+
+            case '6_9':
+                $totExpr = 'COALESCE(tot_6_9,0)';
+                $prExpr  = 'COALESCE(pr_6_9,0)';
+                break;
+
+            case '10_11':
+                $totExpr = 'COALESCE(tot_10_11,0)';
+                $prExpr  = 'COALESCE(pr_10_11,0)';
+                break;
+
+            case 'secondary':
+                $totExpr = 'COALESCE(tot_6_9,0)+COALESCE(tot_10_11,0)';
+                $prExpr  = 'COALESCE(pr_6_9,0)+COALESCE(pr_10_11,0)';
+                break;
+
+            case 'arts_1st':
+            case 'com_1st':
+            case 'physc_1st':
+            case 'biosc_1st':
+            case 'etech_1st':
+            case 'btech_1st':
+                $totExpr = "COALESCE(tot_{$class},0)";
+                $prExpr  = "COALESCE(pr_{$class},0)";
+                break;
+
+            case 'arts_2nd':
+            case 'com_2nd':
+            case 'physc_2nd':
+            case 'biosc_2nd':
+            case 'etech_2nd':
+            case 'btech_2nd':
+                $totExpr = "COALESCE(tot_{$class},0)";
+                $prExpr  = "COALESCE(pr_{$class},0)";
+                break;
+
+            case 'al_1':
+                $totExpr = '
+                    COALESCE(tot_arts_1st,0)+COALESCE(tot_com_1st,0)+
+                    COALESCE(tot_physc_1st,0)+COALESCE(tot_biosc_1st,0)+
+                    COALESCE(tot_etech_1st,0)+COALESCE(tot_btech_1st,0)
+                ';
+                $prExpr = '
+                    COALESCE(pr_arts_1st,0)+COALESCE(pr_com_1st,0)+
+                    COALESCE(pr_physc_1st,0)+COALESCE(pr_biosc_1st,0)+
+                    COALESCE(pr_etech_1st,0)+COALESCE(pr_btech_1st,0)
+                ';
+                break;
+
+            case 'al_2':
+                $totExpr = '
+                    COALESCE(tot_arts_2nd,0)+COALESCE(tot_com_2nd,0)+
+                    COALESCE(tot_physc_2nd,0)+COALESCE(tot_biosc_2nd,0)+
+                    COALESCE(tot_etech_2nd,0)+COALESCE(tot_btech_2nd,0)
+                ';
+                $prExpr = '
+                    COALESCE(pr_arts_2nd,0)+COALESCE(pr_com_2nd,0)+
+                    COALESCE(pr_physc_2nd,0)+COALESCE(pr_biosc_2nd,0)+
+                    COALESCE(pr_etech_2nd,0)+COALESCE(pr_btech_2nd,0)
+                ';
+                break;
+
+            default:
+                $totExpr = '(
+                    COALESCE(tot_1_5,0)+COALESCE(tot_6_9,0)+COALESCE(tot_10_11,0)+
+                    COALESCE(tot_arts_1st,0)+COALESCE(tot_com_1st,0)+
+                    COALESCE(tot_physc_1st,0)+COALESCE(tot_biosc_1st,0)+
+                    COALESCE(tot_etech_1st,0)+COALESCE(tot_btech_1st,0)+
+                    COALESCE(tot_arts_2nd,0)+COALESCE(tot_com_2nd,0)+
+                    COALESCE(tot_physc_2nd,0)+COALESCE(tot_biosc_2nd,0)+
+                    COALESCE(tot_etech_2nd,0)+COALESCE(tot_btech_2nd,0)
+                )';
+
+                $prExpr = '(
+                    COALESCE(pr_1_5,0)+COALESCE(pr_6_9,0)+COALESCE(pr_10_11,0)+
+                    COALESCE(pr_arts_1st,0)+COALESCE(pr_com_1st,0)+
+                    COALESCE(pr_physc_1st,0)+COALESCE(pr_biosc_1st,0)+
+                    COALESCE(pr_etech_1st,0)+COALESCE(pr_btech_1st,0)+
+                    COALESCE(pr_arts_2nd,0)+COALESCE(pr_com_2nd,0)+
+                    COALESCE(pr_physc_2nd,0)+COALESCE(pr_biosc_2nd,0)+
+                    COALESCE(pr_etech_2nd,0)+COALESCE(pr_btech_2nd,0)
+                )';
+        }
+
+        // =========================
+        // ✅ BASE QUERY
+        // =========================
+        $query = Attendance::query()
+            ->selectRaw("
+                DATE(created_at) as adate,
+                SUM($prExpr) as prstu,
+                SUM($totExpr) as totstu
+            ");
+
+        // =========================
+        // ✅ SAME CONDITIONS AS TABLE
+        // =========================
+        if (!empty($insid)) {
+
+            $query->where('institute_id', $insid);
+
+        } elseif ($currentPath == 'attendance-schools') {
+
+            // zonal → no filter
+
+        } elseif ($uname == 'Sch_Admin' && $currentPath == 'schoolatten') {
+
+            $query->where('institute_id', Auth::user()->institute_id);
+
+        } elseif ($currentPath == 'zonalattendance') {
+
+            // zonal → no filter
+        }
+
+        // =========================
+        // ✅ DATE FILTER (TREND)
+        // =========================
+        if (!empty($fromDate)) {
+            $query->whereDate('created_at', '<=', $fromDate);
+        }
+
+        $data = $query
+            ->groupBy('adate')
+            ->orderBy('adate')
+            ->get();
+
+        // =========================
+        // ✅ FORMAT OUTPUT
+        // =========================
+        $labels = [];
+        $studentPerc = [];
+
+        foreach ($data as $row) {
+            $labels[] = $row->adate;
+
+            $studentPerc[] = $row->totstu > 0
+                ? round(($row->prstu / $row->totstu) * 100, 2)
+                : 0;
+        }
+
+        return response()->json([
+            'labels' => $labels,
+            'student' => $studentPerc
+        ]);
     }
     
     /**
@@ -353,6 +554,8 @@ class AttendanceController extends Controller
         
         return view('attendance.create',compact('stupop','teachers','trainees','nonacademic','instid')); 
     }
+
+    //Store attendance from school list (from zone)
     public function createlink($instid)
     {
         $instid = $instid;
@@ -386,6 +589,11 @@ class AttendanceController extends Controller
      */
    public function store(Request $request)
     {
+        $request->validate([
+            'tottea' => 'required|integer|min:0',
+            'prtea'  => 'required|integer|min:0|lte:tottea',
+        ]);
+
         // ⏰ Time restriction
         $ctime = date("H:i:s");
         if ($ctime >= "00:00:00" && $ctime <= "07:30:00") {
@@ -472,8 +680,8 @@ class AttendanceController extends Controller
             'pr_btech_2nd'  => $request->input('al_btech_2nd_pr'), 
 
             // Teachers
-            'tottea' => 0,
-            'prtea'  => 0,
+            'tottea' => $request->input('tottea'),
+            'prtea'  => $request->input('prtea'),
 
             'updated_by' => Auth::id(),
         ]);
@@ -505,33 +713,6 @@ class AttendanceController extends Controller
             ->with('success', 'Attendance Successfully Created!');
     }
 
-    public function submitrespose(){
-        $prstu = Attendance::selectRaw('*,Date(created_at) as adate')->where('institute_id', Auth::user()->institute_id)->wheredate('created_at',  Carbon::now()->format('Y-m-d'))->value('prstu');
-        $totstu = Attendance::selectRaw('*,Date(created_at) as adate')->where('institute_id', Auth::user()->institute_id)->wheredate('created_at',  Carbon::now()->format('Y-m-d'))->value('totstu');
-        if($totstu > 0){
-            $percstu = round(($prstu / $totstu) * 100,2);
-        } else {
-            $percstu = 0;
-        }
-        
-        $prtea = Attendance::selectRaw('*,sum(prtea + prtrainee) as prteachers,Date(created_at) as adate')->where('institute_id', Auth::user()->institute_id)->wheredate('created_at',  Carbon::now()->format('Y-m-d'))->value('prteachers');
-        $tottea = Attendance::selectRaw('*,sum(tottea + tottrainee) as totalteachers,Date(created_at) as adate')->where('institute_id', Auth::user()->institute_id)->wheredate('created_at',  Carbon::now()->format('Y-m-d'))->value('totalteachers');
-        if($tottea > 0){
-            $perctea = round(($prtea / $tottea) * 100,2);
-        } else {
-            $perctea = 0;
-        }
-        
-        $prnonac = Attendance::selectRaw('*,Date(created_at) as adate')->where('institute_id', Auth::user()->institute_id)->wheredate('created_at',  Carbon::now()->format('Y-m-d'))->value('prnonacademic');
-        $totnonac = Attendance::selectRaw('*,Date(created_at) as adate')->where('institute_id', Auth::user()->institute_id)->wheredate('created_at',  Carbon::now()->format('Y-m-d'))->value('totnonacademic');
-        if($totnonac > 0){
-            $percnonac = round(($prnonac / $totnonac) * 100,2);
-        } else {
-            $percnonac = 0;
-        }
-        
-        return view('attendance.submitrespose',compact('percstu','perctea','percnonac','tottea','totnonac'));
-    }
     /**
      * Display the specified resource.
      *

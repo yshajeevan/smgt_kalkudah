@@ -50,7 +50,7 @@ class SubmitController extends Controller
             $listcompleted=[];
         }
        
-        $attendances = DB::table('institutes')->select('institute','id')->where('id', '<',69)->whereNotIn('id', $listcompleted)->get();
+        $attendances = DB::table('institutes')->select('institute','id')->where('id', '<',86)->whereNotIn('id', $listcompleted)->get();
 
         return view('submitforms.submitform', compact('uname','institutes','action','cols','attendances'));
     }
