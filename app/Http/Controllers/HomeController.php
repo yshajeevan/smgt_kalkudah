@@ -107,27 +107,70 @@ class HomeController extends Controller
     }
 
     public function profile(){
-        $profile=Auth()->user();
-        // return $profile;
+        $profile = Auth()->user();
         return view('users.profile')->with('profile',$profile);
     }
 
-    public function profileUpdate(Request $request,$id){
-        $this->validate($request,[
-            'photo'=>'dimensions:max_width=256'
+    public function profileUpdate(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'mobile' => 'nullable|string|max:20',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
-        
-        // return $request->all();
-        $user=User::findOrFail($id);
-        $data=$request->all();
-        $status=$user->fill($data)->save();
-        if($status){
-            request()->session()->flash('success','Successfully updated your profile');
+
+        DB::beginTransaction();
+
+        try {
+
+            $user = User::findOrFail($id);
+
+            // ✅ update USER
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->save();
+
+            // ✅ update EMPLOYEE
+            if ($user->employee) {
+
+                $employee = $user->employee;
+
+                $employee->email = $request->email;   // 🔥 sync email
+                $employee->mobile = $request->mobile;
+
+                // 🔥 PHOTO upload (empno based)
+                if ($request->hasFile('photo')) {
+
+                    $file = $request->file('photo');
+                    $ext = $file->getClientOriginalExtension();
+
+                    $filename = $employee->empno . '.' . $ext;
+
+                    $path = public_path('vfiles/profileimg/' . $filename);
+
+                    if (file_exists($path)) {
+                        unlink($path);
+                    }
+
+                    $file->move(public_path('vfiles/profileimg'), $filename);
+
+                    $employee->photo = $filename;
+                }
+
+                $employee->save();
+            }
+
+            DB::commit();
+
+            return back()->with('success', 'Profile updated successfully');
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return back()->with('error', 'Update failed');
         }
-        else{
-            request()->session()->flash('error','Please try again!');
-        }
-        return redirect()->back();
     }
 
     public function settings(){

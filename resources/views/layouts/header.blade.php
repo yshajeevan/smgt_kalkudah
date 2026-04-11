@@ -62,11 +62,7 @@
       <li class="nav-item dropdown no-arrow">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth()->user()->name}}</span>
-          @if(Auth()->user()->employee_id)
-            <img class="img-profile rounded-circle" src="{{'/images/employees/'.Auth()->user()->employee_id.'.jpg'}}">
-          @else
-            <img class="img-profile rounded-circle" src="{{asset('backend/img/avatar.png')}}">
-          @endif
+          <img class="img-profile rounded-circle" src="{{ asset('vfiles/profileimg/' . (Auth()->user()->employee->photo ?? 'avatar.png')) }}">
         </a>
         <!-- Dropdown - User Information -->
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

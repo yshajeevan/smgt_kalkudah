@@ -22,8 +22,8 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="image">
-                        @if($profile->photo)
-                        <img class="card-img-top img-fluid roundend-circle mt-4" style="border-radius:50%;height:80px;width:80px;margin:auto;" src="{{$profile->photo}}" alt="profile picture">
+                        @if($profile->employee->photo)
+                        <img class="card-img-top img-fluid roundend-circle mt-4" style="border-radius:50%;height:80px;width:80px;margin:auto;" src="{{ asset('vfiles/profileimg/' . $profile->employee->photo) }}"alt="profile picture">
                         @else 
                         <img class="card-img-top img-fluid roundend-circle mt-4" style="border-radius:50%;height:80px;width:80px;margin:auto;" src="{{asset('backend/img/avatar.png')}}" alt="profile picture">
                         @endif
@@ -31,15 +31,15 @@
                     <div class="card-body mt-4 ml-2">
                       <h5 class="card-title text-left"><small><i class="fas fa-user"></i> {{$profile->name}}</small></h5>
                       <p class="card-text text-left"><small><i class="fas fa-envelope"></i> {{$profile->email}}</small></p>
-                      <p class="card-text text-left"><small class="text-muted"><i class="fas fa-hammer"></i> {{$profile->role}}</small></p>
+                      <p class="card-text text-left"><small class="text-muted"><i class="fas fa-phone"></i> {{$profile->employee->mobile}}</small></p>
                     </div>
                   </div>
             </div>
             <div class="col-md-8">
-                <form class="border px-4 pt-2 pb-3" method="POST" action="{{route('profile-update',$profile->id)}}">
+                <form method="POST" enctype="multipart/form-data" action="{{route('profile-update',$profile->id)}}">
                     @csrf
                     <div class="form-group">
-                        <label for="inputTitle" class="col-form-label">Name</label>
+                        <label for="inputTitle" class="col-form-label">Display Name</label>
                       <input id="inputTitle" type="text" name="name" placeholder="Enter name"  value="{{$profile->name}}" class="form-control">
                       @error('name')
                       <span class="text-danger">{{$message}}</span>
@@ -47,23 +47,28 @@
                       </div>
               
                       <div class="form-group">
-                          <label for="inputEmail" class="col-form-label">Email</label>
-                        <input id="inputEmail" disabled type="email" name="email" placeholder="Enter email"  value="{{$profile->email}}" class="form-control">
+                          <label for="inputEmail" class="col-form-label">Email (username)</label>
+                        <input id="inputEmail" type="email" name="email" placeholder="Enter email"  value="{{$profile->email}}" class="form-control">
                         @error('email')
                         <span class="text-danger">{{$message}}</span>
                         @enderror
                       </div>
+
+                      <div class="form-group">
+                        <label class="col-form-label">Mobile</label>
+                        <input type="text" name="mobile" value="{{ $profile->employee->mobile ?? '' }}" class="form-control">
+                    </div>
               
                       <div class="form-group">
-                      <label for="inputPhoto" class="col-form-label">Photo</label>
-                      <div class="input-group">
-                          <span class="input-group-btn">
-                              <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
-                              <i class="fa fa-picture-o"></i> Choose
-                              </a>
-                          </span>
-                          <input id="thumbnail" class="form-control" type="text" name="photo" value="{{$profile->photo}}">
-                      </div>
+                        <label class="col-form-label">Photo</label>
+
+                        <div class="mb-2">
+                        <img id="preview"
+                            src="{{ asset('vfiles/profileimg/' . ($profile->employee->photo ?? 'avatar.png')) }}"
+                            style="height:80px;width:80px;border-radius:50%;object-fit:cover;">
+                        </div>
+
+                        <input type="file" name="photo" class="form-control" onchange="previewImage(event)">
                         @error('photo')
                         <span class="text-danger">{{$message}}</span>
                         @enderror

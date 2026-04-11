@@ -178,22 +178,31 @@
             @if ($user['id'] != 0)
                 <li>
                     @php
-                        $photo = '';
-                        $name = '';
+                      $photo = '';
+                      $name = '';
 
-                        if ($user['id'] == 31) {
-                            $photo = $process->employee->institute1->pfclerk->employee_id ?? asset('backend/img/avatar.png');
-                            $name = $process->employee?->institute1?->pfclerk?->name ?? 'Not assigned';
-                        } elseif ($user['id'] == 32) {
-                            $photo = $process->employee->institute1->acctclerk->employee_id ?? asset('backend/img/avatar.png');
-                            $name = $process->employee?->institute1?->acctclerk?->name ?? 'Not assigned';
-                        } else {
-                            $photo = $service->{'user' . ($index + 1)}->employee_id ?? asset('backend/img/avatar.png');
-                            $name = $service->{'user' . ($index + 1)}->name ?? 'Not assigned';
-                        }
-                    @endphp
+                      if ($user['id'] == 14) {
+                          $pname = $process->employee?->institute1?->pfclerk?->employee?->photo ?? null;
+                          $name = $process->employee?->institute1?->pfclerk?->employee?->name_with_initial_e ?? 'Not assigned';
+
+                      } elseif ($user['id'] == 15) {
+                          $pname = $process->employee?->institute1?->acctclerk?->employee?->photo ?? null;
+                          $name = $process->employee?->institute1?->acctclerk?->employee?->name_with_initial_e ?? 'Not assigned';
+
+                      } else {
+                          $pname = $service->{'user' . ($index + 1)}->employee->photo ?? null;  
+                          $name = $service->{'user' . ($index + 1)}->employee->name_with_initial_e ?? 'Not assigned';
+                      }
+
+                      // 👉 build photo path
+                      if ($pname && file_exists(public_path('vfiles/profileimg/' . $pname))) {
+                          $photo = asset('vfiles/profileimg/' . $pname);
+                      } else {
+                          $photo = asset('backend/img/avatar.png');
+                      }
+                  @endphp
                     
-                    <img src="{{ '/images/employees/'.$photo.'.jpg' }}" alt="" class="timeline-badge">
+                    <img src="{{ $photo }}" alt="{{ $pname }}" class="timeline-badge">
                     
                     @if($process->last_updated_user >= $user['last_user'])
                         <span><i class="fa fa-check"></i></span>

@@ -27,14 +27,17 @@
                         @endcan
                     </div>
                     @can('employee-edit')
-                        <button style="display:none" class="btn" id="proimgupdate"><i class='fas fa-check-circle' style='color: green'></i></button>
+                        @if(isset($employee) && $employee)
+                            <button style="display:none" class="btn" id="proimgupdate">
+                                <i class='fas fa-check-circle' style='color: green'></i>
+                            </button>
+                        @endif
                     @endcan
                     </div>
                     @if(!empty($employee->id))
                     <div class="card-body mt-4 ml-2">
                       <h5 class="card-title text-left"><small><i class="fas fa-user"></i> {{$employee->title.".".$employee->name_with_initial_e}}</small></h5>
                       <p class="card-text text-left"><small><i class="fas fa-home"></i> {{$employee->peraddress}}</small></p>
-                      <!--<p class="card-text text-left"><small><i class="fas fa-phone"></i> {{$employee->mobile}}</small></p>-->
                       <a class="card-text text-left" href="tel:+94{{isset($employee->mobile) ? $employee->mobile : 'N/A' }}"><i class="fa fa-phone"></i><small>{{$employee->mobile}}</small></a></br>
                       <a class="card-text text-left" href="https://api.whatsapp.com/send?phone=94{{isset($employee->whatsapp) ? $employee->whatsapp : 'N/A' }}"><i class="fab fa-whatsapp-square"></i><small>{{$employee->whatsapp}}</small></a></br>
                       <a class="card-text text-left" href="mailto: {{isset($employee->email) ? $employee->email : 'N/A'}}"><i class="fa fa-envelope"></i><small>{{$employee->email}}</small></a>
@@ -417,26 +420,13 @@
                     </div>
                     @if(!empty($employee) && !empty($employee->empdummy)) @if($employee->empdummy->distores != $employee->distores) <span class="dummy-value">{{$employee->empdummy->distores}} <input type="hidden" name="dummy_distores" value="{{$employee->empdummy->distores}}"/></span>@endif @endif
                 </div>
-                @php
-                    function fullMask($val){
-                        if (!$val) return '';
-                        return str_repeat('*', mb_strlen($val));
-                    }
-
-                    $mobile = old('mobile', isset($employee) ? $employee->mobile : '');
-                    $whatsapp = old('whatsapp', isset($employee) ? $employee->whatsapp : '');
-                    $fixed = old('fixedphone', isset($employee) ? $employee->fixedphone : '');
-                @endphp
 
                 <div class="form-group">
                     <div class="form-col-3"><label class="control-label">Mobile</label></div>
                     <div class="form-col-9" style="position:relative;">
                         <input type="text" class="form-control form-control-sm"
                             id="mobile" name="mobile"
-                            value="{{ fullMask($mobile) }}" readonly
-                            data-original="{{ e($mobile) }}">
-                        <i class="fas fa-eye toggle-visibility" data-target="mobile"
-                        style="cursor:pointer; position:absolute; right:10px; top:8px;"></i>
+                            value="{{ $employee->mobile }}" readonly>
                     </div>
                 </div>
 
@@ -446,10 +436,7 @@
                      style="position:relative;">
                         <input type="text" class="form-control form-control-sm"
                             id="fixedphone" name="fixedphone"
-                            value="{{ fullMask($fixed) }}" readonly
-                            data-original="{{ e($fixed) }}">
-                        <i class="fas fa-eye toggle-visibility" data-target="fixedphone"
-                        style="cursor:pointer; position:absolute; right:10px; top:8px;"></i>
+                            value="{{ $employee->fixedphone }}" readonly>
                     </div>
                 </div>
 
@@ -458,10 +445,7 @@
                     <div class="form-col-9" style="position:relative;">
                         <input type="text" class="form-control form-control-sm"
                             id="whatsapp" name="whatsapp"
-                            value="{{ fullMask($whatsapp) }}" readonly
-                            data-original="{{ e($whatsapp) }}">
-                        <i class="fas fa-eye toggle-visibility" data-target="whatsapp"
-                        style="cursor:pointer; position:absolute; right:10px; top:8px;"></i>
+                            value="{{ $employee->whatsapp }}" readonly>
                     </div>
                 </div>
 
@@ -1396,16 +1380,24 @@ $('#filepro').on('change', function () {
 
     // employee id (important)
     let empId = "{{ $employee->id ?? '' }}";
+    let empNo = "{{ $employee->empno ?? '' }}";
+
+    if (!empId || !empNo) {
+        alert('Employee ID or Employee No is missing');
+        return; // ⛔ stop execution
+    }
 
     $.ajax({
-        url: '/employee/photo/' + empId, // create this route
+        url: '/employee/photo/' + empId,
         type: 'POST',
-        data: formData,
+        data: (function () {
+            formData.append('empno', empNo); // 👈 add this
+            return formData;
+        })(),
         contentType: false,
         processData: false,
         success: function (response) {
 
-            // update image preview
             $('#photo').attr('src', response.path + '?t=' + new Date().getTime());
 
             alert('Photo updated successfully');
@@ -1522,30 +1514,6 @@ $('.imgedit').click(function () {
     var source = '{!! asset("/vfiles/")!!}/' + file;
     $('.img-model').attr('src',source);
 });
-
-// Mask the mobile number and whatsapp nuber
-document.addEventListener('click', function(e){
-    if (!e.target.classList.contains('toggle-visibility')) return;
-
-    var icon = e.target;
-    var targetId = icon.getAttribute('data-target');
-    var input = document.getElementById(targetId);
-    var original = input.getAttribute('data-original') || '';
-
-    if (icon.classList.contains('showing')) {
-        // hide again - full mask
-        input.value = '*'.repeat(original.length);
-        icon.classList.remove('fa-eye-slash', 'showing');
-        icon.classList.add('fa-eye');
-    } else {
-        // show full
-        input.value = original;
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash', 'showing');
-    }
-});
-
-
 
 //Employee photo upload
 const imgDiv = document.querySelector('.profile-pic-div');
@@ -2108,17 +2076,6 @@ $(document).ready(function() {
 
   // When form is submitted, ensure disabled fields are enabled so they get posted
   $('#employee_form').on('submit', function(){
-
-    // Restore original values for masked fields
-    ['mobile','whatsapp','fixedphone'].forEach(function(id){
-        var input = document.getElementById(id);
-        if(input){
-            var original = input.getAttribute('data-original');
-            if(original){
-                input.value = original;
-            }
-        }
-    });
 
     // Enable disabled fields so they get posted
     $(this).find(':disabled').each(function(){

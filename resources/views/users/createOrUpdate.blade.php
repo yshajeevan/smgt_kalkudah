@@ -15,7 +15,8 @@
       @endif
         <div class="form-group">
             <label for="employee_id" class="col-form-label">Employee ID</label>
-            <input id="employee_id" type="text" name="employee_id" value="{{old('employee_id', isset($item) ? $item->employee_id : '')}}" class="form-control" required>
+            <input id="employee_id" type="text" name="employee_id" value="{{old('employee_id', isset($item) ? $item->employee_id : '')}}" class="form-control" disabled>
+            <input id="employee_id" type="hidden" name="employee_id" value="{{old('employee_id', isset($item) ? $item->employee_id : '')}}" class="form-control" required>
             @error('employee_id')
               <span class="text-danger">{{$message}}</span>
             @enderror
@@ -29,37 +30,42 @@
         </div>
         <div class="form-group">
             <label for="designation" class="col-form-label">Designation</label>
-            <input id="designation" type="text" name="designation" value="{{old('designation', isset($item) ? $item->employee->designation->designation : '')}}" class="form-control" required>
+            <input id="designation" type="text" name="designation" value="{{old('designation', isset($item) ? $item->employee->designation->designation : '')}}" class="form-control" disabled>
             @error('designation')
               <span class="text-danger">{{$message}}</span>
             @enderror
         </div>
         <div class="form-group">
             <label for="institute" class="col-form-label">Institute</label>
-            <input id="institute" type="text" name="institute" value="{{old('institute', isset($item) ? $item->employee->institute->institute : '')}}" class="form-control" required>
-            <input id="institute_id" type="text" name="institute_id" value="{{old('institute_id', isset($item) ? $item->employee->institute->id : '')}}" class="form-control" required>
+            <input id="institute" type="text" name="institute" value="{{old('institute', isset($item) ? $item->employee->institute->institute : '')}}" class="form-control" disabled>
+            <input id="institute_id" type="hidden" name="institute_id" value="{{old('institute_id', isset($item) ? $item->employee->institute->id : '')}}" class="form-control" required>
             @error('institute')
               <span class="text-danger">{{$message}}</span>
             @enderror
         </div>
         <div class="form-group">
-            <label for="mobile" class="col-form-label">Mobile</label>
+            <label for="mobile" class="col-form-label">Mobile (ex: 7749XXXXX)</label>
             <input id="mobile" type="text" name="mobile" placeholder="Enter Mobile Number"  value="{{old('mobile', isset($item) ? $item->employee->mobile : '')}}" class="form-control">
             @error('mobile')
               <span class="text-danger">{{$message}}</span>
             @enderror
         </div>
-        @php
-          $employeePhoto = public_path('images/employees/' . ($item->employee_id ?? '') . '.jpg');
-          if (isset($item) && file_exists($employeePhoto)) {
-              $photoUrl = asset('images/employees/' . $item->employee_id . '.jpg');
-          } elseif (file_exists(public_path('images/avatar.jpg'))) {
-              $photoUrl = asset('images/avatar.jpg');
-          } else {
-              $photoUrl = asset('backend/img/avatar.png');
-          }
-      @endphp
+    
+      @php
+        $photoName = $item->employee->photo ?? null;
 
+        $employeePhotoPath = $photoName 
+            ? public_path('vfiles/profileimg/' . $photoName) 
+            : null;
+
+        if ($photoName && file_exists($employeePhotoPath)) {
+            $photoUrl = asset('vfiles/profileimg/' . $photoName);
+        } elseif (file_exists(public_path('images/avatar.jpg'))) {
+            $photoUrl = asset('images/avatar.jpg');
+        } else {
+            $photoUrl = asset('backend/img/avatar.png');
+        }
+      @endphp
       <div class="form-group">
           <div class="create-user-photo" id="photo" style="background-image: url('{{ $photoUrl }}');"></div>
           @error('photo')

@@ -91,36 +91,53 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-     public function store(Request $request)
+
+    public function store(Request $request)
     {
-        $this->validate($request,
-        [
+        $this->validate($request, [
             'employee_id' => 'required',
             'institute_id' => 'required',
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
-            'roles'=>'required',
-            'is_active'=>'required|in:1,0',
+            'mobile' => 'required',
+            'roles' => 'required',
+            'is_active' => 'required|in:1,0',
         ]);
-        
-        $user = User::create([
-            'employee_id' => $request->employee_id,
-            'institute_id' => $request->institute_id,
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'is_active' => $request->is_active,
-        ]);
-    
-        $status = $user->assignRole($request->input('roles'));
 
-        if($status){
-            request()->session()->flash('success','Successfully added user');
+        DB::beginTransaction();
+
+        try {
+
+            $user = User::create([
+                'employee_id' => $request->employee_id,
+                'institute_id' => $request->institute_id,
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'is_active' => $request->is_active,
+            ]);
+
+            // ✅ UPDATE EMPLOYEE TABLE
+            \App\Models\Employee::where('id', $request->employee_id)
+                ->update([
+                    'email' => $request->email,
+                    'mobile' => $request->mobile, // if exists in form
+                ]);
+
+            // roles
+            $user->assignRole($request->input('roles'));
+
+            DB::commit();
+
+            request()->session()->flash('success', 'Successfully added user');
             return redirect()->route('user.index');
-        }
-        else{
-            request()->session()->flash('error','Error occurred while adding user');
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            request()->session()->flash('error', 'Error occurred while adding user');
             return redirect()->back();
         }
     }
@@ -155,19 +172,21 @@ class UsersController extends Controller
         $this->validate($request, [
             'institute_id' => 'required|integer',
             'name' => 'required|string|max:255',
+            'mobile' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
             'roles' => 'required',
             'is_active' => 'required|in:1,0',
             'password' => 'nullable|min:6|same:confirm-password',
         ]);
 
-        $user = User::find($id);
+        $user = User::findOrFail($id);
+
         $user->email = $request->email;
         $user->name = $request->name;
         $user->institute_id = $request->institute_id; 
         $user->is_active = $request->is_active;
 
-         // 🔥 Password update only if BOTH fields are entered + matched
+        // 🔥 Password update
         if ($request->filled('password') && $request->filled('confirm-password')) {
             if ($request->password === $request->{'confirm-password'}) {
                 $user->password = Hash::make($request->password);
@@ -176,6 +195,16 @@ class UsersController extends Controller
 
         $user->save();
 
+        // ✅ UPDATE EMPLOYEE TABLE
+        if ($user->employee_id) {
+            \App\Models\Employee::where('id', $user->employee_id)
+                ->update([
+                    'email' => $request->email,
+                    'mobile' => $request->mobile, // make sure input exists
+                ]);
+        }
+
+        // roles
         DB::table('model_has_roles')->where('model_id', $id)->delete();
         $status = $user->assignRole($request->input('roles'));
 

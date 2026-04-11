@@ -296,11 +296,15 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'empno' => 'required|unique:employees,empno',
             'nic' => 'required|unique:employees,nic',
             'name_with_initial_e' => 'string|required|max:30',
             'status' => 'required',
             'email' => 'nullable|email',
             'institute_id' => 'required',
+            'mobile' => 'required',  
+            'designation_id' => 'required',
+            'cadresubject_id' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -503,11 +507,15 @@ class EmployeeController extends Controller
         // validate only fields present (so modal-only doesn't fail).
         if (!$isDummySubmission) {
             $this->validate($request, [
+                'empno' => 'required|unique:employees,empno,'.$id,
                 'nic' => 'required|unique:employees,nic,'.$id,
                 'name_with_initial_e' => 'string|required|max:70',
                 'status' => 'required',
                 'email' => 'nullable|email',
                 'institute_id' => 'required',
+                'mobile' => 'required',    
+                'designation_id' => 'required',
+                'cadresubject_id' => 'required',
             ]);
         } else {
             // optional: add minimal validation for present dummy fields if desired
@@ -729,69 +737,48 @@ class EmployeeController extends Controller
         }
     }
 
-    // public function photoupdate(Request $request, $id){
-        
-    //     $this->validate($request,
-    //     [
-    //         'file' => 'required|mimes:jpeg,jpg,png|max:10000',
-    //     ]);
-        
-    //     // Update profile photo
-    //     $employee = Employee::findOrFail($id);
-
-    //     // delete if file exist
-    //     if(\File::exists(base_path('vfiles/profileimg/').$id."jpg")){
-    //          unlink(base_path('vfiles/profileimg/').$id."jpg");
-    //     }
-        
-    //     if($request->file()) {
-    //         $fileName = $id.".jpg";
-    //         $filePath = $request->file('file')->storeAs('vfiles/profileimg/', $fileName, 'base');
-    //         $employee->photo = $fileName;
-    //     }
-
-    //     $status = $employee->save();
-    //     if($status){
-    //         request()->session()->flash('success','Successfully updated');
-    //         return redirect()->back();
-    //     }
-    //     else{
-    //         request()->session()->flash('error','Error occured while updating');
-    //     }
-        
-    // }
 
     public function photoUpload(Request $request, $id)
     {
         $request->validate([
-            'file' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            'file' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'empno' => 'required'
         ]);
 
         $employee = Employee::findOrFail($id);
+        $empno = $request->empno;
 
         if ($request->hasFile('file')) {
 
             $file = $request->file('file');
-            $filename = time().'_'.$file->getClientOriginalName();
 
-            $file->move(public_path('vfiles/profileimg'), $filename);
+            // get extension
+            $ext = $file->getClientOriginalExtension();
 
-            // delete old photo (optional)
-            if ($employee->photo && file_exists(public_path('vfiles/profileimg/'.$employee->photo))) {
-                unlink(public_path('vfiles/profileimg/'.$employee->photo));
+            // filename = empno + extension
+            $filename = $empno . '.' . $ext;
+
+            // delete old file if exists
+            if (file_exists(public_path('vfiles/profileimg/' . $filename))) {
+                unlink(public_path('vfiles/profileimg/' . $filename));
             }
 
+            // move file
+            $file->move(public_path('vfiles/profileimg'), $filename);
+
+            // update DB
             $employee->photo = $filename;
             $employee->save();
 
             return response()->json([
                 'status' => 'success',
-                'path' => asset('vfiles/profileimg/'.$filename)
+                'path' => asset('vfiles/profileimg/' . $filename)
             ]);
         }
 
         return response()->json(['status' => 'error'], 400);
     }
+
     public function appendview(){
         return view('human_resource.appendclk');
     }
