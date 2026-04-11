@@ -75,6 +75,29 @@ Route::post('update_feedback', 'App\Http\Controllers\ProcessController@updatefee
 Auth::routes();
 
 Route::group( ['middleware' => 'auth'], function(){
+    //Message
+    Route::resource('message', MessageController::class);
+    Route::delete('/message/{id}', [MessageController::class, 'destroy'])->name('message.destroy');
+    Route::get('/message/five','App\Http\Controllers\MessageController@messageFive')->name('messages.five');
+    Route::get('/mobiledetails', 'App\Http\Controllers\EmployeeController@getMobile');
+    
+    Route::get('/message-attachments/{filename}', function ($filename) {
+        $filePath = "private/attachments/{$filename}";
+    
+        if (!Storage::disk('local')->exists($filePath)) {
+            abort(404, 'File not found.');
+        }
+    
+        $fileContent = Storage::disk('local')->get($filePath);
+        $mimeType = Storage::disk('local')->mimeType($filePath);
+    
+        return response($fileContent, 200)->header('Content-Type', $mimeType);
+    })->name('message.attachment');
+
+    //Services Routes
+    Route::resource('service', ServiceController::class);
+    Route::get('service-checklist/{id}','App\Http\Controllers\ChecklistController@index')->name('checklist.index');
+
     //Manage Student
     Route::get('manage-students', [StudentController::class, 'index'])->name('students.index');
     Route::get('manage-students/create', [StudentController::class, 'create'])->name('students.create');
@@ -103,6 +126,11 @@ Route::group( ['middleware' => 'auth'], function(){
     Route::get('attencreate/{instid}', 'App\Http\Controllers\AttendanceController@createlink')->name('attendance.createlink');
     Route::post('attendance', 'App\Http\Controllers\AttendanceController@store')->name('attendance.store');
     Route::get('/attendance-graph', [AttendanceController::class, 'attendanceGraph'])->name('attendance.graph');
+
+    Route::get('zonalattendance', 'App\Http\Controllers\AttendanceController@index')->name('attendance.index');
+    Route::get('schoolatten', 'App\Http\Controllers\AttendanceController@index')->name('attendance.myattendance');
+    Route::get('attendance-schools', 'App\Http\Controllers\AttendanceController@index')->name('attendance.list');
+    Route::get('/schools-by-date', [AttendanceController::class, 'getSchoolsByDate'])->name('schools.by.date');
     
     Route::get('/gndetails/{id}','App\Http\Controllers\GnController@getgn');
         
@@ -244,20 +272,6 @@ Route::get('/result', function () {
 })->middleware('auth')->name('manage.result');
 
 Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(){
-
-    Route::get('/message-attachments/{filename}', function ($filename) {
-        $filePath = "private/attachments/{$filename}";
-    
-        if (!Storage::disk('local')->exists($filePath)) {
-            abort(404, 'File not found.');
-        }
-    
-        $fileContent = Storage::disk('local')->get($filePath);
-        $mimeType = Storage::disk('local')->mimeType($filePath);
-    
-        return response($fileContent, 200)->header('Content-Type', $mimeType);
-    })->name('message.attachment');
-
     Route::resource('cadre-subject', CadreSubjectController::class);
 
     Route::resource('degrees', DegreeController::class);
@@ -388,12 +402,6 @@ Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(
     Route::get('/notifications','App\Http\Controllers\NotificationController@index')->name('all.notification');
     Route::get('/notifshow/{id}','App\Http\Controllers\NotificationController@show')->name('notif.show');
 
-    //Message
-    Route::resource('message', MessageController::class);
-    Route::delete('/message/{id}', [MessageController::class, 'destroy'])->name('message.destroy');
-    Route::get('/message/five','App\Http\Controllers\MessageController@messageFive')->name('messages.five');
-    Route::get('/mobiledetails', 'App\Http\Controllers\EmployeeController@getMobile');
-
     //Password Change
     Route::get('change-password', 'App\Http\Controllers\HomeController@changePassword')->name('change.password.form');
     Route::post('change-password', 'App\Http\Controllers\HomeController@changPasswordStore')->name('change.password');
@@ -417,12 +425,8 @@ Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(
     Route::get('/processdel/{id}','App\Http\Controllers\ProcessController@destroy')->name('process.delete');
     Route::get('bulkupdate','App\Http\Controllers\ProcessController@bulkedit')->name('process.bulkedit');
     Route::post('bulkupdate','App\Http\Controllers\ProcessController@bulkupdate')->name('process.bulkupdate');
-	
-    //Services Routes
-    Route::resource('service', ServiceController::class);
 
     //Checklist Routes
-    Route::get('service-checklist/{id}','App\Http\Controllers\ChecklistController@index')->name('checklist.index');
     Route::get('service-checklist-create/{id}','App\Http\Controllers\ChecklistController@create')->name('checklist.create');
     Route::get('service-checklist-edit/{id}','App\Http\Controllers\ChecklistController@edit')->name('checklist.edit');
     Route::put('service-checklist-update/{id}','App\Http\Controllers\ChecklistController@update')->name('checklist.update');
@@ -433,12 +437,7 @@ Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(
     Route::get('/file-manager',function(){
         return view('layouts.file-manager');
     })->name('file-manager');
-    
-    //Attendance Routes
-    Route::get('zonalattendance', 'App\Http\Controllers\AttendanceController@index')->name('attendance.index');
-    Route::get('schoolatten', 'App\Http\Controllers\AttendanceController@index');
-    Route::get('attendance-schools', 'App\Http\Controllers\AttendanceController@index')->name('attendance.list');
-    Route::get('/schools-by-date', [AttendanceController::class, 'getSchoolsByDate'])->name('schools.by.date');
+
 
     //User Role Routes
     Route::resource('roles', RoleController::class);

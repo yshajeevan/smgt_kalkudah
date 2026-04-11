@@ -18,23 +18,19 @@
         <div class="col-xl-9">
             <h5><em><strong>General Analysis</strong></em></h5>
             <div class="grid-container">
-                <button class="grid-btn" onclick="window.location.href='{{ route('employee.index') }}'">
-                    <i class="fas fa-user-tie"></i>
-                    Manage Employees
+                <button class="grid-btn" onclick="window.location.href='{{ route('attendance.create') }}'">
+                    <i class="fas fa-clipboard-check"></i>
+                    Manage Attendance
                 </button>
-                <!-- <button class="grid-btn" onclick="showUnderConstruction()">
-                    <i class="fas fa-user-tie"></i>
-                    Manage Employees
-                </button> -->
-
-                <!-- <button class="grid-btn" onclick="window.location.href='{{ route('reports.ol.exam.final.subject.result') }}'">
-                    <i class="fas fa-user-graduate"></i>
-                    Manage Students
-                </button> -->
 
                 <button class="grid-btn" onclick="window.location.href='{{ route('students.index') }}'">
                     <i class="fas fa-user-graduate"></i>
                     Manage Students
+                </button>
+
+                <button class="grid-btn" onclick="window.location.href='{{ route('employee.index') }}'">
+                    <i class="fas fa-user-tie"></i>
+                    Manage Employees
                 </button>
 
                <div class="btn-wrapper">

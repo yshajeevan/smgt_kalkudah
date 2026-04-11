@@ -330,15 +330,15 @@ html { height: 100%;}
           </ul>
       </li>
        @endcan
-       @can('process-list')
+       @can('service-show')
        <li class="dropdown">
         <a href="#works" class="dropdown-toggle"  data-toggle="dropdown"><i class="fas fa-sitemap"></i> Services <span class="caret"></span></a>
           <ul class="dropdown-menu animated fadeInLeft" role="menu">
             <div class="dropdown-header">Dropdown heading</div>
             <li><a href="{{ route('service.index') }}">Services</a></li>
-            @can('service-edit')    
+            <!-- @can('service-edit')     -->
             <li><a href="{{ route('inst.viewclerk') }}">Manage Officers</a></li>
-            @endcan
+            <!-- @endcan -->
           </ul>
       </li>
       @endcan
@@ -351,7 +351,7 @@ html { height: 100%;}
             <li><a href="{{ route('process.create') }}">Add Process</a></li>
             @endcan
             @can('process-list')
-            <li><a href="{{ route('process.index',1) }}">Pending Process</a></li>
+            <li><a href="{{ route('process.index',1) }}">My Pending Process</a></li>
             <li><a href="{{ route('process.index',2) }}">Zonal Pending Process</a></li>
             <li><a href="{{ route('process.index',3) }}">Completed Process</a></li>
             <li><a href="{{ route('process.index',4) }}">Holding Process</a></li>
@@ -360,7 +360,7 @@ html { height: 100%;}
           </ul>
       </li>
       @endcan
-      @can('process-list')
+      @can('institute-list')
       <li class="dropdown">
         <a href="#works" class="dropdown-toggle"  data-toggle="dropdown"><i class="fa fa-institution"></i> Institutes<span class="caret"></span></a>
           <ul class="dropdown-menu animated fadeInLeft" role="menu">
@@ -448,15 +448,17 @@ html { height: 100%;}
         <li class="dropdown">
             <a href="#works" class="dropdown-toggle"  data-toggle="dropdown"><i class="fas fa-clipboard-check"></i> Attendance<span class="caret"></span></a>
               <ul class="dropdown-menu animated fadeInLeft" role="menu">
-                <div class="dropdown-header">Dropdown heading</div>
-                @if(Auth::user()->desig == 'principal')
-                <li><a href="{{ route('attendance.create') }}">Attendance Submit</a></li>
+                <div class="dropdown-header">Manage Student Sttendance</div>
+                @if(Auth::user()->hasRole('Sch_Admin'))
+                    <li><a href="{{ route('attendance.create') }}">Submit attendance</a></li>
                 @endif
-                <li><a href="{{ route('attendance.index') }}">@if(Auth::user()->desig != 'principal') Attendane (Zonal) @else Attendane-List @endif</a></li>
-                @if(Auth::user()->desig != 'principal')
-                <li><a href="{{ route('submitform.index',5) }}">Attendane (School-Indiv.)</a></li>
-                <li><a href="{{ route('attendance.list') }}">Attendane (School-All)</a></li>
+                <li><a href="{{ route('attendance.index') }}">Zonal attendance</a></li>
+                @if(Auth::user()->hasRole('Sch_Admin'))
+                <li><a href="{{ route('attendance.myattendance') }}">Our attendance</a></li>
+                @else
+                <li><a href="{{ route('submitform.index',5) }}">Individual school <a href="tel:+"></a>ttendance</a></li>
                 @endif
+                <li><a href="{{ route('attendance.list') }}">School wise attendance</a></li>
               </ul>
         </li>
         {{-- Messaging--}}
