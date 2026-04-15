@@ -302,7 +302,6 @@ class EmployeeController extends Controller
             'status' => 'required',
             'email' => 'nullable|email',
             'institute_id' => 'required',
-            'mobile' => 'required',  
             'designation_id' => 'required',
             'cadresubject_id' => 'required',
         ]);
@@ -513,7 +512,6 @@ class EmployeeController extends Controller
                 'status' => 'required',
                 'email' => 'nullable|email',
                 'institute_id' => 'required',
-                'mobile' => 'required',    
                 'designation_id' => 'required',
                 'cadresubject_id' => 'required',
             ]);
