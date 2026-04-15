@@ -426,8 +426,16 @@
                     <div class="form-col-9" style="position:relative;">
                         <input type="text" class="form-control form-control-sm"
                             id="mobile" name="mobile"
-                            value="{{ $employee->mobile }}" readonly>
+                            value="{{ old('mobile', $employee->mobile ?? '') }}" readonly>
                     </div>
+                    @if(!empty($employee) && !empty($employee->empdummy))
+                        @if($employee->empdummy->mobile != $employee->mobile)
+                            <span class="dummy-value">
+                                {{ $employee->empdummy->mobile }}
+                                <input type="hidden" name="dummy_mobile" value="{{ $employee->empdummy->mobile }}"/>
+                            </span>
+                        @endif
+                    @endif
                 </div>
 
                 <div class="form-group">
@@ -436,8 +444,16 @@
                      style="position:relative;">
                         <input type="text" class="form-control form-control-sm"
                             id="fixedphone" name="fixedphone"
-                            value="{{ $employee->fixedphone }}" readonly>
+                            value="{{ old('fixedphone', $employee->fixedphone ?? '') }}" readonly>
                     </div>
+                    @if(!empty($employee) && !empty($employee->empdummy))
+                        @if($employee->empdummy->fixedphone != $employee->fixedphone)
+                            <span class="dummy-value">
+                                {{ $employee->empdummy->fixedphone }}
+                                <input type="hidden" name="dummy_fixedphone" value="{{ $employee->empdummy->fixedphone }}"/>
+                            </span>
+                        @endif
+                    @endif
                 </div>
 
                 <div class="form-group">
@@ -445,8 +461,16 @@
                     <div class="form-col-9" style="position:relative;">
                         <input type="text" class="form-control form-control-sm"
                             id="whatsapp" name="whatsapp"
-                            value="{{ $employee->whatsapp }}" readonly>
+                            value="{{ old('whatsapp', $employee->whatsapp ?? '') }}" readonly>
                     </div>
+                    @if(!empty($employee) && !empty($employee->empdummy))
+                        @if($employee->empdummy->whatsapp != $employee->whatsapp)
+                            <span class="dummy-value">
+                                {{ $employee->empdummy->whatsapp }}
+                                <input type="hidden" name="dummy_whatsapp" value="{{ $employee->empdummy->whatsapp }}"/>
+                            </span>
+                        @endif
+                    @endif
                 </div>
 
                 <div class="form-group">
