@@ -32,8 +32,14 @@ class UsersController extends Controller
         $data = User::with([
             'employee:id,name_with_initial_e,photo',
             'roles:id,name',
-            'institute:id,institute' // ✅ add this
-        ])->select('employee_id','users.email','users.id','users.is_active');
+            'institute:id,institute'
+        ])->select(
+            'users.id',
+            'users.employee_id',
+            'users.email',
+            'users.is_active',
+            'users.institute_id' // ✅ THIS IS MISSING
+        );
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('photo', function (User $user) { 
