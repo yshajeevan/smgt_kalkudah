@@ -46,6 +46,8 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\StudentOptionalSubjectController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ProfQualificationController;
+use App\Http\Controllers\LeaveController;
+
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
@@ -272,6 +274,16 @@ Route::get('/result', function () {
 })->middleware('auth')->name('manage.result');
 
 Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(){
+    Route::get('/leave-dashboard', [LeaveController::class, 'index'])->name('leave.index');
+    Route::get('/leave-dashboard/data', [LeaveController::class, 'getData'])->name('leave.data');
+    Route::get('/leave-history/{id}', [LeaveController::class, 'history'])->name('leave.history');
+    Route::post('/leave-store', [LeaveController::class,'store'])->name('leave.store');
+    Route::get('/leave-pending-notes', [LeaveController::class,'pendingNotes'])->name('leave.pending.notes');
+    Route::get('/leave-pending-dates/{id}', [LeaveController::class, 'pendingDates'])->name('leave.pending.dates');
+    Route::delete('/leave-delete/{id}', [LeaveController::class, 'destroy'])->name('leave.delete');
+    Route::get('/leave-edit/{id}', [LeaveController::class, 'edit'])->name('leave.edit');
+    Route::post('/leave-update/{id}', [LeaveController::class, 'update'])->name('leave.update');
+
     Route::resource('cadre-subject', CadreSubjectController::class);
 
     Route::resource('degrees', DegreeController::class);

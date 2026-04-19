@@ -444,8 +444,17 @@ html { height: 100%;}
             <li><a href="{{ route('student_responses.create') }}">Add Students Responses</a></li>
           </ul>
       </li>
-      
       @endcan
+      @can('office-leave-list')
+        <li class="dropdown">
+            <a href="#leave" class="dropdown-toggle"  data-toggle="dropdown"><i class="fas fa-calendar-alt"></i> Leave Management<span class="caret"></span></a>
+              <ul class="dropdown-menu animated fadeInLeft" role="menu">
+                <div class="dropdown-header">Manage Leave</div>
+                    <li><a href="{{ route('leave.index') }}">List Staff Leave</a></li>
+                    <li><a href="{{ route('leave.pending.notes') }}">Pending Leave Notes</a></li>
+              </ul>
+        </li>
+      @endcan  
       @can('attendance-list')
         <li class="dropdown">
             <a href="#works" class="dropdown-toggle"  data-toggle="dropdown"><i class="fas fa-clipboard-check"></i> Attendance<span class="caret"></span></a>

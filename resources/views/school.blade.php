@@ -20,7 +20,7 @@
             <div class="grid-container">
                 <button class="grid-btn" onclick="window.location.href='{{ route('attendance.create') }}'">
                     <i class="fas fa-clipboard-check"></i>
-                    Manage Attendance
+                    Add Attendance
                 </button>
 
                 <button class="grid-btn" onclick="window.location.href='{{ route('students.index') }}'">

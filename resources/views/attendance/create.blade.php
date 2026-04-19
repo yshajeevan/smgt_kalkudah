@@ -305,7 +305,7 @@
             {{-- A/L Physical Science 2nd --}}
             @if($stupop && $stupop->{"al_physc_2nd_tot"} >= 1)
             <tr>
-                <td>A/L Physical Science 2nd Year</td>
+                <td>A/L Ph.Science 2nd Year</td>
                 <td>
                     <div class="input-wrap">
                         <input type="number" class="textbox pr-input" name="al_physc_2nd_pr"
@@ -329,7 +329,7 @@
             {{-- A/L Bio Science 2nd --}}
             @if($stupop && $stupop->{"al_biosc_2nd_tot"} >= 1)
             <tr>
-                <td>A/L Bio Science 2nd Year</td>
+                <td>A/L Bio.Science 2nd Year</td>
                 <td>
                     <div class="input-wrap">
                         <input type="number" class="textbox pr-input" name="al_biosc_2nd_pr"
@@ -400,10 +400,10 @@
             
             {{-- Teachers --}}
             <tr class="group-row">
-                <td colspan="2">Staffr</td>
+                <td colspan="2">Staff</td>
             </tr>
             <tr>
-                <td>Teachers</td>
+                <td>Teachers (Including DOs)</td>
 
                 <td colspan="2"> {{-- merge 2 columns for clean layout --}}
                     <div style="display:flex; justify-content:center; gap:6px;">
