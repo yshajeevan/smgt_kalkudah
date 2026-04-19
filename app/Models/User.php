@@ -52,9 +52,9 @@ class User extends Authenticatable
     {  
         return $this->hasMany('App\Models\Message');  
     }
-    public function institute()  
-    {  
-        return $this->hasMany('App\Models\Institute');  
+    public function institute()
+    {
+        return $this->belongsTo(\App\Models\Institute::class, 'institute_id');
     }
     public function employee()  
     {  
