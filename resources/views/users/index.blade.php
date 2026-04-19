@@ -46,7 +46,7 @@
         columns: [
             {data: 'photo', name: 'photo', orderable: false, searchable: false},
             {data: 'name_with_initial_e', name: 'employee.name_with_initial_e'},
-            {data: 'institute', name: 'employee.institute1.institute'},
+            {data: 'institute', name: 'institute1.institute'},
             {data: 'email', name: 'email'},
             {data: 'roles', name: 'roles',
                 render: function(data, type, full, meta) {

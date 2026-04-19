@@ -58,7 +58,7 @@ class UsersController extends Controller
                         return $user->employee->name_with_initial_e ?? 'N/A';
                     })
                     ->addColumn('institute', function(User $user){
-                        return $user->employee->institute1->institute ?? 'N/A';
+                        return $user->institute->institute ?? 'N/A';
                     })
                     ->addColumn('roles', function (User $user) {
                         return implode(', ', $user->roles->pluck('name')->toArray());
