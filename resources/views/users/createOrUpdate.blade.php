@@ -15,7 +15,7 @@
       @endif
         <div class="form-group">
             <label for="employee_id" class="col-form-label">Employee ID</label>
-            <input id="employee_id" type="text" name="employee_id" value="{{old('employee_id', isset($item) ? $item->employee_id : '')}}" class="form-control" disabled>
+            <input id="employee_id_display" type="text" name="employee_id_display" value="{{old('employee_id_display', isset($item) ? $item->employee_id : '')}}" class="form-control" disabled>
             <input id="employee_id" type="hidden" name="employee_id" value="{{old('employee_id', isset($item) ? $item->employee_id : '')}}" class="form-control" required>
             @error('employee_id')
               <span class="text-danger">{{$message}}</span>
@@ -236,6 +236,7 @@ $( "#employee_search" ).autocomplete({
     select: function (event, ui) {
       console.log(ui.item.photo);
             $('#employee_search').val(ui.item.label);  
+            $('#employee_id_display').val(ui.item.value); 
             $('#employee_id').val(ui.item.value);
             $('#name').val(ui.item.fullname);
             $('#institute').val(ui.item.institute);
