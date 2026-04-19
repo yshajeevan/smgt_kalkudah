@@ -29,8 +29,11 @@ class UsersController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = User::with('employee:id,name_with_initial_e,photo')->with('roles:id,name')->select('employee_id','users.email','users.id','users.is_active');
-
+        $data = User::with([
+            'employee:id,name_with_initial_e,photo',
+            'roles:id,name',
+            'institute:id,institute' // ✅ add this
+        ])->select('employee_id','users.email','users.id','users.is_active');
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('photo', function (User $user) { 
