@@ -270,12 +270,12 @@ $(document).ready(function () {
             {data: 'prstu'},
             {data: 'percstu'},
 
-            @if($currentPath == 'attendance-schools')
-                {data: 'rank'},
-            @endif
-
             @if($currentPath != 'zonalattendance')
                 {data: 'principal'},
+            @endif
+
+            @if($currentPath == 'attendance-schools')
+                {data: 'rank'},
             @endif
 
             @if($currentPath == 'zonalattendance')

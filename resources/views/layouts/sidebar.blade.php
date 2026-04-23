@@ -467,7 +467,11 @@ html { height: 100%;}
                 @if(Auth::user()->hasRole('Sch_Admin'))
                 <li><a href="{{ route('attendance.myattendance') }}">Our attendance</a></li>
                 @else
-                <li><a href="{{ route('submitform.index',5) }}">Individual school <a href="tel:+"></a>ttendance</a></li>
+                <li>
+                    <a href="{{ route('submitform.index',5) }}">
+                        Individual school attendance
+                    </a>
+                </li>           
                 @endif
                 <li><a href="{{ route('attendance.list') }}">School wise attendance</a></li>
               </ul>

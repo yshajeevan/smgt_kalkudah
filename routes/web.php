@@ -47,6 +47,7 @@ use App\Http\Controllers\StudentOptionalSubjectController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ProfQualificationController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\TokenController;
 
 
 use Illuminate\Support\Facades\Storage;
@@ -274,6 +275,17 @@ Route::get('/result', function () {
 })->middleware('auth')->name('manage.result');
 
 Route::group(['middleware' => ['auth','role:super_admin|User|Admin']], function(){
+    Route::get('/token', [TokenController::class,'index']);
+    Route::post('/token', [TokenController::class,'store']);
+    Route::get('/find-employee/{nic}', [TokenController::class,'findEmployee']);
+    Route::get('/next/{branch}', [TokenController::class,'next']);
+    Route::post('/complete/{id}', [TokenController::class,'complete']);
+    Route::get('/token/dashboard', [TokenController::class,'dashboard']);
+    Route::get('/dashboard', [TokenController::class,'dashboard']);
+    Route::get('/dashboard-data', [TokenController::class,'dashboardData']);
+    Route::post('/complete/{id}', [TokenController::class,'complete']);
+    Route::get('/token/dashboard/data', [TokenController::class,'dashboardData'])->name('token.dashboard.data');
+
     Route::get('/leave-dashboard', [LeaveController::class, 'index'])->name('leave.index');
     Route::get('/leave-dashboard/data', [LeaveController::class, 'getData'])->name('leave.data');
     Route::get('/leave-history/{id}', [LeaveController::class, 'history'])->name('leave.history');
