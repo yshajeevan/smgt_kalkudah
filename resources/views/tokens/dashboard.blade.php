@@ -164,7 +164,10 @@ function attachCheckout(){
                 },
                 body: JSON.stringify({satisfaction:5})
             })
-            .then(()=> document.getElementById('row-'+id).remove());
+            .then(res => res.json())
+            .then(() => {
+                loadTable(); // 🔥 important
+            });
         };
     });
 }
